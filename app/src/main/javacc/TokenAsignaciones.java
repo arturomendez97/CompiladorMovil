@@ -7,8 +7,8 @@ class TokenAsignaciones
 {
 	  //Variable para validar asignaciones a caracteres(ichr)
 	  public static int segunda = 0;
-	  //Tabla que almacenara los tokens declarados
-	  //private static Hashtable tablavars = new Hashtable();
+	  //Tabla que almacenara los tokens declarados globalmente
+	  private static Hashtable tablaCarsGlobal = new Hashtable();
 
 	  //Tabla que almacenara las funciones declaradas
 	  private static Hashtable tablaFunc = new Hashtable();
@@ -34,6 +34,13 @@ class TokenAsignaciones
 			//Si TokenIzq.image no se encuentra en la tabla en la cual se agregan los tokens, el token no ha sido declarado, y se manda un error
 			return "Error: La funcion " + identificador.image + " No ha sido declarada \r\nLinea: "
 		}
+
+	}
+
+	public static void InsertarSimboloGlobal(Token identificador, int tipo)
+	{
+		//En este metodo se agrega a la tabla de tokens el identificador que esta siendo declarado junto con su tipo de dato
+		tablaVarsGlobal.put(identificador.image, tipo);
 
 	}
 
@@ -208,6 +215,22 @@ class TokenAsignaciones
 			return "Error: La funcion " + identificador.image + " No ha sido declarada \r\nLinea: "
 		}
 	}
+
+	/*Metodo que verifica si una funcion ha sido declarada
+		ej cuando hace una llamada*/ 
+		public static String checkFuncion(Token nombreFuncion)
+		{
+			try 
+			{
+				tabla = tablaFunc.get(nombreFuncion.image);
+				return " ";
+			}
+			catch(Exception e)
+			{
+				//Si TokenIzq.image no se encuentra en la tabla en la cual se agregan los tokens, el token no ha sido declarado, y se manda un error
+				return "Error: La funcion " + identificador.image + " No ha sido declarada \r\nLinea: "
+			}
+		}
 
  }
   

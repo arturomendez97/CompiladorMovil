@@ -138,7 +138,62 @@ void Programa() :
 	TokenAsignaciones.SetTables();	
 }
 {
-    <PROGRAMA><NOMBREPROG><SEMICOLON>Mis_Vars()Mis_Func()Main()<EOF>
+    <PROGRAMA><NOMBREPROG><SEMICOLON>Mis_Vars_Global()Mis_Func()Main()<EOF>
+}
+
+//////////////MIS_VARS_GLOBAL/////////////////
+void Mis_Vars_Global() :
+{}
+{
+        Empty()
+    |   Vars_Global()
+}
+
+void Vars_Global() :
+{}
+{
+    <VAR>Vars2_Global()
+}
+
+void Vars2_Global() :
+{
+	int td;
+	Token var;	
+}
+{
+    (Tipo())
+    {
+		td = token.kind; 
+	}
+    var = <ID>
+    {		
+		TokenAsignaciones.InsertarSimboloGlobal(var, td);
+	}
+    Dim()
+    MasV_Global( td) <SEMICOLON> MasT_Global()
+}
+
+
+void MasV_Global( int tipo) :
+{}
+{
+        <COMMA> 
+        td = tipo
+        var = <ID>
+        {		
+            TokenAsignaciones.InsertarSimboloGlobal(var, td);
+        }
+        Dim()
+        MasV( td )
+     | Empty()
+
+}
+
+void MasT_Global() :
+{}
+{
+        Vars2()
+      | Empty()
 }
 
 
@@ -233,7 +288,7 @@ void Funcion() :
 		TokenAsignaciones.InsertarFuncion(func, td);
 	}
     TokenAsignaciones.InsertarFuncion(func, td)
-    <PARENIZQ>Func2()<PARENDER>
+    <PARENIZQ>Func2(func)<PARENDER>
     
     Func3(func)
     <BRACKETIZQ>
@@ -254,10 +309,10 @@ int Func1() :
     |   Empty()
 }
 
-void Func2() :
+void Func2(Token func) :
 {}
 {
-        Parametros()
+        Parametros(func)
     |   Empty()
 }
 
@@ -307,24 +362,35 @@ void Main2() :
 }
 
 //////////////PARAMETROS/////////////////
-void Parametros() :
-{}
+Token Parametros( Token func) :
 {
-    Tipo()<ID>Params()
+	int td;
+	Token var;	
+}
+{
+    (Tipo())
+    {
+		td = token.kind; 
+	}
+    var = <ID>
+    {		
+		TokenAsignaciones.InsertarSimbolo(var, td, func);
+	}
+    Params(func)
 }
 
-void Params() :
+void Params( Token func ) :
 {}
 {
-        <BRACKETIZQ><CTEI><BRACKETDER>Params2()
-    |   Params2()
+        <BRACKETIZQ><CTEI><BRACKETDER>Params2(func)
+    |   Params2(func)
     |   Empty()
 }
 
-void Params2() :
+void Params2( Token func ) :
 {}
 {
-    <OR><COMMA>Parametros()
+    <OR><COMMA>Parametros(func)
 }
 
 //////////////LECTURA/////////////////
@@ -439,7 +505,7 @@ void Asignacion2(Token v1, Token func) :
 {
         v2 = <NOMBREMOD>
         
-        <PARENIZQ>Parametros()<PARENDER>
+        <PARENIZQ>Parametros(func)<PARENDER>
         
         res = TokenAsignaciones.checkAsing(v1, v2, func);
         if(res != " ")
@@ -557,16 +623,28 @@ void No_condicional2() :
 }
 
 //////////////EMPTY/////////////////
-void Llamada() :
-{}
+void Llamada( Token func ) :
 {
-    <NOMBREMOD><PARENIZQ>Llamada2()<PARENDER><SEMICOLON>
+	Token var;	
+    String res;	
+	boolean imp = false;
+}
+{
+    var = <NOMBREMOD>
+    res = TokenAsignaciones.checkFuncion(var);
+		
+		if(res != " ")
+		{
+			System.out.println(res);
+			imp = true;
+		}
+    <PARENIZQ>Llamada2(func)<PARENDER><SEMICOLON>
 }
 
-void Llamada2() :
+void Llamada2( Token func ) :
 {}
 {
-        Parametros()
+        Parametros(func)
     |   Empty()
 }
 
@@ -574,7 +652,7 @@ void Llamada2() :
 void Estatuto(Token func) :
 {}
 {
-        Asignacion(Token func)Estatuto2(Token func)
+        Asignacion(func)Estatuto2(func)
     |   Lectura()Estatuto2()
     |   Escritura()Estatuto2()
     |   Retorno()Estatuto2()
@@ -582,7 +660,7 @@ void Estatuto(Token func) :
     |   Condicional()Estatuto2()
     |   No_condicional()Estatuto2()
     |   Expresion()Estatuto2()
-   // |   Llamada()Estatuto2()
+    |   Llamada(func)Estatuto2()
 }
 
 void Estatuto2() :
