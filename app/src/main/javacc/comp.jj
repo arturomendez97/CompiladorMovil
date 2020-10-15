@@ -1,0 +1,695 @@
+options {
+  BUILD_PARSER = true;
+  BUILD_TOKEN_MANAGER = true;
+  USER_TOKEN_MANAGER = false;
+  USER_CHAR_STREAM = false;
+  STATIC = true;
+
+  LOOKAHEAD = 1;
+  FORCE_LA_CHECK = false;
+  DEBUG_LOOKAHEAD = false;
+
+  CHOICE_AMBIGUITY_CHECK = 2;
+  OTHER_AMBIGUITY_CHECK = 1;
+
+  SANITY_CHECK = true;
+  DEBUG_PARSER = false;
+  DEBUG_TOKEN_MANAGER = false;
+  ERROR_REPORTING = true;
+
+  JAVA_UNICODE_ESCAPE = false;
+  UNICODE_INPUT = false;
+  IGNORE_CASE = false;
+}
+
+PARSER_BEGIN(comp)
+package com.example.myapplication.parser;
+
+public class comp {
+
+}
+
+PARSER_END(comp)
+
+/**
+ * Root Production
+ */
+
+
+/**
+ * Matching parentheses production.
+ */
+
+
+////////////////////////////////////////////////////////////////////////////
+///////////////////////////////TOKENS///////////////////////////////////////
+
+// Establecer tokens y palabras reservadas
+// Se separan en bloques que contienen tokens y palabras reservadas del mismo tipo
+
+// Palabras reservadas
+TOKEN:
+{
+    <MAIN: "main" > {System.out.println("MAIN-> "+image);} //1
+    | <PROGRAMA: "program" > {System.out.println("PROGRAMA -> "+image);} //2
+    | <VAR: "var" > {System.out.println("VAR -> "+image);} //3
+    | <INT: "int" > {System.out.println("INT -> "+image);} //4
+    | <FLOAT: "float" > {System.out.println("FLOAT -> "+image);} //5
+    | <CHAR: "char" > {System.out.println("CHAR -> "+image);} //6
+    | <VOID: "void" > {System.out.println("VOID -> "+image);} //7
+    | <MODULE: "module" > {System.out.println("MODULE -> "+image);} //8
+    | <RETURN: "return" > {System.out.println("RETURN -> "+image);} //9
+    | <READ: "read" > {System.out.println("READ -> "+image);} //10
+    | <WRITE: "write" > {System.out.println("WRITE -> "+image);} //11
+    | <IF: "if" > {System.out.println("IF -> "+image);} //12
+    | <THEN: "then" > {System.out.println("THEN -> "+image);} //13
+    | <ELSE: "else" > {System.out.println("ELSE -> "+image);} //14
+    | <WHILE: "while" > {System.out.println("WHILE -> "+image);} //15
+    | <DO: "do" > {System.out.println("DO -> "+image);} //16
+    | <FOR: "for" > {System.out.println("FOR -> "+image);} //17
+    | <TO: "to" > {System.out.println("TO -> "+image);} //18
+}
+
+// Separadores
+TOKEN:
+{
+    <PARENIZQ: "(" > {System.out.println("PARENIZQ -> "+image);} //19
+    | <PARENDER: ")" > {System.out.println("PARENDER -> "+image);} //20
+    | <BRACKETIZQ: "{" > {System.out.println("BRACKETIZQ -> "+image);} //21
+    | <BRACKETDER: "}" > {System.out.println("BRACKETDER -> "+image);} //22
+    | <COMMA: "," > {System.out.println("COMMA -> "+image);} //23
+    | <COLON: ":" > {System.out.println("COLON -> "+image);} //24
+    | <SEMICOLON: ";" > {System.out.println("SEMICOLON -> "+image);} //25
+}
+
+
+// Operadores aritmeticos
+TOKEN:
+{
+    <MAS: "+" > {System.out.println("MAS -> "+image);} //26
+    | <MENOS: "-" > {System.out.println("MENOS -> "+image);} //27
+    | <MULT: "*" > {System.out.println("MULT -> "+image);} //28
+    | <DIV: "/" > {System.out.println("DIV -> "+image);} //29
+}
+
+// Operadores Lógicos
+TOKEN:
+{
+    <ASIGNACION: "=" > {System.out.println("ASIGNACION -> "+image);} //30
+    | <MASQUE: ">" > {System.out.println("MASQUE -> "+image);} //31
+    | <MENOSQUE: "<" > {System.out.println("MENOSQUE -> "+image);} //32
+    | <IGUAL: "==" > {System.out.println("IGUAL -> "+image);} //33
+    | <NOIGUAL: "!=" > {System.out.println("NOIGUAL -> "+image);} //34
+    | <AND: "&" > {System.out.println("AND -> "+image);} //35
+    | <OR: "|" > {System.out.println("OR -> "+image);} //36
+}
+
+// Valores
+TOKEN:
+{
+    <CTEI: (["0"-"9"])+ > {System.out.println("CTEI -> "+image);} //37
+    | <CTEF: (["0"-"9"])+["."](["0"-"9"])+ > {System.out.println("CTEF -> "+image);} //38
+    | <ID: ["a"-"z","A"-"Z"](["a"-"z","A"-"Z","0"-"9","_"])* > {System.out.println("ID -> "+image);} //39
+    | <NOMBREPROG : ["a"-"z","A"-"Z"](["a"-"z","A"-"Z","0"-"9","_"])* > {System.out.println("NOMBREPROG -> "+image);} //40
+    | <NOMBREMOD: ["a"-"z","A"-"Z"](["a"-"z","A"-"Z","0"-"9","_"])* > {System.out.println("NOMBREMOD -> "+image);} //41
+    | <CTEC : "'"["a"-"z","A"-"Z","0"-"9"]"'" >//42
+
+}
+// Input
+void Input():
+{
+}
+{
+  Lectura() <EOF>
+}
+SKIP :
+{
+    " " | "\r\n" | "\t"
+}
+
+
+////////////////////////////////////////////////////////////////////////////
+///////////////////////////////Gramática////////////////////////////////////
+
+
+//////////////PROGRAMA/////////////////
+void Programa() :
+{
+	TokenAsignaciones.SetTables();	
+}
+{
+    <PROGRAMA><NOMBREPROG><SEMICOLON>Mis_Vars()Mis_Func()Main()<EOF>
+}
+
+
+//////////////MIS_VARS/////////////////
+void Mis_Vars(Token func) :
+{}
+{
+        Empty()
+    |   Vars(func)
+}
+
+void Vars(Token func) :
+{}
+{
+    <VAR>Vars2(func)
+}
+
+void Vars2(Token func) :
+{
+	int td;
+	Token var;	
+}
+{
+    (Tipo())
+    {
+		td = token.kind; 
+	}
+    var = <ID>
+    {		
+		TokenAsignaciones.InsertarSimbolo(var, td, func);
+	}
+    Dim()
+    MasV( td, func ) <SEMICOLON> MasT(func)
+}
+
+void Dim() :
+{}
+{
+        <BRACKETIZQ><CTEI><BRACKETDER>MasDim()
+      | Empty()
+}
+
+void MasDim() :
+{}
+{
+        <BRACKETIZQ><CTEI><BRACKETDER>
+      | Empty()
+}
+
+void MasV( int tipo, Token func ) :
+{}
+{
+        <COMMA> 
+        td = tipo
+        var = <ID>
+        {		
+            TokenAsignaciones.InsertarSimbolo(var, td, func);
+        }
+        Dim()
+        MasV( td )
+     | Empty()
+
+}
+
+void MasT(Token func) :
+{}
+{
+        Vars2()
+      | Empty()
+}
+
+
+
+//////////////MIS_FUNC/////////////////
+void Mis_Func() :
+{}
+{
+        Funcion()
+    |   Empty()
+}
+
+void Funcion() :
+{
+    int td;
+	Token func;
+}
+{
+    td = Func1()
+    <MODULE>
+    func = <NOMBREMOD>
+    {		
+		TokenAsignaciones.InsertarFuncion(func, td);
+	}
+    TokenAsignaciones.InsertarFuncion(func, td)
+    <PARENIZQ>Func2()<PARENDER>
+    
+    Func3(func)
+    <BRACKETIZQ>
+    Func4(func)
+    <BRACKETDER>Mas_F()
+}
+
+int Func1() :
+{
+	int td;
+}
+{
+        (Tipo_Retorno())
+        {
+            td = token.kind; 
+        }
+        return td;
+    |   Empty()
+}
+
+void Func2() :
+{}
+{
+        Parametros()
+    |   Empty()
+}
+
+void Func3(Token func) :
+{}
+{
+        Mis_Vars(func)
+    |   Empty()
+}
+
+void Func4(Token func) :
+{}
+{
+        Estatuto(Token func)
+    |   Empty()
+}
+
+void Mas_F() :
+{}
+{
+        Funcion()
+    |   Empty()
+}
+
+//////////////TIPO_RETORNO/////////////////
+void Tipo_Retorno() :
+{}
+{
+        <INT>
+    |   <FLOAT>
+    |   <CHAR>
+    |   <VOID>
+}
+
+//////////////MAIN/////////////////
+void Main() :
+{}
+{
+    <MAIN><PARENIZQ><PARENDER><BRACKETIZQ>Main2()<BRACKETDER>
+}
+
+void Main2() :
+{}
+{
+        Estatuto()
+    |   Empty()
+}
+
+//////////////PARAMETROS/////////////////
+void Parametros() :
+{}
+{
+    Tipo()<ID>Params()
+}
+
+void Params() :
+{}
+{
+        <BRACKETIZQ><CTEI><BRACKETDER>Params2()
+    |   Params2()
+    |   Empty()
+}
+
+void Params2() :
+{}
+{
+    <OR><COMMA>Parametros()
+}
+
+//////////////LECTURA/////////////////
+void Lectura() :
+{}
+{
+    <READ><PARENIZQ>Lectura2()<PARENDER><SEMICOLON>
+}
+
+void Lectura2() :
+{}
+{
+        Variable()Lectura3()
+
+
+}
+void Lectura3() :
+{}
+{
+        <COMMA>Lectura2()
+      | Empty()
+
+}
+
+
+//////////////ESCRITURA/////////////////
+void Escritura() :
+{}
+{
+    <WRITE><PARENIZQ>Escritura2()<PARENDER><SEMICOLON>
+}
+
+void Escritura2() :
+{}
+{
+        Escritura_L()
+    |   Escritura_V()
+}
+
+void Escritura_L() :
+{}
+{
+        Letrero() Escritura_L2()
+
+}
+
+void Escritura_V() :
+{}
+{
+        Expresion()Escritura_V2()
+
+}
+void Escritura_L2() :
+{}
+{
+         <COMMA>Escritura_L()
+      | Empty()
+}
+
+void Escritura_V2() :
+{}
+{
+      <COMMA>Escritura_V()
+     | Empty()
+}
+void Letrero() :
+{}
+{
+    <ID>
+}
+
+//////////////ESTATUTO DE DECISION/////////////////
+void Estatuto_De_Decision() :
+{}
+{
+    <IF><PARENIZQ>Expresion()<PARENDER><THEN><BRACKETIZQ>EDD2()<BRACKETDER>EDD3()
+}
+
+void EDD2() :
+{}
+{
+        Estatuto()<SEMICOLON>
+    |   Empty()
+}
+
+void EDD3() :
+{}
+{
+        Empty()
+    |   <ELSE><BRACKETIZQ>EDD2()<BRACKETDER>
+}
+
+//////////////ASIGNACION/////////////////
+void Asignacion( Token func) :
+{
+	int td;
+	Token var;	
+}
+{
+    var = Variable()
+    <ASIGNACION>
+    Asignacion2(var, func)
+}
+
+void Asignacion2(Token v1, Token func) :
+{
+    Token v2;
+	Token v3;
+	String res;	
+	boolean imp = false;
+}
+{
+        v2 = <NOMBREMOD>
+        
+        <PARENIZQ>Parametros()<PARENDER>
+        
+        res = TokenAsignaciones.checkAsing(v1, v2, func);
+        if(res != " ")
+		{
+			System.out.println(res);
+			imp = true;
+		}
+	  }
+        Asignacion3()
+    |   v2 = Expresion()
+        v3 = Asignacion3()
+        res = TokenAsignaciones.checkAsing(v2, v3, func);
+        if(res != " ")
+		{
+			System.out.println(res);
+			imp = true;
+		}
+        res = TokenAsignaciones.checkAsing(v1, v2, func);
+        if(res != " ")
+		{
+			System.out.println(res);
+			imp = true;
+		}
+}
+
+Token Asignacion3() :
+{
+    Token v1;
+}
+{
+        <SEMICOLON>
+        v1 = Asignacion4()
+        return v1;
+
+}
+Token Asignacion4() :
+{
+    Token v1;
+    Token v2;
+}
+{
+        v1 = Expresion() 
+        v2 = Asignacion3()
+        res = TokenAsignaciones.checkAsing(v1, v2);
+		
+		if(res != " ")
+		{
+			System.out.println(res);
+			imp = true;
+		}
+        return v1;
+      | Empty()
+}
+
+//////////////VARIABLE/////////////////
+Token Variable() :
+{
+    Token var;
+}
+{
+    var = <ID>
+    Variable2()Variable2()
+    return var;
+}
+
+void Variable2() :
+{}
+{
+        <BRACKETIZQ><CTEI><BRACKETDER>
+    |   Empty()
+}
+
+//////////////TIPO/////////////////
+void Tipo() :
+{}
+{
+        <INT>
+    |   <FLOAT>
+    |   <CHAR>
+}
+
+//////////////TIPO/////////////////
+void Retorno() :
+{}
+{
+    <RETURN><PARENIZQ>Expresion()<PARENDER>
+}
+
+//////////////CONDICIONAL/////////////////
+void Condicional() :
+{}
+{
+    <WHILE><PARENIZQ>Expresion()<PARENDER><DO><BRACKETIZQ>Condicional2()<BRACKETDER>
+}
+
+void Condicional2() :
+{}
+{
+        Estatuto()<SEMICOLON>
+    |   Empty()
+}
+
+//////////////NO_CONDICIONAL/////////////////
+void No_condicional() :
+{}
+{
+    <FOR><ID>Variable()<ASIGNACION>Expresion()<TO>Expresion()<DO><BRACKETIZQ>No_condicional2()<BRACKETDER>
+}
+
+void No_condicional2() :
+{}
+{
+        Estatuto()<SEMICOLON>
+    |   Empty()
+}
+
+//////////////EMPTY/////////////////
+void Llamada() :
+{}
+{
+    <NOMBREMOD><PARENIZQ>Llamada2()<PARENDER><SEMICOLON>
+}
+
+void Llamada2() :
+{}
+{
+        Parametros()
+    |   Empty()
+}
+
+//////////////ESTATUTO/////////////////
+void Estatuto(Token func) :
+{}
+{
+        Asignacion(Token func)Estatuto2(Token func)
+    |   Lectura()Estatuto2()
+    |   Escritura()Estatuto2()
+    |   Retorno()Estatuto2()
+    |   Estatuto_De_Decision()Estatuto2()
+    |   Condicional()Estatuto2()
+    |   No_condicional()Estatuto2()
+    |   Expresion()Estatuto2()
+   // |   Llamada()Estatuto2()
+}
+
+void Estatuto2() :
+{}
+{
+        Estatuto()
+    |   Empty()
+}
+
+//////////////EXPRESION/////////////////
+void Expresion() :
+{}
+{
+    T_Exp()Expresion2()
+}
+
+void Expresion2() :
+{}
+{
+        <OR>Expresion()
+    |   Empty()
+}
+
+//////////////T_Exp/////////////////
+void T_Exp() :
+{}
+{
+    G_Exp()T_Exp2()
+}
+
+void T_Exp2() :
+{}
+{
+        <AND>T_Exp()
+    |   Empty()
+}
+
+//////////////G_Exp/////////////////
+void G_Exp() :
+{}
+{
+    M_Exp()G_Exp2()
+}
+
+void G_Exp2() :
+{}
+{
+        <MENOSQUE>M_Exp()
+    |   <MASQUE>M_Exp()
+    |   <IGUAL>M_Exp()
+    |   <NOIGUAL>M_Exp()
+    |   Empty()
+}
+
+//////////////M_Exp/////////////////
+void M_Exp() :
+{}
+{
+    T()M_Exp2()
+}
+
+void M_Exp2() :
+{}
+{
+        <MAS>M_Exp()
+    |   <MENOS>M_Exp()
+    |   Empty()
+}
+
+//////////////T(TERMINO)/////////////////
+void T() :
+{}
+{
+    F()T2()
+}
+
+void T2() :
+{}
+{
+        <MULT>T()
+    |   <DIV>T()
+    |   Empty()
+}
+
+//////////////F(FACTOR)/////////////////
+void F() :
+{}
+{
+        <PARENIZQ>Expresion()<PARENDER>
+    |   Variable()
+    |   Llamada()
+    |   F2()
+}
+
+void F2() :
+{}
+{
+        <CTEI>
+    |   <CTEF>
+    |   <ID>
+}
+
+
+//////////////VACIO/////////////////
+void Empty() :
+{}
+{
+   {}
+
+}
