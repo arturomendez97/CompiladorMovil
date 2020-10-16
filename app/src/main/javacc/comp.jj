@@ -178,10 +178,9 @@ void MasV_Global( int tipo) :
 {}
 {
         <COMMA> 
-        td = tipo
         var = <ID>
         {		
-            TokenAsignaciones.InsertarSimboloGlobal(var, td);
+            TokenAsignaciones.InsertarSimboloGlobal(var, tipo);
         }
         Dim()
         MasV( td )
@@ -247,10 +246,9 @@ void MasV( int tipo, Token func ) :
 {}
 {
         <COMMA> 
-        td = tipo
         var = <ID>
         {		
-            TokenAsignaciones.InsertarSimbolo(var, td, func);
+            TokenAsignaciones.InsertarSimbolo(var, tipo, func);
         }
         Dim()
         MasV( td )
@@ -287,7 +285,6 @@ void Funcion() :
     {		
 		TokenAsignaciones.InsertarFuncion(func, td);
 	}
-    TokenAsignaciones.InsertarFuncion(func, td)
     <PARENIZQ>Func2(func)<PARENDER>
     
     Func3(func)
@@ -297,15 +294,12 @@ void Funcion() :
 }
 
 int Func1() :
-{
-	int td;
-}
+{}
 {
         (Tipo_Retorno())
         {
-            td = token.kind; 
+            return token.kind;
         }
-        return td;
     |   Empty()
 }
 
@@ -326,7 +320,7 @@ void Func3(Token func) :
 void Func4(Token func) :
 {}
 {
-        Estatuto(Token func)
+        Estatuto(func)
     |   Empty()
 }
 
@@ -506,29 +500,33 @@ void Asignacion2(Token v1, Token func) :
         v2 = <NOMBREMOD>
         
         <PARENIZQ>Parametros(func)<PARENDER>
-        
+        {
         res = TokenAsignaciones.checkAsing(v1, v2, func);
         if(res != " ")
-		{
-			System.out.println(res);
-			imp = true;
-		}
-	  }
+        {
+            System.out.println(res);
+            imp = true;
+        }
+        }
+
         Asignacion3()
     |   v2 = Expresion()
         v3 = Asignacion3()
-        res = TokenAsignaciones.checkAsing(v2, v3, func);
-        if(res != " ")
-		{
-			System.out.println(res);
-			imp = true;
-		}
-        res = TokenAsignaciones.checkAsing(v1, v2, func);
-        if(res != " ")
-		{
-			System.out.println(res);
-			imp = true;
-		}
+        {
+         res = TokenAsignaciones.checkAsing(v2, v3, func);
+                if(res != " ")
+        		{
+        			System.out.println(res);
+        			imp = true;
+        		}
+                res = TokenAsignaciones.checkAsing(v1, v2, func);
+                if(res != " ")
+        		{
+        			System.out.println(res);
+        			imp = true;
+        		}
+        }
+
 }
 
 Token Asignacion3() :
@@ -538,7 +536,9 @@ Token Asignacion3() :
 {
         <SEMICOLON>
         v1 = Asignacion4()
-        return v1;
+        {
+         return v1;
+        }
 
 }
 Token Asignacion4() :
@@ -549,14 +549,16 @@ Token Asignacion4() :
 {
         v1 = Expresion() 
         v2 = Asignacion3()
+        {
         res = TokenAsignaciones.checkAsing(v1, v2);
-		
-		if(res != " ")
-		{
-			System.out.println(res);
-			imp = true;
-		}
-        return v1;
+
+        		if(res != " ")
+        		{
+        			System.out.println(res);
+        			imp = true;
+        		}
+                return v1;
+        }
       | Empty()
 }
 
@@ -568,7 +570,9 @@ Token Variable() :
 {
     var = <ID>
     Variable2()Variable2()
+    {
     return var;
+    }
 }
 
 void Variable2() :
@@ -631,13 +635,15 @@ void Llamada( Token func ) :
 }
 {
     var = <NOMBREMOD>
+    {
     res = TokenAsignaciones.checkFuncion(var);
-		
-		if(res != " ")
-		{
-			System.out.println(res);
-			imp = true;
-		}
+
+    		if(res != " ")
+    		{
+    			System.out.println(res);
+    			imp = true;
+    		}
+    }
     <PARENIZQ>Llamada2(func)<PARENDER><SEMICOLON>
 }
 
