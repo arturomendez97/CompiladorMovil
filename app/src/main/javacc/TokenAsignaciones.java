@@ -32,7 +32,7 @@ class TokenAsignaciones
 		catch(Exception e)
 		{
 			//Si TokenIzq.image no se encuentra en la tabla en la cual se agregan los tokens, el token no ha sido declarado, y se manda un error
-			return "Error: La funcion " + identificador.image + " No ha sido declarada \r\nLinea: "
+			return "Error: La funcion " + identificador.image + " No ha sido declarada \r\nLinea: ";
 		}
 
 	}
@@ -103,7 +103,7 @@ class TokenAsignaciones
 			catch(Exception e)
 			{
 				//Si TokenIzq.image no se encuentra en la tabla en la cual se agregan los tokens, el token no ha sido declarado, y se manda un error
-				return "Error: La funcion " + identificador.image + " No ha sido declarada \r\nLinea: "
+				return "Error: La funcion " + identificador.image + " No ha sido declarada \r\nLinea: ";
 			}
 		}
 		else 		
@@ -130,7 +130,7 @@ class TokenAsignaciones
 			catch(Exception e)
 			{
 				//Si TokenIzq.image no se encuentra en la tabla en la cual se agregan los tokens, el token no ha sido declarado, y se manda un error
-				return "Error: La funcion " + identificador.image + " No ha sido declarada \r\nLinea: "
+				return "Error: La funcion " + identificador.image + " No ha sido declarada \r\nLinea: ";
 			}
 		}
 				//Si el dato es entero(37) o decimal(38) o caracter(42)
@@ -212,7 +212,7 @@ class TokenAsignaciones
 		catch(Exception e)
 		{
 			//Si TokenIzq.image no se encuentra en la tabla en la cual se agregan los tokens, el token no ha sido declarado, y se manda un error
-			return "Error: La funcion " + identificador.image + " No ha sido declarada \r\nLinea: "
+			return "Error: La funcion " + identificador.image + " No ha sido declarada \r\nLinea: ";
 		}
 	}
 
@@ -228,7 +228,7 @@ class TokenAsignaciones
 			catch(Exception e)
 			{
 				//Si TokenIzq.image no se encuentra en la tabla en la cual se agregan los tokens, el token no ha sido declarado, y se manda un error
-				return "Error: La funcion " + identificador.image + " No ha sido declarada \r\nLinea: "
+				return "Error: La funcion " + identificador.image + " No ha sido declarada \r\nLinea: ";
 			}
 		}
 
