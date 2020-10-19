@@ -24,11 +24,17 @@ options {
 
 PARSER_BEGIN(comp)
 package com.example.myapplication.parser;
-
+import com.example.myapplication.TokenAsignaciones.TokenAsignaciones;
 
 public class comp {
 
 }
+
+
+
+
+
+
 
 PARSER_END(comp)
 
@@ -116,6 +122,7 @@ TOKEN:
     | <CTEC : "'"["a"-"z","A"-"Z","0"-"9"]"'" >//42
 
 }
+
 // Input
 void Input():
 {
@@ -139,6 +146,7 @@ void Programa() :
 	TokenAsignaciones.SetTables();	
 }
 {
+
     <PROGRAMA><NOMBREPROG><SEMICOLON>Mis_Vars_Global()Mis_Func()Main()<EOF>
 }
 
@@ -176,7 +184,10 @@ void Vars2_Global() :
 
 
 void MasV_Global( int tipo) :
-{}
+{
+    int td;
+    Token var;
+}
 {
         <COMMA> 
         var = <ID>
@@ -184,7 +195,7 @@ void MasV_Global( int tipo) :
             TokenAsignaciones.InsertarSimboloGlobal(var, tipo);
         }
         Dim()
-        MasV( td )
+        MasV_Global(td)
      | Empty()
 
 }
@@ -192,7 +203,7 @@ void MasV_Global( int tipo) :
 void MasT_Global() :
 {}
 {
-        Vars2()
+        Vars2_Global()
       | Empty()
 }
 
@@ -244,7 +255,10 @@ void MasDim() :
 }
 
 void MasV( int tipo, Token func ) :
-{}
+{
+    int td;
+    Token var;
+}
 {
         <COMMA> 
         var = <ID>
@@ -252,7 +266,7 @@ void MasV( int tipo, Token func ) :
             TokenAsignaciones.InsertarSimbolo(var, tipo, func);
         }
         Dim()
-        MasV( td )
+        MasV( td ,func)
      | Empty()
 
 }
@@ -260,7 +274,7 @@ void MasV( int tipo, Token func ) :
 void MasT(Token func) :
 {}
 {
-        Vars2()
+        Vars2(func)
       | Empty()
 }
 
@@ -344,15 +358,25 @@ void Tipo_Retorno() :
 
 //////////////MAIN/////////////////
 void Main() :
-{}
 {
-    <MAIN><PARENIZQ><PARENDER><BRACKETIZQ>Main2()<BRACKETDER>
+
+	Token func;
+}
+{
+
+     func =<MAIN>
+     {
+     		TokenAsignaciones.InsertarMain(func);
+     }
+     <PARENIZQ><PARENDER><BRACKETIZQ>Main2(func)<BRACKETDER>
 }
 
-void Main2() :
+
+
+void Main2(Token func) :
 {}
 {
-        Estatuto()
+        Estatuto(func)
     |   Empty()
 }
 
@@ -458,24 +482,24 @@ void Letrero() :
 }
 
 //////////////ESTATUTO DE DECISION/////////////////
-void Estatuto_De_Decision() :
+void Estatuto_De_Decision(Token func) :
 {}
 {
-    <IF><PARENIZQ>Expresion()<PARENDER><THEN><BRACKETIZQ>EDD2()<BRACKETDER>EDD3()
+    <IF><PARENIZQ>Expresion()<PARENDER><THEN><BRACKETIZQ>EDD2(func)<BRACKETDER>EDD3(func)
 }
 
-void EDD2() :
+void EDD2(Token func) :
 {}
 {
-        Estatuto()<SEMICOLON>
+        Estatuto(func)<SEMICOLON>
     |   Empty()
 }
 
-void EDD3() :
+void EDD3(Token func) :
 {}
 {
         Empty()
-    |   <ELSE><BRACKETIZQ>EDD2()<BRACKETDER>
+    |   <ELSE><BRACKETIZQ>EDD2(func)<BRACKETDER>
 }
 
 //////////////ASIGNACION/////////////////
@@ -660,20 +684,20 @@ void Estatuto(Token func) :
 {}
 {
         Asignacion(func)Estatuto2(func)
-    |   Lectura()Estatuto2()
-    |   Escritura()Estatuto2()
-    |   Retorno()Estatuto2()
-    |   Estatuto_De_Decision()Estatuto2()
-    |   Condicional()Estatuto2()
-    |   No_condicional()Estatuto2()
-    |   Expresion()Estatuto2()
-    |   Llamada(func)Estatuto2()
+    |   Lectura()Estatuto2(func)
+    |   Escritura()Estatuto2(func)
+    |   Retorno()Estatuto2(func)
+    |   Estatuto_De_Decision(func)Estatuto2(func)
+    |   Condicional()Estatuto2(func)
+    |   No_condicional()Estatuto2(func)
+    |   Expresion()Estatuto2(func)
+    |   Llamada(func)Estatuto2(func)
 }
 
-void Estatuto2() :
+void Estatuto2(Token func) :
 {}
 {
-        Estatuto()
+        Estatuto(func)
     |   Empty()
 }
 
@@ -778,3 +802,4 @@ void Empty() :
    {}
 
 }
+

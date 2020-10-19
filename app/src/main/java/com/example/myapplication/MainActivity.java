@@ -33,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
         String textoAnalizar = inputText.getEditText().getText().toString();
         ByteArrayInputStream bais = new ByteArrayInputStream(textoAnalizar.getBytes());
         comp ae =new comp(bais);
+
+
         try {
             ae.Programa();
             text.setText("Correcto");
