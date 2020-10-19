@@ -193,6 +193,7 @@ void MasV_Global( int tipo) :
         var = <ID>
         {		
             TokenAsignaciones.InsertarSimboloGlobal(var, tipo);
+            td = tipo;
         }
         Dim()
         MasV_Global(td)
@@ -264,6 +265,7 @@ void MasV( int tipo, Token func ) :
         var = <ID>
         {		
             TokenAsignaciones.InsertarSimbolo(var, tipo, func);
+            td = tipo;
         }
         Dim()
         MasV( td ,func)
@@ -381,7 +383,7 @@ void Main2(Token func) :
 }
 
 //////////////PARAMETROS/////////////////
-Token Parametros( Token func) :
+void Parametros( Token func) :
 {
 	int td;
 	Token var;	
@@ -436,17 +438,17 @@ void Lectura3() :
 
 
 //////////////ESCRITURA/////////////////
-void Escritura() :
+void Escritura(Token func) :
 {}
 {
-    <WRITE><PARENIZQ>Escritura2()<PARENDER><SEMICOLON>
+    <WRITE><PARENIZQ>Escritura2(func)<PARENDER><SEMICOLON>
 }
 
-void Escritura2() :
+void Escritura2(Token func) :
 {}
 {
         Escritura_L()
-    |   Escritura_V()
+    |   Escritura_V(func)
 }
 
 void Escritura_L() :
@@ -456,10 +458,10 @@ void Escritura_L() :
 
 }
 
-void Escritura_V() :
+void Escritura_V(Token func) :
 {}
 {
-        Expresion()Escritura_V2()
+        Expresion(func)Escritura_V2(func)
 
 }
 void Escritura_L2() :
@@ -469,10 +471,10 @@ void Escritura_L2() :
       | Empty()
 }
 
-void Escritura_V2() :
+void Escritura_V2(Token func) :
 {}
 {
-      <COMMA>Escritura_V()
+      <COMMA>Escritura_V(func)
      | Empty()
 }
 void Letrero() :
@@ -485,7 +487,7 @@ void Letrero() :
 void Estatuto_De_Decision(Token func) :
 {}
 {
-    <IF><PARENIZQ>Expresion()<PARENDER><THEN><BRACKETIZQ>EDD2(func)<BRACKETDER>EDD3(func)
+    <IF><PARENIZQ>Expresion(func)<PARENDER><THEN><BRACKETIZQ>EDD2(func)<BRACKETDER>EDD3(func)
 }
 
 void EDD2(Token func) :
@@ -534,9 +536,9 @@ void Asignacion2(Token v1, Token func) :
         }
         }
 
-        Asignacion3()
-    |   v2 = Expresion()
-        v3 = Asignacion3()
+        Asignacion3(func)
+    |   v2 = Expresion(func)
+        v3 = Asignacion3(func)
         {
          res = TokenAsignaciones.checkAsing(v2, v3, func);
                 if(res != " ")
@@ -554,28 +556,30 @@ void Asignacion2(Token v1, Token func) :
 
 }
 
-Token Asignacion3() :
+Token Asignacion3(Token func) :
 {
     Token v1;
 }
 {
         <SEMICOLON>
-        v1 = Asignacion4()
+        v1 = Asignacion4(func)
         {
          return v1;
         }
 
 }
-Token Asignacion4() :
+Token Asignacion4(Token func) :
 {
     Token v1;
     Token v2;
+    String res;
+    boolean imp = false;
 }
 {
-        v1 = Expresion() 
-        v2 = Asignacion3()
+        v1 = Expresion(func)
+        v2 = Asignacion3(func)
         {
-        res = TokenAsignaciones.checkAsing(v1, v2);
+        res = TokenAsignaciones.checkAsing(v1, v2, func);
 
         		if(res != " ")
         		{
@@ -617,42 +621,42 @@ void Tipo() :
 }
 
 //////////////TIPO/////////////////
-void Retorno() :
+void Retorno(Token func) :
 {}
 {
-    <RETURN><PARENIZQ>Expresion()<PARENDER>
+    <RETURN><PARENIZQ>Expresion(func)<PARENDER>
 }
 
 //////////////CONDICIONAL/////////////////
-void Condicional() :
+void Condicional(Token func) :
 {}
 {
-    <WHILE><PARENIZQ>Expresion()<PARENDER><DO><BRACKETIZQ>Condicional2()<BRACKETDER>
+    <WHILE><PARENIZQ>Expresion(func)<PARENDER><DO><BRACKETIZQ>Condicional2(func)<BRACKETDER>
 }
 
-void Condicional2() :
+void Condicional2(Token func) :
 {}
 {
-        Estatuto()<SEMICOLON>
+        Estatuto(func)<SEMICOLON>
     |   Empty()
 }
 
 //////////////NO_CONDICIONAL/////////////////
-void No_condicional() :
+void No_condicional(Token func) :
 {}
 {
-    <FOR><ID>Variable()<ASIGNACION>Expresion()<TO>Expresion()<DO><BRACKETIZQ>No_condicional2()<BRACKETDER>
+    <FOR><ID>Variable()<ASIGNACION>Expresion(func)<TO>Expresion(func)<DO><BRACKETIZQ>No_condicional2(func)<BRACKETDER>
 }
 
-void No_condicional2() :
+void No_condicional2(Token func) :
 {}
 {
-        Estatuto()<SEMICOLON>
+        Estatuto(func)<SEMICOLON>
     |   Empty()
 }
 
 //////////////EMPTY/////////////////
-void Llamada( Token func ) :
+Token Llamada( Token func ) :
 {
 	Token var;	
     String res;	
@@ -670,6 +674,7 @@ void Llamada( Token func ) :
     		}
     }
     <PARENIZQ>Llamada2(func)<PARENDER><SEMICOLON>
+    {return var;}
 }
 
 void Llamada2( Token func ) :
@@ -685,13 +690,13 @@ void Estatuto(Token func) :
 {
         Asignacion(func)Estatuto2(func)
     |   Lectura()Estatuto2(func)
-    |   Escritura()Estatuto2(func)
-    |   Retorno()Estatuto2(func)
+    |   Escritura(func)Estatuto2(func)
+    |   Retorno(func)Estatuto2(func)
     |   Estatuto_De_Decision(func)Estatuto2(func)
-    |   Condicional()Estatuto2(func)
-    |   No_condicional()Estatuto2(func)
-    |   Expresion()Estatuto2(func)
-    |   Llamada(func)Estatuto2(func)
+    |   Condicional(func)Estatuto2(func)
+    |   No_condicional(func)Estatuto2(func)
+    |   Expresion(func)Estatuto2(func)
+    //|   Llamada(func)Estatuto2(func)
 }
 
 void Estatuto2(Token func) :
@@ -702,96 +707,122 @@ void Estatuto2(Token func) :
 }
 
 //////////////EXPRESION/////////////////
-void Expresion() :
-{}
+Token Expresion(Token func) :
 {
-    T_Exp()Expresion2()
+    Token var;
+}
+{
+    var = T_Exp(func)Expresion2(func)
+    {return var;}
 }
 
-void Expresion2() :
+void Expresion2(Token func) :
 {}
 {
-        <OR>Expresion()
+        <OR>Expresion(func)
     |   Empty()
 }
 
 //////////////T_Exp/////////////////
-void T_Exp() :
-{}
+Token T_Exp(Token func) :
 {
-    G_Exp()T_Exp2()
+    Token var;
+}
+{
+    var = G_Exp(func)
+    T_Exp2(func)
+    {return var;}
 }
 
-void T_Exp2() :
+void T_Exp2(Token func) :
 {}
 {
-        <AND>T_Exp()
+        <AND>T_Exp(func)
     |   Empty()
 }
 
 //////////////G_Exp/////////////////
-void G_Exp() :
-{}
+Token G_Exp(Token func) :
 {
-    M_Exp()G_Exp2()
+    Token var;
+}
+{
+   var = M_Exp(func)G_Exp2(func)
+   {return var;}
 }
 
-void G_Exp2() :
+void G_Exp2(Token func) :
 {}
 {
-        <MENOSQUE>M_Exp()
-    |   <MASQUE>M_Exp()
-    |   <IGUAL>M_Exp()
-    |   <NOIGUAL>M_Exp()
+        <MENOSQUE>M_Exp(func)
+    |   <MASQUE>M_Exp(func)
+    |   <IGUAL>M_Exp(func)
+    |   <NOIGUAL>M_Exp(func)
     |   Empty()
 }
 
 //////////////M_Exp/////////////////
-void M_Exp() :
-{}
+Token M_Exp(Token func) :
 {
-    T()M_Exp2()
+    Token var;
+}
+{
+    var = T(func)
+    M_Exp2(func)
+    {return var;}
 }
 
-void M_Exp2() :
+void M_Exp2(Token func) :
 {}
 {
-        <MAS>M_Exp()
-    |   <MENOS>M_Exp()
+        <MAS>M_Exp(func)
+    |   <MENOS>M_Exp(func)
     |   Empty()
 }
 
 //////////////T(TERMINO)/////////////////
-void T() :
-{}
+Token T(Token func) :
 {
-    F()T2()
+    Token var;
+}
+{
+    var = F(func)
+    T2(func)
+    {return var;}
 }
 
-void T2() :
+void T2(Token func) :
 {}
 {
-        <MULT>T()
-    |   <DIV>T()
+        <MULT>T(func)
+    |   <DIV>T(func)
     |   Empty()
 }
 
 //////////////F(FACTOR)/////////////////
-void F() :
-{}
+Token F(Token func) :
 {
-        <PARENIZQ>Expresion()<PARENDER>
-    |   Variable()
-    |   Llamada()
-    |   F2()
+    Token var;
+}
+{
+        <PARENIZQ>
+        var = Expresion(func)<PARENDER>{return var;}
+    |   var = Variable(){return var;}
+    |   var = Llamada(func){return var;}
+    |   var = F2(){return var;}
 }
 
-void F2() :
-{}
+Token F2() :
 {
-        <CTEI>
-    |   <CTEF>
-    |   <ID>
+    Token var;
+}
+{
+        var = <CTEI>
+        {return var;}
+    |   var = <CTEF>
+        {return var;}
+    |   var = <ID>
+        {return var;}
 }
 
 
