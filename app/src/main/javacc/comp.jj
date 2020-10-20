@@ -117,19 +117,11 @@ TOKEN:
     <CTEI: (["0"-"9"])+ > {System.out.println("CTEI -> "+image);} //37
     | <CTEF: (["0"-"9"])+["."](["0"-"9"])+ > {System.out.println("CTEF -> "+image);} //38
     | <ID: ["a"-"z","A"-"Z"](["a"-"z","A"-"Z","0"-"9","_"])* > {System.out.println("ID -> "+image);} //39
-    | <NOMBREPROG : ["a"-"z","A"-"Z"](["a"-"z","A"-"Z","0"-"9","_"])* > {System.out.println("NOMBREPROG -> "+image);} //40
-    | <NOMBREMOD: ["a"-"z","A"-"Z"](["a"-"z","A"-"Z","0"-"9","_"])* > {System.out.println("NOMBREMOD -> "+image);} //41
-    | <CTEC : "'"["a"-"z","A"-"Z","0"-"9"]"'" >//42
+    | <CTEC : "'"["a"-"z","A"-"Z","0"-"9"]"'" >//40
 
 }
 
-// Input
-void Input():
-{
-}
-{
-  Lectura() <EOF>
-}
+
 SKIP :
 {
     " " | "\r\n" | "\t"
@@ -147,7 +139,7 @@ void Programa() :
 }
 {
 
-    <PROGRAMA><NOMBREPROG><SEMICOLON>Mis_Vars_Global()Mis_Func()Main()<EOF>
+    <PROGRAMA><ID><SEMICOLON>Mis_Vars_Global()Mis_Func()Main()<EOF>
 }
 
 //////////////MIS_VARS_GLOBAL/////////////////
@@ -167,15 +159,15 @@ void Vars_Global() :
 void Vars2_Global() :
 {
 	int td;
-	Token var;	
+	Token var;
 }
 {
-    (Tipo())
+    Tipo()
     {
-		td = token.kind; 
+		td = token.kind;
 	}
     var = <ID>
-    {		
+    {
 		TokenAsignaciones.InsertarSimboloGlobal(var, td);
 	}
     Dim()
@@ -189,9 +181,9 @@ void MasV_Global( int tipo) :
     Token var;
 }
 {
-        <COMMA> 
+        <COMMA>
         var = <ID>
-        {		
+        {
             TokenAsignaciones.InsertarSimboloGlobal(var, tipo);
             td = tipo;
         }
@@ -226,15 +218,15 @@ void Vars(Token func) :
 void Vars2(Token func) :
 {
 	int td;
-	Token var;	
+	Token var;
 }
 {
     (Tipo())
     {
-		td = token.kind; 
+		td = token.kind;
 	}
     var = <ID>
-    {		
+    {
 		TokenAsignaciones.InsertarSimbolo(var, td, func);
 	}
     Dim()
@@ -261,9 +253,9 @@ void MasV( int tipo, Token func ) :
     Token var;
 }
 {
-        <COMMA> 
+        <COMMA>
         var = <ID>
-        {		
+        {
             TokenAsignaciones.InsertarSimbolo(var, tipo, func);
             td = tipo;
         }
@@ -298,12 +290,12 @@ void Funcion() :
 {
     td = Func1()
     <MODULE>
-    func = <NOMBREMOD>
-    {		
+    func = <ID>
+    {
 		TokenAsignaciones.InsertarFuncion(func, td);
 	}
     <PARENIZQ>Func2(func)<PARENDER>
-    
+
     Func3(func)
     <BRACKETIZQ>
     Func4(func)
@@ -313,7 +305,7 @@ void Funcion() :
 int Func1() :
 {}
 {
-        (Tipo_Retorno())
+        Tipo_Retorno()
         {
             return token.kind;
         }
@@ -386,15 +378,15 @@ void Main2(Token func) :
 void Parametros( Token func) :
 {
 	int td;
-	Token var;	
+	Token var;
 }
 {
-    (Tipo())
+    Tipo()
     {
-		td = token.kind; 
+		td = token.kind;
 	}
     var = <ID>
-    {		
+    {
 		TokenAsignaciones.InsertarSimbolo(var, td, func);
 	}
     Params(func)
@@ -508,7 +500,7 @@ void EDD3(Token func) :
 void Asignacion( Token func) :
 {
 	int td;
-	Token var;	
+	Token var;
 }
 {
     var = Variable()
@@ -520,12 +512,12 @@ void Asignacion2(Token v1, Token func) :
 {
     Token v2;
 	Token v3;
-	String res;	
+	String res;
 	boolean imp = false;
 }
 {
-        v2 = <NOMBREMOD>
-        
+        v2 = <ID>
+
         <PARENIZQ>Parametros(func)<PARENDER>
         {
         res = TokenAsignaciones.checkAsing(v1, v2, func);
@@ -655,15 +647,15 @@ void No_condicional2(Token func) :
     |   Empty()
 }
 
-//////////////EMPTY/////////////////
+//////////////Llamada/////////////////
 Token Llamada( Token func ) :
 {
-	Token var;	
-    String res;	
+	Token var;
+    String res;
 	boolean imp = false;
 }
 {
-    var = <NOMBREMOD>
+    var = <ID>
     {
     res = TokenAsignaciones.checkFuncion(var);
 
@@ -806,10 +798,14 @@ Token F(Token func) :
 }
 {
         <PARENIZQ>
-        var = Expresion(func)<PARENDER>{return var;}
-    |   var = Variable(){return var;}
-    |   var = Llamada(func){return var;}
-    |   var = F2(){return var;}
+        var = Expresion(func)<PARENDER>
+        {return var;}
+    |   var = Variable()
+        {return var;}
+    //|   var = Llamada(func)
+    //    {return var;}
+    |   var = F2()
+        {return var;}
 }
 
 Token F2() :

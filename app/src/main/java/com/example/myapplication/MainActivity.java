@@ -24,25 +24,34 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         text = (TextView) findViewById(R.id.resultados);
         inputText = (TextInputLayout) findViewById(R.id.codigo);
+        boton = (Button) findViewById(R.id.button);
 
+        String Create = "Hola";
+        ByteArrayInputStream inicio = new ByteArrayInputStream(Create.getBytes());
+        final comp ae =new comp(inicio);
+
+        boton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view)  {
+                String textoAnalizar = inputText.getEditText().getText().toString();
+                ByteArrayInputStream bais = new ByteArrayInputStream(textoAnalizar.getBytes());
+
+                ae.ReInit(bais);
+
+
+                try {
+                    ae.Programa();
+                    text.setText("Correcto");
+                } catch (ParseException ex){
+                    text.setText(ex.getMessage());
+                }catch (TokenMgrError tme){
+                    text.setText(tme.getMessage());
+                }
+
+            }
+        });
 
 
     }
 
-    public void onClick(View view)  {
-        String textoAnalizar = inputText.getEditText().getText().toString();
-        ByteArrayInputStream bais = new ByteArrayInputStream(textoAnalizar.getBytes());
-        comp ae =new comp(bais);
 
-
-        try {
-            ae.Programa();
-            text.setText("Correcto");
-        } catch (ParseException ex){
-            text.setText(ex.getMessage());
-        }catch (TokenMgrError tme){
-            text.setText(tme.getMessage());
-        }
-        
-    }
 }
