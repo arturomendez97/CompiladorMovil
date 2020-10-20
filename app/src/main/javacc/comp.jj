@@ -120,6 +120,13 @@ TOKEN:
     | <CTEC : "'"["a"-"z","A"-"Z","0"-"9"]"'" >//40
 
 }
+/// Tokens que se olvidaron
+TOKEN:
+{
+    <BRAIZQ: "[" > {System.out.println("BRAIZQ -> "+image);} //41
+    | <BRADER: "]" > {System.out.println("BRADER -> "+image);} //42
+}
+
 
 
 SKIP :
@@ -599,7 +606,7 @@ Token Variable() :
 void Variable2() :
 {}
 {
-        <BRACKETIZQ><CTEI><BRACKETDER>
+        <BRAIZQ><CTEI><BRADER>
     |   Empty()
 }
 

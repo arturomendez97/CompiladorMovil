@@ -87,7 +87,7 @@ static private int jjMoveStringLiteralDfa0_0(){
    switch(curChar)
    {
       case 13:
-         return jjMoveStringLiteralDfa1_0(0x40000000000L);
+         return jjMoveStringLiteralDfa1_0(0x100000000000L);
       case 33:
          return jjMoveStringLiteralDfa1_0(0x400000000L);
       case 38:
@@ -117,6 +117,10 @@ static private int jjMoveStringLiteralDfa0_0(){
          return jjMoveStringLiteralDfa1_0(0x200000000L);
       case 62:
          return jjStopAtPos(0, 31);
+      case 91:
+         return jjStopAtPos(0, 41);
+      case 93:
+         return jjStopAtPos(0, 42);
       case 99:
          return jjMoveStringLiteralDfa1_0(0x40L);
       case 100:
@@ -158,8 +162,8 @@ static private int jjMoveStringLiteralDfa1_0(long active0){
    switch(curChar)
    {
       case 10:
-         if ((active0 & 0x40000000000L) != 0L)
-            return jjStopAtPos(1, 42);
+         if ((active0 & 0x100000000000L) != 0L)
+            return jjStopAtPos(1, 44);
          break;
       case 61:
          if ((active0 & 0x200000000L) != 0L)
@@ -503,7 +507,7 @@ public static final String[] jjstrLiteralImages = {
 "\151\146", "\164\150\145\156", "\145\154\163\145", "\167\150\151\154\145", "\144\157", 
 "\146\157\162", "\164\157", "\50", "\51", "\173", "\175", "\54", "\72", "\73", "\53", "\55", 
 "\52", "\57", "\75", "\76", "\74", "\75\75", "\41\75", "\46", "\174", null, null, 
-null, null, null, null, null, };
+null, null, "\133", "\135", null, null, null, };
 static protected Token jjFillToken()
 {
    final Token t;
@@ -801,6 +805,16 @@ static void TokenLexicalActions(Token matchedToken)
         image.append(input_stream.GetSuffix(jjimageLen + (lengthOfMatch = jjmatchedPos + 1)));
                                                                 System.out.println("ID -> "+image);
          break;
+      case 41 :
+        image.append(jjstrLiteralImages[41]);
+        lengthOfMatch = jjstrLiteralImages[41].length();
+                    System.out.println("BRAIZQ -> "+image);
+         break;
+      case 42 :
+        image.append(jjstrLiteralImages[42]);
+        lengthOfMatch = jjstrLiteralImages[42].length();
+                      System.out.println("BRADER -> "+image);
+         break;
       default :
          break;
    }
@@ -887,10 +901,10 @@ public static final String[] lexStateNames = {
    "DEFAULT",
 };
 static final long[] jjtoToken = {
-   0x1ffffffffffL, 
+   0x7ffffffffffL, 
 };
 static final long[] jjtoSkip = {
-   0xe0000000000L, 
+   0x380000000000L, 
 };
     static protected SimpleCharStream  input_stream;
 

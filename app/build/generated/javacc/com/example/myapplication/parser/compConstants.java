@@ -90,6 +90,10 @@ public interface compConstants {
   int ID = 39;
   /** RegularExpression Id. */
   int CTEC = 40;
+  /** RegularExpression Id. */
+  int BRAIZQ = 41;
+  /** RegularExpression Id. */
+  int BRADER = 42;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -137,6 +141,8 @@ public interface compConstants {
     "<CTEF>",
     "<ID>",
     "<CTEC>",
+    "\"[\"",
+    "\"]\"",
     "\" \"",
     "\"\\r\\n\"",
     "\"\\t\"",
