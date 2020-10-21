@@ -390,13 +390,14 @@ void Parametros( Token func) :
     Token var;
 }
 {
-    Tipo()
-    var = <ID>
-    {
-		TokenAsignaciones.checkVariable(var, func);
-	}
-	Dim()
-    Params(func)
+        Tipo()
+        var = <ID>
+        {
+            TokenAsignaciones.checkVariable(var, func);
+        }
+        Dim()
+        Params(func)
+     |  Empty()
 }
 
 void Params( Token func ) :
@@ -670,7 +671,7 @@ void Condicional(Token func) :
 void Condicional2(Token func) :
 {}
 {
-        Estatuto(func)<SEMICOLON>
+        Estatuto(func)
     |   Empty()
 }
 
@@ -678,13 +679,13 @@ void Condicional2(Token func) :
 void No_condicional(Token func) :
 {}
 {
-    <FOR><ID>Variable()<ASIGNACION>Expresion(func)<TO>Expresion(func)<DO><CURLYIZQ>No_condicional2(func)<CURLYDER>
+    <FOR>Variable()<ASIGNACION>Expresion(func)<TO>Expresion(func)<DO><CURLYIZQ>No_condicional2(func)<CURLYDER>
 }
 
 void No_condicional2(Token func) :
 {}
 {
-        Estatuto(func)<SEMICOLON>
+        Estatuto(func)
     |   Empty()
 }
 
