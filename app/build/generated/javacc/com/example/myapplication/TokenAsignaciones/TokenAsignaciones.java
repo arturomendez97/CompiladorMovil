@@ -108,23 +108,31 @@ public class TokenAsignaciones {
         {
             try
             {
-                tabla = (CustomHash) tablaFunc.get(nombreFuncion.image);
-                try
-                {
-                    //Si el TokenIzq.image existe dentro de la tabla de tokens, entonces tipoIdent1 toma el tipo de dato con el que TokenIzq.image fue declarado
-                    tipoIdent1 = (Integer)tabla.tablaV.get(TokenIzq.image);
-                }
-                catch(Exception e)
-                {
-                    //Si TokenIzq.image no se encuentra en la tabla en la cual se agregan los tokens, el token no ha sido declarado, y se manda un error
-                    return "Error: El identificador " + TokenIzq.image + " No ha sido declarado \r\nLinea: " + TokenIzq.beginLine;
-                }
+                tipoIdent1 = (Integer)tablaVarsGlobal.get(TokenIzq.image);
             }
             catch(Exception e)
             {
-                //Si TokenIzq.image no se encuentra en la tabla en la cual se agregan los tokens, el token no ha sido declarado, y se manda un error
-                return "Error: La funcion " + nombreFuncion.image + " No ha sido declarada \r\nLinea: ";
+                try
+                {
+                    tabla = (CustomHash) tablaFunc.get(nombreFuncion.image);
+                    try
+                    {
+                        //Si el TokenIzq.image existe dentro de la tabla de tokens, entonces tipoIdent1 toma el tipo de dato con el que TokenIzq.image fue declarado
+                        tipoIdent1 = (Integer)tabla.tablaV.get(TokenIzq.image);
+                    }
+                    catch(Exception g)
+                    {
+                        //Si TokenIzq.image no se encuentra en la tabla en la cual se agregan los tokens, el token no ha sido declarado, y se manda un error
+                        return "Error: El identificador " + TokenIzq.image + " No ha sido declarado \r\nLinea: " + TokenIzq.beginLine;
+                    }
+                }
+                catch(Exception h)
+                {
+                    //Si TokenIzq.image no se encuentra en la tabla en la cual se agregan los tokens, el token no ha sido declarado, y se manda un error
+                    return "Error: La funcion " + nombreFuncion.image + " No ha sido declarada \r\nLinea: ";
+                }
             }
+
         }
         else
             tipoIdent1 = 0;
@@ -136,23 +144,25 @@ public class TokenAsignaciones {
 			se obtiene su tipo de la tabla de tokens para poder hacer las comparaciones*/
             try
             {
-                tabla = (CustomHash) tablaFunc.get(nombreFuncion.image);
-                try
-                {
-                    tipoIdent2 = (Integer)tabla.tablaV.get(TokenAsig.image);
-                }
-                catch(Exception e)
-                {
-                    //si el identificador no existe manda el error
-                    return "Error: El identificador " + TokenAsig.image + " No ha sido declarado \r\nLinea: " + TokenIzq.beginLine;
-                }
+                tipoIdent2 = (Integer)tablaVarsGlobal.get(TokenIzq.image);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                //Si TokenIzq.image no se encuentra en la tabla en la cual se agregan los tokens, el token no ha sido declarado, y se manda un error
-                return "Error: La funcion " + nombreFuncion.image + " No ha sido declarada \r\nLinea: ";
+                try {
+                    tabla = (CustomHash) tablaFunc.get(nombreFuncion.image);
+                    try {
+                        tipoIdent2 = (Integer) tabla.tablaV.get(TokenAsig.image);
+                    } catch (Exception f) {
+                        //si el identificador no existe manda el error
+                        return "Error: El identificador " + TokenAsig.image + " No ha sido declarado \r\nLinea: " + TokenIzq.beginLine;
+                    }
+                } catch (Exception g) {
+                    //Si TokenIzq.image no se encuentra en la tabla en la cual se agregan los tokens, el token no ha sido declarado, y se manda un error
+                    return "Error: La funcion " + nombreFuncion.image + " No ha sido declarada \r\nLinea: ";
+                }
             }
         }
+
         //Si el dato es entero(37) o decimal(38) o caracter(40)
         //tipoIdent2 = tipo_del_dato
         else if(TokenAsig.kind == 37 || TokenAsig.kind == 38 || TokenAsig.kind == 40)

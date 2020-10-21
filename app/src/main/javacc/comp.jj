@@ -142,10 +142,12 @@ SKIP :
 //////////////PROGRAMA/////////////////
 void Programa() :
 {
-	TokenAsignaciones.SetTables();	
+	TokenAsignaciones.SetTables();
+	Token var;
 }
 {
     <PROGRAMA><ID><SEMICOLON>Mis_Vars_Global()Mis_Func()Main()<EOF>
+    //var = <PROGRAMA>Estatuto(var)<EOF>
 }
 
 //////////////MIS_VARS_GLOBAL/////////////////
@@ -504,27 +506,40 @@ void EDD3(Token func) :
 }
 
 //////////////ASIGNACION/////////////////
+
+void Asignacion( Token func) :
+{}
+{
+    Variable()<ASIGNACION>Expresion(func)Asignacion2(func)<SEMICOLON>
+}
+
+void Asignacion2(Token func) :
+{}
+{
+        Asignacion(func)
+     |  Empty()
+}
+
+/*
 void Asignacion( Token func) :
 {
 	int td;
 	Token var;
+	Token var2;
 }
 {
     var = Variable()
-    <ASIGNACION>
-    Asignacion2(var, func)
+    <ASIGNACION> var2= <ID>
+    Asignacion2(var, var2, func)
 }
 
-void Asignacion2(Token v1, Token func) :
+void Asignacion2(Token v1, Token v2, Token func) :
 {
-    Token v2;
 	Token v3;
 	String res;
 	boolean imp = false;
 }
 {
-        v2 = <ID>
-
         <PARENIZQ>Parametros(func)<PARENDER>
         {
         res = TokenAsignaciones.checkAsing(v1, v2, func);
@@ -536,7 +551,8 @@ void Asignacion2(Token v1, Token func) :
         }
 
         Asignacion3(func)
-    |   v2 = Expresion(func)
+
+    |   Expresion(func)
         v3 = Asignacion3(func)
         {
          res = TokenAsignaciones.checkAsing(v2, v3, func);
@@ -587,8 +603,8 @@ Token Asignacion4(Token func) :
         		}
                 return v1;
         }
-      | Empty()
-}
+      | Empty() {return func;}
+}*/
 
 //////////////VARIABLE/////////////////
 Token Variable() :
