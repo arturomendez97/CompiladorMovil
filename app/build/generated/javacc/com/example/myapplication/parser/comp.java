@@ -338,26 +338,20 @@ TokenAsignaciones.InsertarMain(func);
   }
 
 //////////////PARAMETROS/////////////////
-  static final public void Parametros(Token func) throws ParseException {int td;
-        Token var;
+  static final public 
+void Parametros(Token func) throws ParseException {Token var;
     Tipo();
-td = token.kind;
     var = jj_consume_token(ID);
-TokenAsignaciones.InsertarSimbolo(var, td, func);
+TokenAsignaciones.checkVariable(var, func);
+    Dim();
     Params(func);
   }
 
   static final public void Params(Token func) throws ParseException {
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-    case CURLYIZQ:{
-      jj_consume_token(CURLYIZQ);
-      jj_consume_token(CTEI);
-      jj_consume_token(CURLYDER);
-      Params2(func);
-      break;
-      }
-    case OR:{
-      Params2(func);
+    case COMMA:{
+      jj_consume_token(COMMA);
+      Parametros(func);
       break;
       }
     default:
@@ -366,11 +360,37 @@ TokenAsignaciones.InsertarSimbolo(var, td, func);
     }
   }
 
-  static final public void Params2(Token func) throws ParseException {
-    jj_consume_token(OR);
-    jj_consume_token(COMMA);
-    Parametros(func);
-  }
+/*
+void Parametros( Token func) :
+{
+	int td;
+	Token var;
+}
+{
+    Tipo()
+    {
+		td = token.kind;
+	}
+    var = <ID>
+    {
+		TokenAsignaciones.InsertarSimbolo(var, td, func);
+	}
+    Params(func)
+}
+
+void Params( Token func ) :
+{}
+{
+        <CURLYIZQ><CTEI><CURLYDER>Params2(func)
+    |   Params2(func)
+    |   Empty()
+}
+
+void Params2( Token func ) :
+{}
+{
+    <OR><COMMA>Parametros(func)
+}*/
 
 //////////////LECTURA/////////////////
   static final public void Lectura() throws ParseException {
@@ -1037,10 +1057,10 @@ res = TokenAsignaciones.checkFuncion(var);
       jj_la1_init_1();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x8,0x800000,0x70,0x8,0x0,0x0,0x800000,0x70,0x1f0,0xf0,0x70,0xa9e00,0x1f0,0xf0,0xa9e00,0x200000,0x800000,0x80000,0x800000,0x800000,0xa9e00,0x0,0x70,0xa9e00,0xa9e00,0x70,0xa9e00,0xa9e00,0x0,0x0,0x80000000,0xc000000,0x30000000,0x80000,0x0,};
+      jj_la1_0 = new int[] {0x8,0x800000,0x70,0x8,0x0,0x0,0x800000,0x70,0x1f0,0xf0,0x70,0xa9e00,0x1f0,0xf0,0xa9e00,0x800000,0x800000,0x80000,0x800000,0x800000,0xa9e00,0x0,0x70,0xa9e00,0xa9e00,0x70,0xa9e00,0xa9e00,0x0,0x0,0x80000000,0xc000000,0x30000000,0x80000,0x0,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0x0,0x0,0x0,0x0,0x200,0x200,0x0,0x0,0x0,0x0,0x0,0xe0,0x0,0x0,0xe0,0x10,0x0,0xe0,0x0,0x0,0xe0,0x80,0x0,0xe0,0xe0,0x0,0xe0,0xe0,0x10,0x8,0x7,0x0,0x0,0xe0,0xe0,};
+      jj_la1_1 = new int[] {0x0,0x0,0x0,0x0,0x200,0x200,0x0,0x0,0x0,0x0,0x0,0xe0,0x0,0x0,0xe0,0x0,0x0,0xe0,0x0,0x0,0xe0,0x80,0x0,0xe0,0xe0,0x0,0xe0,0xe0,0x10,0x8,0x7,0x0,0x0,0xe0,0xe0,};
    }
 
   /** Constructor with InputStream. */

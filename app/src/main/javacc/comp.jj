@@ -384,6 +384,31 @@ void Main2(Token func) :
 }
 
 //////////////PARAMETROS/////////////////
+
+void Parametros( Token func) :
+{
+    Token var;
+}
+{
+    Tipo()
+    var = <ID>
+    {
+		TokenAsignaciones.checkVariable(var, func);
+	}
+	Dim()
+    Params(func)
+}
+
+void Params( Token func ) :
+{}
+{
+        <COMMA> Parametros(func)
+     |  Empty()
+}
+
+
+
+/*
 void Parametros( Token func) :
 {
 	int td;
@@ -413,7 +438,7 @@ void Params2( Token func ) :
 {}
 {
     <OR><COMMA>Parametros(func)
-}
+}*/
 
 //////////////LECTURA/////////////////
 void Lectura() :
