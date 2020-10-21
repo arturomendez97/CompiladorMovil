@@ -51,9 +51,9 @@ public interface compConstants {
   /** RegularExpression Id. */
   int PARENDER = 20;
   /** RegularExpression Id. */
-  int BRACKETIZQ = 21;
+  int CURLYIZQ = 21;
   /** RegularExpression Id. */
-  int BRACKETDER = 22;
+  int CURLYDER = 22;
   /** RegularExpression Id. */
   int COMMA = 23;
   /** RegularExpression Id. */
@@ -91,9 +91,9 @@ public interface compConstants {
   /** RegularExpression Id. */
   int CTEC = 40;
   /** RegularExpression Id. */
-  int BRAIZQ = 41;
+  int BRACKETIZQ = 41;
   /** RegularExpression Id. */
-  int BRADER = 42;
+  int BRACKETDER = 42;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -146,6 +146,7 @@ public interface compConstants {
     "\" \"",
     "\"\\r\\n\"",
     "\"\\t\"",
+    "\"\\n\"",
   };
 
 }

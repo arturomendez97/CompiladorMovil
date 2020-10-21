@@ -82,8 +82,8 @@ TOKEN:
 {
     <PARENIZQ: "(" > {System.out.println("PARENIZQ -> "+image);} //19
     | <PARENDER: ")" > {System.out.println("PARENDER -> "+image);} //20
-    | <BRACKETIZQ: "{" > {System.out.println("BRACKETIZQ -> "+image);} //21
-    | <BRACKETDER: "}" > {System.out.println("BRACKETDER -> "+image);} //22
+    | <CURLYIZQ: "{" > {System.out.println("CURLYIZQ -> "+image);} //21
+    | <CURLYDER: "}" > {System.out.println("CURLYDER -> "+image);} //22
     | <COMMA: "," > {System.out.println("COMMA -> "+image);} //23
     | <COLON: ":" > {System.out.println("COLON -> "+image);} //24
     | <SEMICOLON: ";" > {System.out.println("SEMICOLON -> "+image);} //25
@@ -123,15 +123,15 @@ TOKEN:
 /// Tokens que se olvidaron
 TOKEN:
 {
-    <BRAIZQ: "[" > {System.out.println("BRAIZQ -> "+image);} //41
-    | <BRADER: "]" > {System.out.println("BRADER -> "+image);} //42
+    <BRACKETIZQ: "[" > {System.out.println("BRACKETIZQ -> "+image);} //41
+    | <BRACKETDER: "]" > {System.out.println("BRACKETDER -> "+image);} //42
 }
 
 
 
 SKIP :
 {
-    " " | "\r\n" | "\t"
+    " " | "\r\n" | "\t" | "\n"
 }
 
 
@@ -153,8 +153,8 @@ void Programa() :
 void Mis_Vars_Global() :
 {}
 {
-        Empty()
-    |   Vars_Global()
+        Vars_Global()
+    |   Empty()
 }
 
 void Vars_Global() :
@@ -304,9 +304,9 @@ void Funcion() :
     <PARENIZQ>Func2(func)<PARENDER>
 
     Func3(func)
-    <BRACKETIZQ>
+    <CURLYIZQ>
     Func4(func)
-    <BRACKETDER>Mas_F()
+    <CURLYDER>Mas_F()
 }
 
 int Func1() :
@@ -369,7 +369,7 @@ void Main() :
      {
      		TokenAsignaciones.InsertarMain(func);
      }
-     <PARENIZQ><PARENDER><BRACKETIZQ>Main2(func)<BRACKETDER>
+     <PARENIZQ><PARENDER><CURLYIZQ>Main2(func)<CURLYDER>
 }
 
 
@@ -402,7 +402,7 @@ void Parametros( Token func) :
 void Params( Token func ) :
 {}
 {
-        <BRACKETIZQ><CTEI><BRACKETDER>Params2(func)
+        <CURLYIZQ><CTEI><CURLYDER>Params2(func)
     |   Params2(func)
     |   Empty()
 }
@@ -486,7 +486,7 @@ void Letrero() :
 void Estatuto_De_Decision(Token func) :
 {}
 {
-    <IF><PARENIZQ>Expresion(func)<PARENDER><THEN><BRACKETIZQ>EDD2(func)<BRACKETDER>EDD3(func)
+    <IF><PARENIZQ>Expresion(func)<PARENDER><THEN><CURLYIZQ>EDD2(func)<CURLYDER>EDD3(func)
 }
 
 void EDD2(Token func) :
@@ -500,7 +500,7 @@ void EDD3(Token func) :
 {}
 {
         Empty()
-    |   <ELSE><BRACKETIZQ>EDD2(func)<BRACKETDER>
+    |   <ELSE><CURLYIZQ>EDD2(func)<CURLYDER>
 }
 
 //////////////ASIGNACION/////////////////
@@ -597,17 +597,10 @@ Token Variable() :
 }
 {
     var = <ID>
-    Variable2()Variable2()
+    Dim()
     {
     return var;
     }
-}
-
-void Variable2() :
-{}
-{
-        <BRAIZQ><CTEI><BRADER>
-    |   Empty()
 }
 
 //////////////TIPO/////////////////
@@ -630,7 +623,7 @@ void Retorno(Token func) :
 void Condicional(Token func) :
 {}
 {
-    <WHILE><PARENIZQ>Expresion(func)<PARENDER><DO><BRACKETIZQ>Condicional2(func)<BRACKETDER>
+    <WHILE><PARENIZQ>Expresion(func)<PARENDER><DO><CURLYIZQ>Condicional2(func)<CURLYDER>
 }
 
 void Condicional2(Token func) :
@@ -644,7 +637,7 @@ void Condicional2(Token func) :
 void No_condicional(Token func) :
 {}
 {
-    <FOR><ID>Variable()<ASIGNACION>Expresion(func)<TO>Expresion(func)<DO><BRACKETIZQ>No_condicional2(func)<BRACKETDER>
+    <FOR><ID>Variable()<ASIGNACION>Expresion(func)<TO>Expresion(func)<DO><CURLYIZQ>No_condicional2(func)<CURLYDER>
 }
 
 void No_condicional2(Token func) :

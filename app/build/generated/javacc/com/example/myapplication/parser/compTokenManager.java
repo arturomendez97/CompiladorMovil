@@ -507,7 +507,7 @@ public static final String[] jjstrLiteralImages = {
 "\151\146", "\164\150\145\156", "\145\154\163\145", "\167\150\151\154\145", "\144\157", 
 "\146\157\162", "\164\157", "\50", "\51", "\173", "\175", "\54", "\72", "\73", "\53", "\55", 
 "\52", "\57", "\75", "\76", "\74", "\75\75", "\41\75", "\46", "\174", null, null, 
-null, null, "\133", "\135", null, null, null, };
+null, null, "\133", "\135", null, null, null, null, };
 static protected Token jjFillToken()
 {
    final Token t;
@@ -564,7 +564,7 @@ public static Token getNextToken()
    jjimageLen = 0;
 
    try { input_stream.backup(0);
-      while (curChar <= 32 && (0x100000200L & (1L << curChar)) != 0L)
+      while (curChar <= 32 && (0x100000600L & (1L << curChar)) != 0L)
          curChar = input_stream.BeginToken();
    }
    catch (java.io.IOException e1) { continue EOFLoop; }
@@ -716,12 +716,12 @@ static void TokenLexicalActions(Token matchedToken)
       case 21 :
         image.append(jjstrLiteralImages[21]);
         lengthOfMatch = jjstrLiteralImages[21].length();
-                          System.out.println("BRACKETIZQ -> "+image);
+                        System.out.println("CURLYIZQ -> "+image);
          break;
       case 22 :
         image.append(jjstrLiteralImages[22]);
         lengthOfMatch = jjstrLiteralImages[22].length();
-                          System.out.println("BRACKETDER -> "+image);
+                        System.out.println("CURLYDER -> "+image);
          break;
       case 23 :
         image.append(jjstrLiteralImages[23]);
@@ -808,12 +808,12 @@ static void TokenLexicalActions(Token matchedToken)
       case 41 :
         image.append(jjstrLiteralImages[41]);
         lengthOfMatch = jjstrLiteralImages[41].length();
-                    System.out.println("BRAIZQ -> "+image);
+                        System.out.println("BRACKETIZQ -> "+image);
          break;
       case 42 :
         image.append(jjstrLiteralImages[42]);
         lengthOfMatch = jjstrLiteralImages[42].length();
-                      System.out.println("BRADER -> "+image);
+                          System.out.println("BRACKETDER -> "+image);
          break;
       default :
          break;
@@ -904,7 +904,7 @@ static final long[] jjtoToken = {
    0x7ffffffffffL, 
 };
 static final long[] jjtoSkip = {
-   0x380000000000L, 
+   0x780000000000L, 
 };
     static protected SimpleCharStream  input_stream;
 
