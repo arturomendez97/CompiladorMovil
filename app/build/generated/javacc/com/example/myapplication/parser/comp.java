@@ -84,7 +84,15 @@ TokenAsignaciones.InsertarSimboloGlobal(var, tipo);
 
 //////////////MIS_VARS/////////////////
   static final public void Mis_Vars(Token func) throws ParseException {
-    Empty();
+    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+    case VAR:{
+      Vars(func);
+      break;
+      }
+    default:
+      jj_la1[3] = jj_gen;
+      Empty();
+    }
   }
 
   static final public void Vars(Token func) throws ParseException {
@@ -114,7 +122,7 @@ TokenAsignaciones.InsertarSimbolo(var, td, func);
       break;
       }
     default:
-      jj_la1[3] = jj_gen;
+      jj_la1[4] = jj_gen;
       Empty();
     }
   }
@@ -128,7 +136,7 @@ TokenAsignaciones.InsertarSimbolo(var, td, func);
       break;
       }
     default:
-      jj_la1[4] = jj_gen;
+      jj_la1[5] = jj_gen;
       Empty();
     }
   }
@@ -146,7 +154,7 @@ TokenAsignaciones.InsertarSimbolo(var, tipo, func);
       break;
       }
     default:
-      jj_la1[5] = jj_gen;
+      jj_la1[6] = jj_gen;
       Empty();
     }
   }
@@ -160,7 +168,7 @@ TokenAsignaciones.InsertarSimbolo(var, tipo, func);
       break;
       }
     default:
-      jj_la1[6] = jj_gen;
+      jj_la1[7] = jj_gen;
       Empty();
     }
   }
@@ -177,7 +185,7 @@ TokenAsignaciones.InsertarSimbolo(var, tipo, func);
       break;
       }
     default:
-      jj_la1[7] = jj_gen;
+      jj_la1[8] = jj_gen;
       Empty();
     }
   }
@@ -209,7 +217,7 @@ TokenAsignaciones.InsertarFuncion(func, td);
       break;
       }
     default:
-      jj_la1[8] = jj_gen;
+      jj_la1[9] = jj_gen;
       Empty();
     }
     throw new Error("Missing return statement in function");
@@ -224,7 +232,7 @@ TokenAsignaciones.InsertarFuncion(func, td);
       break;
       }
     default:
-      jj_la1[9] = jj_gen;
+      jj_la1[10] = jj_gen;
       Empty();
     }
   }
@@ -249,7 +257,7 @@ TokenAsignaciones.InsertarFuncion(func, td);
       break;
       }
     default:
-      jj_la1[10] = jj_gen;
+      jj_la1[11] = jj_gen;
       Empty();
     }
   }
@@ -265,7 +273,7 @@ TokenAsignaciones.InsertarFuncion(func, td);
       break;
       }
     default:
-      jj_la1[11] = jj_gen;
+      jj_la1[12] = jj_gen;
       Empty();
     }
   }
@@ -290,7 +298,7 @@ TokenAsignaciones.InsertarFuncion(func, td);
       break;
       }
     default:
-      jj_la1[12] = jj_gen;
+      jj_la1[13] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -323,7 +331,7 @@ TokenAsignaciones.InsertarMain(func);
       break;
       }
     default:
-      jj_la1[13] = jj_gen;
+      jj_la1[14] = jj_gen;
       Empty();
     }
   }
@@ -352,7 +360,7 @@ TokenAsignaciones.InsertarSimbolo(var, td, func);
       break;
       }
     default:
-      jj_la1[14] = jj_gen;
+      jj_la1[15] = jj_gen;
       Empty();
     }
   }
@@ -385,7 +393,7 @@ TokenAsignaciones.InsertarSimbolo(var, td, func);
       break;
       }
     default:
-      jj_la1[15] = jj_gen;
+      jj_la1[16] = jj_gen;
       Empty();
     }
   }
@@ -412,7 +420,7 @@ TokenAsignaciones.InsertarSimbolo(var, td, func);
       break;
       }
     default:
-      jj_la1[16] = jj_gen;
+      jj_la1[17] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -436,7 +444,7 @@ TokenAsignaciones.InsertarSimbolo(var, td, func);
       break;
       }
     default:
-      jj_la1[17] = jj_gen;
+      jj_la1[18] = jj_gen;
       Empty();
     }
   }
@@ -449,7 +457,7 @@ TokenAsignaciones.InsertarSimbolo(var, td, func);
       break;
       }
     default:
-      jj_la1[18] = jj_gen;
+      jj_la1[19] = jj_gen;
       Empty();
     }
   }
@@ -488,7 +496,7 @@ TokenAsignaciones.InsertarSimbolo(var, td, func);
       break;
       }
     default:
-      jj_la1[19] = jj_gen;
+      jj_la1[20] = jj_gen;
       Empty();
     }
   }
@@ -544,7 +552,7 @@ res = TokenAsignaciones.checkAsing(v2, v3, func);
       break;
       }
     default:
-      jj_la1[20] = jj_gen;
+      jj_la1[21] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -579,7 +587,7 @@ res = TokenAsignaciones.checkAsing(v1, v2, func);
       break;
       }
     default:
-      jj_la1[21] = jj_gen;
+      jj_la1[22] = jj_gen;
       Empty();
     }
     throw new Error("Missing return statement in function");
@@ -609,7 +617,7 @@ res = TokenAsignaciones.checkAsing(v1, v2, func);
       break;
       }
     default:
-      jj_la1[22] = jj_gen;
+      jj_la1[23] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -652,7 +660,7 @@ res = TokenAsignaciones.checkAsing(v1, v2, func);
       break;
       }
     default:
-      jj_la1[23] = jj_gen;
+      jj_la1[24] = jj_gen;
       Empty();
     }
   }
@@ -689,7 +697,7 @@ res = TokenAsignaciones.checkAsing(v1, v2, func);
       break;
       }
     default:
-      jj_la1[24] = jj_gen;
+      jj_la1[25] = jj_gen;
       Empty();
     }
   }
@@ -723,7 +731,7 @@ res = TokenAsignaciones.checkFuncion(var);
       break;
       }
     default:
-      jj_la1[25] = jj_gen;
+      jj_la1[26] = jj_gen;
       Empty();
     }
   }
@@ -774,7 +782,7 @@ res = TokenAsignaciones.checkFuncion(var);
       break;
       }
     default:
-      jj_la1[26] = jj_gen;
+      jj_la1[27] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -796,7 +804,7 @@ res = TokenAsignaciones.checkFuncion(var);
       break;
       }
     default:
-      jj_la1[27] = jj_gen;
+      jj_la1[28] = jj_gen;
       Empty();
     }
   }
@@ -817,7 +825,7 @@ res = TokenAsignaciones.checkFuncion(var);
       break;
       }
     default:
-      jj_la1[28] = jj_gen;
+      jj_la1[29] = jj_gen;
       Empty();
     }
   }
@@ -838,7 +846,7 @@ res = TokenAsignaciones.checkFuncion(var);
       break;
       }
     default:
-      jj_la1[29] = jj_gen;
+      jj_la1[30] = jj_gen;
       Empty();
     }
   }
@@ -874,7 +882,7 @@ res = TokenAsignaciones.checkFuncion(var);
       break;
       }
     default:
-      jj_la1[30] = jj_gen;
+      jj_la1[31] = jj_gen;
       Empty();
     }
   }
@@ -900,7 +908,7 @@ res = TokenAsignaciones.checkFuncion(var);
       break;
       }
     default:
-      jj_la1[31] = jj_gen;
+      jj_la1[32] = jj_gen;
       Empty();
     }
   }
@@ -926,7 +934,7 @@ res = TokenAsignaciones.checkFuncion(var);
       break;
       }
     default:
-      jj_la1[32] = jj_gen;
+      jj_la1[33] = jj_gen;
       Empty();
     }
   }
@@ -953,7 +961,7 @@ res = TokenAsignaciones.checkFuncion(var);
       break;
       }
     default:
-      jj_la1[33] = jj_gen;
+      jj_la1[34] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -978,7 +986,7 @@ res = TokenAsignaciones.checkFuncion(var);
       break;
       }
     default:
-      jj_la1[34] = jj_gen;
+      jj_la1[35] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -1000,7 +1008,7 @@ res = TokenAsignaciones.checkFuncion(var);
   static public Token jj_nt;
   static private int jj_ntk;
   static private int jj_gen;
-  static final private int[] jj_la1 = new int[35];
+  static final private int[] jj_la1 = new int[36];
   static private int[] jj_la1_0;
   static private int[] jj_la1_1;
   static {
@@ -1008,10 +1016,10 @@ res = TokenAsignaciones.checkFuncion(var);
       jj_la1_init_1();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x8,0x800000,0x70,0x0,0x0,0x800000,0x70,0x1f0,0xf0,0x70,0xa9e00,0x1f0,0xf0,0xa9e00,0x200000,0x800000,0x80000,0x800000,0x800000,0xa9e00,0x80000,0x80000,0x70,0xa9e00,0xa9e00,0x70,0xa9e00,0xa9e00,0x0,0x0,0x80000000,0xc000000,0x30000000,0x80000,0x0,};
+      jj_la1_0 = new int[] {0x8,0x800000,0x70,0x8,0x0,0x0,0x800000,0x70,0x1f0,0xf0,0x70,0xa9e00,0x1f0,0xf0,0xa9e00,0x200000,0x800000,0x80000,0x800000,0x800000,0xa9e00,0x80000,0x80000,0x70,0xa9e00,0xa9e00,0x70,0xa9e00,0xa9e00,0x0,0x0,0x80000000,0xc000000,0x30000000,0x80000,0x0,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0x0,0x0,0x0,0x200,0x200,0x0,0x0,0x0,0x0,0x0,0xe0,0x0,0x0,0xe0,0x10,0x0,0xe0,0x0,0x0,0xe0,0xe0,0xe0,0x0,0xe0,0xe0,0x0,0xe0,0xe0,0x10,0x8,0x7,0x0,0x0,0xe0,0xe0,};
+      jj_la1_1 = new int[] {0x0,0x0,0x0,0x0,0x200,0x200,0x0,0x0,0x0,0x0,0x0,0xe0,0x0,0x0,0xe0,0x10,0x0,0xe0,0x0,0x0,0xe0,0xe0,0xe0,0x0,0xe0,0xe0,0x0,0xe0,0xe0,0x10,0x8,0x7,0x0,0x0,0xe0,0xe0,};
    }
 
   /** Constructor with InputStream. */
@@ -1032,7 +1040,7 @@ res = TokenAsignaciones.checkFuncion(var);
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 35; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 36; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -1046,7 +1054,7 @@ res = TokenAsignaciones.checkFuncion(var);
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 35; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 36; i++) jj_la1[i] = -1;
   }
 
   /** Constructor. */
@@ -1063,7 +1071,7 @@ res = TokenAsignaciones.checkFuncion(var);
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 35; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 36; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -1081,7 +1089,7 @@ res = TokenAsignaciones.checkFuncion(var);
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 35; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 36; i++) jj_la1[i] = -1;
   }
 
   /** Constructor with generated Token Manager. */
@@ -1097,7 +1105,7 @@ res = TokenAsignaciones.checkFuncion(var);
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 35; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 36; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -1106,7 +1114,7 @@ res = TokenAsignaciones.checkFuncion(var);
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 35; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 36; i++) jj_la1[i] = -1;
   }
 
   static private Token jj_consume_token(int kind) throws ParseException {
@@ -1162,7 +1170,7 @@ res = TokenAsignaciones.checkFuncion(var);
       la1tokens[jj_kind] = true;
       jj_kind = -1;
     }
-    for (int i = 0; i < 35; i++) {
+    for (int i = 0; i < 36; i++) {
       if (jj_la1[i] == jj_gen) {
         for (int j = 0; j < 32; j++) {
           if ((jj_la1_0[i] & (1<<j)) != 0) {

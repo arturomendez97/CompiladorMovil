@@ -145,7 +145,6 @@ void Programa() :
 	TokenAsignaciones.SetTables();	
 }
 {
-
     <PROGRAMA><ID><SEMICOLON>Mis_Vars_Global()Mis_Func()Main()<EOF>
 }
 
@@ -212,8 +211,9 @@ void MasT_Global() :
 void Mis_Vars(Token func) :
 {}
 {
-        Empty()
-    |   Vars(func)
+      Vars(func)
+    | Empty()
+
 }
 
 void Vars(Token func) :
