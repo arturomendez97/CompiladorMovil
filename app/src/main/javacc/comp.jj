@@ -125,6 +125,7 @@ TOKEN:
 {
     <BRACKETIZQ: "[" > {System.out.println("BRACKETIZQ -> "+image);} //41
     | <BRACKETDER: "]" > {System.out.println("BRACKETDER -> "+image);} //42
+    | <LLAMADA: "llamada" > {System.out.println("READ -> "+image);} //43
 }
 
 
@@ -256,6 +257,20 @@ void MasDim() :
       | Empty()
 }
 
+void Dim_Expresion(Token func) :
+{}
+{
+        <BRACKETIZQ>Expresion(func)<BRACKETDER>MasDim_Expresion(func)
+      | Empty()
+}
+
+void MasDim_Expresion(Token func) :
+{}
+{
+        <BRACKETIZQ>Expresion(func)<BRACKETDER>
+      | Empty()
+}
+
 void MasV( int tipo, Token func ) :
 {
     int td;
@@ -268,7 +283,7 @@ void MasV( int tipo, Token func ) :
             TokenAsignaciones.InsertarSimbolo(var, tipo, func);
             td = tipo;
         }
-        Dim()
+
         MasV( td ,func)
      | Empty()
 
@@ -297,8 +312,8 @@ void Funcion() :
 	Token func;
 }
 {
-    td = Func1()
     <MODULE>
+    td = Func1()
     func = <ID>
     {
 		TokenAsignaciones.InsertarFuncion(func, td);
@@ -395,7 +410,7 @@ void Parametros( Token func) :
         {
             TokenAsignaciones.checkVariable(var, func);
         }
-        Dim()
+        Dim_Expresion(func)
         Params(func)
      |  Empty()
 }
@@ -442,23 +457,23 @@ void Params2( Token func ) :
 }*/
 
 //////////////LECTURA/////////////////
-void Lectura() :
+void Lectura(Token func) :
 {}
 {
-    <READ><PARENIZQ>Lectura2()<PARENDER><SEMICOLON>
+    <READ><PARENIZQ>Lectura2(func)<PARENDER><SEMICOLON>
 }
 
-void Lectura2() :
+void Lectura2(Token func) :
 {}
 {
-        Variable()Lectura3()
+        Variable(func)Lectura3(func)
 
 
 }
-void Lectura3() :
+void Lectura3(Token func) :
 {}
 {
-        <COMMA>Lectura2()
+        <COMMA>Lectura2(func)
       | Empty()
 
 }
@@ -536,7 +551,7 @@ void EDD3(Token func) :
 void Asignacion( Token func) :
 {}
 {
-    Variable()<ASIGNACION>Expresion(func)Asignacion2(func)<SEMICOLON>
+    Variable(func)<ASIGNACION>Expresion(func)Asignacion2(func)<SEMICOLON>
 }
 
 void Asignacion2(Token func) :
@@ -633,13 +648,13 @@ Token Asignacion4(Token func) :
 }*/
 
 //////////////VARIABLE/////////////////
-Token Variable() :
+Token Variable(Token func) :
 {
     Token var;
 }
 {
     var = <ID>
-    Dim()
+    Dim_Expresion(func)
     {
     return var;
     }
@@ -679,7 +694,7 @@ void Condicional2(Token func) :
 void No_condicional(Token func) :
 {}
 {
-    <FOR>Variable()<ASIGNACION>Expresion(func)<TO>Expresion(func)<DO><CURLYIZQ>No_condicional2(func)<CURLYDER>
+    <FOR>Variable(func)<ASIGNACION>Expresion(func)<TO>Expresion(func)<DO><CURLYIZQ>No_condicional2(func)<CURLYDER>
 }
 
 void No_condicional2(Token func) :
@@ -697,6 +712,7 @@ Token Llamada( Token func ) :
 	boolean imp = false;
 }
 {
+    <LLAMADA>
     var = <ID>
     {
     res = TokenAsignaciones.checkFuncion(var);
@@ -723,14 +739,13 @@ void Estatuto(Token func) :
 {}
 {
         Asignacion(func)Estatuto2(func)
-    |   Lectura()Estatuto2(func)
+    |   Lectura(func)Estatuto2(func)
     |   Escritura(func)Estatuto2(func)
     |   Retorno(func)Estatuto2(func)
     |   Estatuto_De_Decision(func)Estatuto2(func)
     |   Condicional(func)Estatuto2(func)
     |   No_condicional(func)Estatuto2(func)
-    |   Expresion(func)Estatuto2(func)
-    //|   Llamada(func)Estatuto2(func)
+    |   Llamada(func)Estatuto2(func)
 }
 
 void Estatuto2(Token func) :
@@ -842,10 +857,10 @@ Token F(Token func) :
         <PARENIZQ>
         var = Expresion(func)<PARENDER>
         {return var;}
-    |   var = Variable()
+    |   var = Variable(func)
         {return var;}
-    //|   var = Llamada(func)
-    //    {return var;}
+    |   var = Llamada(func)
+        {return var;}
     |   var = F2()
         {return var;}
 }

@@ -142,6 +142,35 @@ TokenAsignaciones.InsertarSimbolo(var, td, func);
     }
   }
 
+  static final public void Dim_Expresion(Token func) throws ParseException {
+    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+    case BRACKETIZQ:{
+      jj_consume_token(BRACKETIZQ);
+      Expresion(func);
+      jj_consume_token(BRACKETDER);
+      MasDim_Expresion(func);
+      break;
+      }
+    default:
+      jj_la1[6] = jj_gen;
+      Empty();
+    }
+  }
+
+  static final public void MasDim_Expresion(Token func) throws ParseException {
+    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+    case BRACKETIZQ:{
+      jj_consume_token(BRACKETIZQ);
+      Expresion(func);
+      jj_consume_token(BRACKETDER);
+      break;
+      }
+    default:
+      jj_la1[7] = jj_gen;
+      Empty();
+    }
+  }
+
   static final public void MasV(int tipo, Token func) throws ParseException {int td;
     Token var;
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
@@ -150,12 +179,11 @@ TokenAsignaciones.InsertarSimbolo(var, td, func);
       var = jj_consume_token(ID);
 TokenAsignaciones.InsertarSimbolo(var, tipo, func);
             td = tipo;
-      Dim();
       MasV(td ,func);
       break;
       }
     default:
-      jj_la1[6] = jj_gen;
+      jj_la1[8] = jj_gen;
       Empty();
     }
   }
@@ -169,7 +197,7 @@ TokenAsignaciones.InsertarSimbolo(var, tipo, func);
       break;
       }
     default:
-      jj_la1[7] = jj_gen;
+      jj_la1[9] = jj_gen;
       Empty();
     }
   }
@@ -177,24 +205,20 @@ TokenAsignaciones.InsertarSimbolo(var, tipo, func);
 //////////////MIS_FUNC/////////////////
   static final public void Mis_Func() throws ParseException {
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-    case INT:
-    case FLOAT:
-    case CHAR:
-    case VOID:
     case MODULE:{
       Funcion();
       break;
       }
     default:
-      jj_la1[8] = jj_gen;
+      jj_la1[10] = jj_gen;
       Empty();
     }
   }
 
   static final public void Funcion() throws ParseException {int td;
         Token func;
-    td = Func1();
     jj_consume_token(MODULE);
+    td = Func1();
     func = jj_consume_token(ID);
 TokenAsignaciones.InsertarFuncion(func, td);
     jj_consume_token(PARENIZQ);
@@ -218,7 +242,7 @@ TokenAsignaciones.InsertarFuncion(func, td);
       break;
       }
     default:
-      jj_la1[9] = jj_gen;
+      jj_la1[11] = jj_gen;
       Empty();
     }
     throw new Error("Missing return statement in function");
@@ -240,31 +264,25 @@ TokenAsignaciones.InsertarFuncion(func, td);
     case IF:
     case WHILE:
     case FOR:
-    case PARENIZQ:
-    case CTEI:
-    case CTEF:
-    case ID:{
+    case ID:
+    case LLAMADA:{
       Estatuto(func);
       break;
       }
     default:
-      jj_la1[10] = jj_gen;
+      jj_la1[12] = jj_gen;
       Empty();
     }
   }
 
   static final public void Mas_F() throws ParseException {
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-    case INT:
-    case FLOAT:
-    case CHAR:
-    case VOID:
     case MODULE:{
       Funcion();
       break;
       }
     default:
-      jj_la1[11] = jj_gen;
+      jj_la1[13] = jj_gen;
       Empty();
     }
   }
@@ -289,7 +307,7 @@ TokenAsignaciones.InsertarFuncion(func, td);
       break;
       }
     default:
-      jj_la1[12] = jj_gen;
+      jj_la1[14] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -314,15 +332,13 @@ TokenAsignaciones.InsertarMain(func);
     case IF:
     case WHILE:
     case FOR:
-    case PARENIZQ:
-    case CTEI:
-    case CTEF:
-    case ID:{
+    case ID:
+    case LLAMADA:{
       Estatuto(func);
       break;
       }
     default:
-      jj_la1[13] = jj_gen;
+      jj_la1[15] = jj_gen;
       Empty();
     }
   }
@@ -337,12 +353,12 @@ void Parametros(Token func) throws ParseException {Token var;
       Tipo();
       var = jj_consume_token(ID);
 TokenAsignaciones.checkVariable(var, func);
-      Dim();
+      Dim_Expresion(func);
       Params(func);
       break;
       }
     default:
-      jj_la1[14] = jj_gen;
+      jj_la1[16] = jj_gen;
       Empty();
     }
   }
@@ -355,7 +371,7 @@ TokenAsignaciones.checkVariable(var, func);
       break;
       }
     default:
-      jj_la1[15] = jj_gen;
+      jj_la1[17] = jj_gen;
       Empty();
     }
   }
@@ -393,28 +409,28 @@ void Params2( Token func ) :
 }*/
 
 //////////////LECTURA/////////////////
-  static final public void Lectura() throws ParseException {
+  static final public void Lectura(Token func) throws ParseException {
     jj_consume_token(READ);
     jj_consume_token(PARENIZQ);
-    Lectura2();
+    Lectura2(func);
     jj_consume_token(PARENDER);
     jj_consume_token(SEMICOLON);
   }
 
-  static final public void Lectura2() throws ParseException {
-    Variable();
-    Lectura3();
+  static final public void Lectura2(Token func) throws ParseException {
+    Variable(func);
+    Lectura3(func);
   }
 
-  static final public void Lectura3() throws ParseException {
+  static final public void Lectura3(Token func) throws ParseException {
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case COMMA:{
       jj_consume_token(COMMA);
-      Lectura2();
+      Lectura2(func);
       break;
       }
     default:
-      jj_la1[16] = jj_gen;
+      jj_la1[18] = jj_gen;
       Empty();
     }
   }
@@ -436,12 +452,13 @@ void Params2( Token func ) :
       }
     case PARENIZQ:
     case CTEI:
-    case CTEF:{
+    case CTEF:
+    case LLAMADA:{
       Escritura_V(func);
       break;
       }
     default:
-      jj_la1[17] = jj_gen;
+      jj_la1[19] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -465,7 +482,7 @@ void Params2( Token func ) :
       break;
       }
     default:
-      jj_la1[18] = jj_gen;
+      jj_la1[20] = jj_gen;
       Empty();
     }
   }
@@ -478,7 +495,7 @@ void Params2( Token func ) :
       break;
       }
     default:
-      jj_la1[19] = jj_gen;
+      jj_la1[21] = jj_gen;
       Empty();
     }
   }
@@ -508,16 +525,14 @@ void Params2( Token func ) :
     case IF:
     case WHILE:
     case FOR:
-    case PARENIZQ:
-    case CTEI:
-    case CTEF:
-    case ID:{
+    case ID:
+    case LLAMADA:{
       Estatuto(func);
       jj_consume_token(SEMICOLON);
       break;
       }
     default:
-      jj_la1[20] = jj_gen;
+      jj_la1[22] = jj_gen;
       Empty();
     }
   }
@@ -529,7 +544,7 @@ void Params2( Token func ) :
 //////////////ASIGNACION/////////////////
   static final public 
 void Asignacion(Token func) throws ParseException {
-    Variable();
+    Variable(func);
     jj_consume_token(ASIGNACION);
     Expresion(func);
     Asignacion2(func);
@@ -543,7 +558,7 @@ void Asignacion(Token func) throws ParseException {
       break;
       }
     default:
-      jj_la1[21] = jj_gen;
+      jj_la1[23] = jj_gen;
       Empty();
     }
   }
@@ -635,9 +650,9 @@ Token Asignacion4(Token func) :
 }*/
 
 //////////////VARIABLE/////////////////
-  static final public Token Variable() throws ParseException {Token var;
+  static final public Token Variable(Token func) throws ParseException {Token var;
     var = jj_consume_token(ID);
-    Dim();
+    Dim_Expresion(func);
 {if ("" != null) return var;}
     throw new Error("Missing return statement in function");
   }
@@ -658,7 +673,7 @@ Token Asignacion4(Token func) :
       break;
       }
     default:
-      jj_la1[22] = jj_gen;
+      jj_la1[24] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -692,15 +707,13 @@ Token Asignacion4(Token func) :
     case IF:
     case WHILE:
     case FOR:
-    case PARENIZQ:
-    case CTEI:
-    case CTEF:
-    case ID:{
+    case ID:
+    case LLAMADA:{
       Estatuto(func);
       break;
       }
     default:
-      jj_la1[23] = jj_gen;
+      jj_la1[25] = jj_gen;
       Empty();
     }
   }
@@ -708,7 +721,7 @@ Token Asignacion4(Token func) :
 //////////////NO_CONDICIONAL/////////////////
   static final public void No_condicional(Token func) throws ParseException {
     jj_consume_token(FOR);
-    Variable();
+    Variable(func);
     jj_consume_token(ASIGNACION);
     Expresion(func);
     jj_consume_token(TO);
@@ -727,15 +740,13 @@ Token Asignacion4(Token func) :
     case IF:
     case WHILE:
     case FOR:
-    case PARENIZQ:
-    case CTEI:
-    case CTEF:
-    case ID:{
+    case ID:
+    case LLAMADA:{
       Estatuto(func);
       break;
       }
     default:
-      jj_la1[24] = jj_gen;
+      jj_la1[26] = jj_gen;
       Empty();
     }
   }
@@ -744,6 +755,7 @@ Token Asignacion4(Token func) :
   static final public Token Llamada(Token func) throws ParseException {Token var;
     String res;
         boolean imp = false;
+    jj_consume_token(LLAMADA);
     var = jj_consume_token(ID);
 res = TokenAsignaciones.checkFuncion(var);
 
@@ -773,7 +785,7 @@ res = TokenAsignaciones.checkFuncion(var);
       break;
       }
     case READ:{
-      Lectura();
+      Lectura(func);
       Estatuto2(func);
       break;
       }
@@ -802,15 +814,13 @@ res = TokenAsignaciones.checkFuncion(var);
       Estatuto2(func);
       break;
       }
-    case PARENIZQ:
-    case CTEI:
-    case CTEF:{
-      Expresion(func);
+    case LLAMADA:{
+      Llamada(func);
       Estatuto2(func);
       break;
       }
     default:
-      jj_la1[25] = jj_gen;
+      jj_la1[27] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -824,15 +834,13 @@ res = TokenAsignaciones.checkFuncion(var);
     case IF:
     case WHILE:
     case FOR:
-    case PARENIZQ:
-    case CTEI:
-    case CTEF:
-    case ID:{
+    case ID:
+    case LLAMADA:{
       Estatuto(func);
       break;
       }
     default:
-      jj_la1[26] = jj_gen;
+      jj_la1[28] = jj_gen;
       Empty();
     }
   }
@@ -853,7 +861,7 @@ res = TokenAsignaciones.checkFuncion(var);
       break;
       }
     default:
-      jj_la1[27] = jj_gen;
+      jj_la1[29] = jj_gen;
       Empty();
     }
   }
@@ -874,7 +882,7 @@ res = TokenAsignaciones.checkFuncion(var);
       break;
       }
     default:
-      jj_la1[28] = jj_gen;
+      jj_la1[30] = jj_gen;
       Empty();
     }
   }
@@ -910,7 +918,7 @@ res = TokenAsignaciones.checkFuncion(var);
       break;
       }
     default:
-      jj_la1[29] = jj_gen;
+      jj_la1[31] = jj_gen;
       Empty();
     }
   }
@@ -936,7 +944,7 @@ res = TokenAsignaciones.checkFuncion(var);
       break;
       }
     default:
-      jj_la1[30] = jj_gen;
+      jj_la1[32] = jj_gen;
       Empty();
     }
   }
@@ -962,7 +970,7 @@ res = TokenAsignaciones.checkFuncion(var);
       break;
       }
     default:
-      jj_la1[31] = jj_gen;
+      jj_la1[33] = jj_gen;
       Empty();
     }
   }
@@ -978,7 +986,12 @@ res = TokenAsignaciones.checkFuncion(var);
       break;
       }
     case ID:{
-      var = Variable();
+      var = Variable(func);
+{if ("" != null) return var;}
+      break;
+      }
+    case LLAMADA:{
+      var = Llamada(func);
 {if ("" != null) return var;}
       break;
       }
@@ -989,7 +1002,7 @@ res = TokenAsignaciones.checkFuncion(var);
       break;
       }
     default:
-      jj_la1[32] = jj_gen;
+      jj_la1[34] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -1014,7 +1027,7 @@ res = TokenAsignaciones.checkFuncion(var);
       break;
       }
     default:
-      jj_la1[33] = jj_gen;
+      jj_la1[35] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -1036,7 +1049,7 @@ res = TokenAsignaciones.checkFuncion(var);
   static public Token jj_nt;
   static private int jj_ntk;
   static private int jj_gen;
-  static final private int[] jj_la1 = new int[34];
+  static final private int[] jj_la1 = new int[36];
   static private int[] jj_la1_0;
   static private int[] jj_la1_1;
   static {
@@ -1044,10 +1057,10 @@ res = TokenAsignaciones.checkFuncion(var);
       jj_la1_init_1();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x8,0x800000,0x70,0x8,0x0,0x0,0x800000,0x70,0x1f0,0xf0,0xa9e00,0x1f0,0xf0,0xa9e00,0x70,0x800000,0x800000,0x80000,0x800000,0x800000,0xa9e00,0x0,0x70,0xa9e00,0xa9e00,0xa9e00,0xa9e00,0x0,0x0,0x80000000,0xc000000,0x30000000,0x80000,0x0,};
+      jj_la1_0 = new int[] {0x8,0x800000,0x70,0x8,0x0,0x0,0x0,0x0,0x800000,0x70,0x100,0xf0,0x29e00,0x100,0xf0,0x29e00,0x70,0x800000,0x800000,0x80000,0x800000,0x800000,0x29e00,0x0,0x70,0x29e00,0x29e00,0x29e00,0x29e00,0x0,0x0,0x80000000,0xc000000,0x30000000,0x80000,0x0,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0x0,0x0,0x0,0x0,0x200,0x200,0x0,0x0,0x0,0x0,0xe0,0x0,0x0,0xe0,0x0,0x0,0x0,0xe0,0x0,0x0,0xe0,0x80,0x0,0xe0,0xe0,0xe0,0xe0,0x10,0x8,0x7,0x0,0x0,0xe0,0xe0,};
+      jj_la1_1 = new int[] {0x0,0x0,0x0,0x0,0x200,0x200,0x200,0x200,0x0,0x0,0x0,0x0,0x880,0x0,0x0,0x880,0x0,0x0,0x0,0x8e0,0x0,0x0,0x880,0x80,0x0,0x880,0x880,0x880,0x880,0x10,0x8,0x7,0x0,0x0,0x8e0,0xe0,};
    }
 
   /** Constructor with InputStream. */
@@ -1068,7 +1081,7 @@ res = TokenAsignaciones.checkFuncion(var);
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 34; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 36; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -1082,7 +1095,7 @@ res = TokenAsignaciones.checkFuncion(var);
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 34; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 36; i++) jj_la1[i] = -1;
   }
 
   /** Constructor. */
@@ -1099,7 +1112,7 @@ res = TokenAsignaciones.checkFuncion(var);
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 34; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 36; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -1117,7 +1130,7 @@ res = TokenAsignaciones.checkFuncion(var);
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 34; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 36; i++) jj_la1[i] = -1;
   }
 
   /** Constructor with generated Token Manager. */
@@ -1133,7 +1146,7 @@ res = TokenAsignaciones.checkFuncion(var);
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 34; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 36; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -1142,7 +1155,7 @@ res = TokenAsignaciones.checkFuncion(var);
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 34; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 36; i++) jj_la1[i] = -1;
   }
 
   static private Token jj_consume_token(int kind) throws ParseException {
@@ -1193,12 +1206,12 @@ res = TokenAsignaciones.checkFuncion(var);
   /** Generate ParseException. */
   static public ParseException generateParseException() {
     jj_expentries.clear();
-    boolean[] la1tokens = new boolean[47];
+    boolean[] la1tokens = new boolean[48];
     if (jj_kind >= 0) {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
     }
-    for (int i = 0; i < 34; i++) {
+    for (int i = 0; i < 36; i++) {
       if (jj_la1[i] == jj_gen) {
         for (int j = 0; j < 32; j++) {
           if ((jj_la1_0[i] & (1<<j)) != 0) {
@@ -1210,7 +1223,7 @@ res = TokenAsignaciones.checkFuncion(var);
         }
       }
     }
-    for (int i = 0; i < 47; i++) {
+    for (int i = 0; i < 48; i++) {
       if (la1tokens[i]) {
         jj_expentry = new int[1];
         jj_expentry[0] = i;

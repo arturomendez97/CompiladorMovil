@@ -94,6 +94,8 @@ public interface compConstants {
   int BRACKETIZQ = 41;
   /** RegularExpression Id. */
   int BRACKETDER = 42;
+  /** RegularExpression Id. */
+  int LLAMADA = 43;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -143,6 +145,7 @@ public interface compConstants {
     "<CTEC>",
     "\"[\"",
     "\"]\"",
+    "\"llamada\"",
     "\" \"",
     "\"\\r\\n\"",
     "\"\\t\"",
