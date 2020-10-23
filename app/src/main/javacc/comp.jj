@@ -75,57 +75,59 @@ TOKEN:
     | <DO: "do" > {System.out.println("DO -> "+image);} //16
     | <FOR: "for" > {System.out.println("FOR -> "+image);} //17
     | <TO: "to" > {System.out.println("TO -> "+image);} //18
+    | <CALL: "call" > {System.out.println("CALL -> "+image);} //19
 }
 
 // Separadores
 TOKEN:
 {
-    <PARENIZQ: "(" > {System.out.println("PARENIZQ -> "+image);} //19
-    | <PARENDER: ")" > {System.out.println("PARENDER -> "+image);} //20
-    | <CURLYIZQ: "{" > {System.out.println("CURLYIZQ -> "+image);} //21
-    | <CURLYDER: "}" > {System.out.println("CURLYDER -> "+image);} //22
-    | <COMMA: "," > {System.out.println("COMMA -> "+image);} //23
-    | <COLON: ":" > {System.out.println("COLON -> "+image);} //24
-    | <SEMICOLON: ";" > {System.out.println("SEMICOLON -> "+image);} //25
+    <PARENIZQ: "(" > {System.out.println("PARENIZQ -> "+image);} //20
+    | <PARENDER: ")" > {System.out.println("PARENDER -> "+image);} //21
+    | <CURLYIZQ: "{" > {System.out.println("CURLYIZQ -> "+image);} //22
+    | <CURLYDER: "}" > {System.out.println("CURLYDER -> "+image);} //23
+    | <COMMA: "," > {System.out.println("COMMA -> "+image);} //24
+    | <COLON: ":" > {System.out.println("COLON -> "+image);} //25
+    | <SEMICOLON: ";" > {System.out.println("SEMICOLON -> "+image);} //26
 }
 
 
 // Operadores aritmeticos
 TOKEN:
 {
-    <MAS: "+" > {System.out.println("MAS -> "+image);} //26
-    | <MENOS: "-" > {System.out.println("MENOS -> "+image);} //27
-    | <MULT: "*" > {System.out.println("MULT -> "+image);} //28
-    | <DIV: "/" > {System.out.println("DIV -> "+image);} //29
+    <MAS: "+" > {System.out.println("MAS -> "+image);} //27
+    | <MENOS: "-" > {System.out.println("MENOS -> "+image);} //28
+    | <MULT: "*" > {System.out.println("MULT -> "+image);} //29
+    | <DIV: "/" > {System.out.println("DIV -> "+image);} //30
 }
 
 // Operadores Lógicos
 TOKEN:
 {
-    <ASIGNACION: "=" > {System.out.println("ASIGNACION -> "+image);} //30
-    | <MASQUE: ">" > {System.out.println("MASQUE -> "+image);} //31
-    | <MENOSQUE: "<" > {System.out.println("MENOSQUE -> "+image);} //32
-    | <IGUAL: "==" > {System.out.println("IGUAL -> "+image);} //33
-    | <NOIGUAL: "!=" > {System.out.println("NOIGUAL -> "+image);} //34
-    | <AND: "&" > {System.out.println("AND -> "+image);} //35
-    | <OR: "|" > {System.out.println("OR -> "+image);} //36
+    <ASIGNACION: "=" > {System.out.println("ASIGNACION -> "+image);} //31
+    | <MASQUE: ">" > {System.out.println("MASQUE -> "+image);} //32
+    | <MENOSQUE: "<" > {System.out.println("MENOSQUE -> "+image);} //33
+    | <IGUAL: "==" > {System.out.println("IGUAL -> "+image);} //34
+    | <NOIGUAL: "!=" > {System.out.println("NOIGUAL -> "+image);} //35
+    | <AND: "&" > {System.out.println("AND -> "+image);} //36
+    | <OR: "|" > {System.out.println("OR -> "+image);} //37
 }
 
 // Valores
 TOKEN:
 {
-    <CTEI: (["0"-"9"])+ > {System.out.println("CTEI -> "+image);} //37
-    | <CTEF: (["0"-"9"])+["."](["0"-"9"])+ > {System.out.println("CTEF -> "+image);} //38
-    | <ID: ["a"-"z","A"-"Z"](["a"-"z","A"-"Z","0"-"9","_"])* > {System.out.println("ID -> "+image);} //39
-    | <CTEC : "'"["a"-"z","A"-"Z","0"-"9"]"'" >//40
+    <CTEI: (["0"-"9"])+ > {System.out.println("CTEI -> "+image);} //38
+    | <CTEF: (["0"-"9"])+["."](["0"-"9"])+ > {System.out.println("CTEF -> "+image);} //39
+    | <ID: ["a"-"z","A"-"Z"](["a"-"z","A"-"Z","0"-"9","_"])* > {System.out.println("ID -> "+image);} //40
+    | <CTEC : "'"["a"-"z","A"-"Z","0"-"9"]"'" >//41
 
 }
 /// Tokens que se olvidaron
 TOKEN:
 {
-    <BRACKETIZQ: "[" > {System.out.println("BRACKETIZQ -> "+image);} //41
-    | <BRACKETDER: "]" > {System.out.println("BRACKETDER -> "+image);} //42
-    | <LLAMADA: "llamada" > {System.out.println("READ -> "+image);} //43
+    <BRACKETIZQ: "[" > {System.out.println("BRACKETIZQ -> "+image);} //42
+    | <BRACKETDER: "]" > {System.out.println("BRACKETDER -> "+image);} //43
+    | <COMILLA: "'" > {System.out.println("COMILLA -> "+image);} //44
+
 }
 
 
@@ -339,7 +341,7 @@ int Func1() :
 void Func2(Token func) :
 {}
 {
-        Parametros(func)
+        Parametros_Func(func)
     |   Empty()
 }
 
@@ -398,9 +400,9 @@ void Main2(Token func) :
     |   Empty()
 }
 
-//////////////PARAMETROS/////////////////
+//////////////PARAMETROS_FUNC/////////////////
 
-void Parametros( Token func) :
+void Parametros_Func( Token func) :
 {
     Token var;
 }
@@ -411,7 +413,25 @@ void Parametros( Token func) :
             TokenAsignaciones.checkVariable(var, func);
         }
         Dim_Expresion(func)
-        Params(func)
+        Params_Func(func)
+     |  Empty()
+}
+
+void Params_Func( Token func ) :
+{}
+{
+        <COMMA> Parametros_Func(func)
+     |  Empty()
+}
+
+//////////////PARAMETROS/////////////////
+
+void Parametros( Token func) :
+{
+    Token var;
+}
+{
+        Expresion(func)Params(func)
      |  Empty()
 }
 
@@ -489,40 +509,21 @@ void Escritura(Token func) :
 void Escritura2(Token func) :
 {}
 {
-        Escritura_L()
-    |   Escritura_V(func)
+        Letrero()Escritura3(func)
+    |   Expresion(func)Escritura3(func)
 }
 
-void Escritura_L() :
+void Escritura3(Token func) :
 {}
 {
-        Letrero() Escritura_L2()
-
+        <COMMA>Escritura2(func)
+    |   Empty()
 }
 
-void Escritura_V(Token func) :
-{}
-{
-        Expresion(func)Escritura_V2(func)
-
-}
-void Escritura_L2() :
-{}
-{
-         <COMMA>Escritura_L()
-      | Empty()
-}
-
-void Escritura_V2(Token func) :
-{}
-{
-      <COMMA>Escritura_V(func)
-     | Empty()
-}
 void Letrero() :
 {}
 {
-    <ID>
+    <COMILLA> <ID> <COMILLA>
 }
 
 //////////////ESTATUTO DE DECISION/////////////////
@@ -535,15 +536,15 @@ void Estatuto_De_Decision(Token func) :
 void EDD2(Token func) :
 {}
 {
-        Estatuto(func)<SEMICOLON>
+        Estatuto(func)
     |   Empty()
 }
 
 void EDD3(Token func) :
 {}
 {
-        Empty()
-    |   <ELSE><CURLYIZQ>EDD2(func)<CURLYDER>
+        <ELSE><CURLYIZQ>EDD2(func)<CURLYDER>
+    |   Empty()
 }
 
 //////////////ASIGNACION/////////////////
@@ -673,7 +674,7 @@ void Tipo() :
 void Retorno(Token func) :
 {}
 {
-    <RETURN><PARENIZQ>Expresion(func)<PARENDER>
+    <RETURN><PARENIZQ>Expresion(func)<PARENDER><SEMICOLON>
 }
 
 //////////////CONDICIONAL/////////////////
@@ -712,7 +713,7 @@ Token Llamada( Token func ) :
 	boolean imp = false;
 }
 {
-    <LLAMADA>
+    <CALL>
     var = <ID>
     {
     res = TokenAsignaciones.checkFuncion(var);
@@ -723,7 +724,7 @@ Token Llamada( Token func ) :
     			imp = true;
     		}
     }
-    <PARENIZQ>Llamada2(func)<PARENDER><SEMICOLON>
+    <PARENIZQ>Llamada2(func)<PARENDER>
     {return var;}
 }
 
@@ -745,7 +746,7 @@ void Estatuto(Token func) :
     |   Estatuto_De_Decision(func)Estatuto2(func)
     |   Condicional(func)Estatuto2(func)
     |   No_condicional(func)Estatuto2(func)
-    |   Llamada(func)Estatuto2(func)
+    |   Llamada(func)<SEMICOLON>Estatuto2(func)
 }
 
 void Estatuto2(Token func) :

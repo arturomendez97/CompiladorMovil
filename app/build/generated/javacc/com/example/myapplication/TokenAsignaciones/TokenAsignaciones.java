@@ -80,15 +80,15 @@ public class TokenAsignaciones {
 		 caracter = chrComp
 		*/
         intComp.add(4);
-        intComp.add(37);
+        intComp.add(38);
 
         decComp.add(4);
         decComp.add(5);
-        decComp.add(37);
         decComp.add(38);
+        decComp.add(39);
 
         chrComp.add(6);
-        chrComp.add(40);
+        chrComp.add(41);
 
         //strComp.add(47);
         //strComp.add(51);
@@ -101,10 +101,10 @@ public class TokenAsignaciones {
         int tipoIdent2;
         CustomHash tabla;
 							/* De la tabla obtenemos el tipo de dato del identificador
-								asi como, si el token enviado es diferente a algun tipo que no se declara como los numeros(37), los decimales(38),
-								caracteres(40)
+								asi como, si el token enviado es diferente a algun tipo que no se declara como los numeros(38), los decimales(39),
+								caracteres(41)
 								entonces tipoIdent1 = tipo_de_dato, ya que TokenAsig es un dato*/
-        if(TokenIzq.kind != 37 && TokenIzq.kind != 38)
+        if(TokenIzq.kind != 38 && TokenIzq.kind != 39)
         {
             try
             {
@@ -137,8 +137,8 @@ public class TokenAsignaciones {
         else
             tipoIdent1 = 0;
 
-        //TokenAsig.kind != 37 && TokenAsig.kind != 38 && TokenAsig.kind != 40
-        if(TokenAsig.kind == 39)
+        //TokenAsig.kind != 38 && TokenAsig.kind != 39 && TokenAsig.kind != 41
+        if(TokenAsig.kind == 40)
         {
 			/*Si el tipo de dato que se esta asignando, es algun identificador(kind == 39)
 			se obtiene su tipo de la tabla de tokens para poder hacer las comparaciones*/
@@ -163,9 +163,9 @@ public class TokenAsignaciones {
             }
         }
 
-        //Si el dato es entero(37) o decimal(38) o caracter(40)
+        //Si el dato es entero(38) o decimal(39) o caracter(41)
         //tipoIdent2 = tipo_del_dato
-        else if(TokenAsig.kind == 37 || TokenAsig.kind == 38 || TokenAsig.kind == 40)
+        else if(TokenAsig.kind == 38 || TokenAsig.kind == 39 || TokenAsig.kind == 41)
             tipoIdent2 = TokenAsig.kind;
         else //Si no, se inicializa en algun valor "sin significado(con respecto a los tokens)", para que la variable este inicializada y no marque error al comparar
             tipoIdent2 = 0;

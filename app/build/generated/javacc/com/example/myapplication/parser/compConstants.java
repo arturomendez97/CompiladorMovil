@@ -47,55 +47,57 @@ public interface compConstants {
   /** RegularExpression Id. */
   int TO = 18;
   /** RegularExpression Id. */
-  int PARENIZQ = 19;
+  int CALL = 19;
   /** RegularExpression Id. */
-  int PARENDER = 20;
+  int PARENIZQ = 20;
   /** RegularExpression Id. */
-  int CURLYIZQ = 21;
+  int PARENDER = 21;
   /** RegularExpression Id. */
-  int CURLYDER = 22;
+  int CURLYIZQ = 22;
   /** RegularExpression Id. */
-  int COMMA = 23;
+  int CURLYDER = 23;
   /** RegularExpression Id. */
-  int COLON = 24;
+  int COMMA = 24;
   /** RegularExpression Id. */
-  int SEMICOLON = 25;
+  int COLON = 25;
   /** RegularExpression Id. */
-  int MAS = 26;
+  int SEMICOLON = 26;
   /** RegularExpression Id. */
-  int MENOS = 27;
+  int MAS = 27;
   /** RegularExpression Id. */
-  int MULT = 28;
+  int MENOS = 28;
   /** RegularExpression Id. */
-  int DIV = 29;
+  int MULT = 29;
   /** RegularExpression Id. */
-  int ASIGNACION = 30;
+  int DIV = 30;
   /** RegularExpression Id. */
-  int MASQUE = 31;
+  int ASIGNACION = 31;
   /** RegularExpression Id. */
-  int MENOSQUE = 32;
+  int MASQUE = 32;
   /** RegularExpression Id. */
-  int IGUAL = 33;
+  int MENOSQUE = 33;
   /** RegularExpression Id. */
-  int NOIGUAL = 34;
+  int IGUAL = 34;
   /** RegularExpression Id. */
-  int AND = 35;
+  int NOIGUAL = 35;
   /** RegularExpression Id. */
-  int OR = 36;
+  int AND = 36;
   /** RegularExpression Id. */
-  int CTEI = 37;
+  int OR = 37;
   /** RegularExpression Id. */
-  int CTEF = 38;
+  int CTEI = 38;
   /** RegularExpression Id. */
-  int ID = 39;
+  int CTEF = 39;
   /** RegularExpression Id. */
-  int CTEC = 40;
+  int ID = 40;
   /** RegularExpression Id. */
-  int BRACKETIZQ = 41;
+  int CTEC = 41;
   /** RegularExpression Id. */
-  int BRACKETDER = 42;
+  int BRACKETIZQ = 42;
   /** RegularExpression Id. */
-  int LLAMADA = 43;
+  int BRACKETDER = 43;
+  /** RegularExpression Id. */
+  int COMILLA = 44;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -121,6 +123,7 @@ public interface compConstants {
     "\"do\"",
     "\"for\"",
     "\"to\"",
+    "\"call\"",
     "\"(\"",
     "\")\"",
     "\"{\"",
@@ -145,7 +148,7 @@ public interface compConstants {
     "<CTEC>",
     "\"[\"",
     "\"]\"",
-    "\"llamada\"",
+    "\"\\\'\"",
     "\" \"",
     "\"\\r\\n\"",
     "\"\\t\"",
