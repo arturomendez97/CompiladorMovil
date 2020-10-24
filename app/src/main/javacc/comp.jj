@@ -148,8 +148,9 @@ void Programa() :
 	Token var;
 }
 {
-    <PROGRAMA><ID><SEMICOLON>Mis_Vars_Global()Mis_Func()Main()<EOF>
-    //var = <PROGRAMA>Estatuto(var)<EOF>
+    <PROGRAMA><ID><SEMICOLON>Mis_Vars_Global()Mis_Func()Main()<EOF>//
+
+
 }
 
 //////////////MIS_VARS_GLOBAL/////////////////
@@ -549,7 +550,10 @@ void EDD3(Token func) :
 //////////////ASIGNACION/////////////////
 
 void Asignacion( Token func) :
-{}
+{
+Token var;
+Token var2;
+}
 {
     Variable(func)<ASIGNACION>Expresion(func)Asignacion2(func)<SEMICOLON>
 }
@@ -560,6 +564,8 @@ void Asignacion2(Token func) :
         Asignacion(func)
      |  Empty()
 }
+//// throw new ParseException(res);
+//// res = TokenAsignaciones.checkAsing(v1, v2, func);
 
 /*
 void Asignacion( Token func) :
@@ -586,7 +592,7 @@ void Asignacion2(Token v1, Token v2, Token func) :
         res = TokenAsignaciones.checkAsing(v1, v2, func);
         if(res != " ")
         {
-            System.out.println(res);
+            throw new ParseException(res);
             imp = true;
         }
         }
