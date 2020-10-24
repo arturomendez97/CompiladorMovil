@@ -131,7 +131,6 @@ TOKEN:
 }
 
 
-
 SKIP :
 {
     " " | "\r\n" | "\t" | "\n"
@@ -652,9 +651,20 @@ Token Asignacion4(Token func) :
 Token Variable(Token func) :
 {
     Token var;
+    String res;
+    boolean imp = false;
 }
 {
     var = <ID>
+    {
+        res = TokenAsignaciones.checkVariable(var, func);
+
+        if(res != " ")
+        {
+            throw new ParseException(res);
+            imp = true;
+        }
+    }
     Dim_Expresion(func)
     {
     return var;

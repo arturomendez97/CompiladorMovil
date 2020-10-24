@@ -14,10 +14,14 @@ import com.google.android.material.textfield.TextInputLayout;
 
 import java.io.ByteArrayInputStream;
 
+import com.example.myapplication.TokenAsignaciones.TokenAsignaciones;
+
+
 public class MainActivity extends AppCompatActivity {
     TextInputLayout inputText;
     TextView text;
     Button boton;
+    Button boton_tabla;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
         text = (TextView) findViewById(R.id.resultados);
         inputText = (TextInputLayout) findViewById(R.id.codigo);
         boton = (Button) findViewById(R.id.button);
+        boton_tabla = (Button) findViewById(R.id.Button_Tabla);
 
         String Create = "Hola";
         ByteArrayInputStream inicio = new ByteArrayInputStream(Create.getBytes());

@@ -50,4 +50,12 @@
             android:text="hola" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <Button
+        android:id="@+id/Button_Tabla"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ver Tabla"
+        tools:layout_editor_absoluteX="44dp"
+        tools:layout_editor_absoluteY="447dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

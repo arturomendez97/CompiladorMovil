@@ -675,7 +675,16 @@ Token Asignacion4(Token func) :
 
 //////////////VARIABLE/////////////////
   static final public Token Variable(Token func) throws ParseException {Token var;
+    String res;
+    boolean imp = false;
     var = jj_consume_token(ID);
+res = TokenAsignaciones.checkVariable(var, func);
+
+        if(res != " ")
+        {
+            {if (true) throw new ParseException(res);}
+            imp = true;
+        }
     Dim_Expresion(func);
 {if ("" != null) return var;}
     throw new Error("Missing return statement in function");

@@ -28,6 +28,11 @@ public class TokenAsignaciones {
     //private static ArrayList<Integer> strComp = new ArrayList();
     private static ArrayList<Integer> chrComp = new ArrayList();
 
+    public static Hashtable GetTabla()
+    {
+        return tablaVarsGlobal;
+    }
+
     //variable		//tipoDato
     public static String InsertarSimbolo(Token identificador, int tipo, Token nombreFuncion)
     {
@@ -226,26 +231,35 @@ public class TokenAsignaciones {
     public static String checkVariable(Token checkTok, Token nombreFuncion)
     {
         CustomHash tabla;
+
         try
         {
-            tabla = (CustomHash) tablaFunc.get(nombreFuncion.image);
+            int tipoToken = (Integer)tablaVarsGlobal.get(checkTok.image);
+        }
+        catch (Exception e)
+        {
             try
             {
-                //Intenta obtener el token a verificar(checkTok) de la tabla de los tokens
-                int tipoIdent1 = (Integer)tabla.tablaV.get(checkTok.image);
-                return " ";
+                tabla = (CustomHash) tablaFunc.get(nombreFuncion.image);
+                try
+                {
+                    //Intenta obtener el token a verificar(checkTok) de la tabla de los tokens
+                    int tipoIdent1 = (Integer)tabla.tablaV.get(checkTok.image);
+                    return " ";
+                }
+                catch(Exception f)
+                {
+                    //Si no lo puede obtener, manda el error
+                    return "Error: El identificador " + checkTok.image + " No ha sido declarado \r\nLinea: " + checkTok.beginLine;
+                }
             }
-            catch(Exception e)
+            catch(Exception g)
             {
-                //Si no lo puede obtener, manda el error
-                return "Error: El identificador " + checkTok.image + " No ha sido declarado \r\nLinea: " + checkTok.beginLine;
+                //Si TokenIzq.image no se encuentra en la tabla en la cual se agregan los tokens, el token no ha sido declarado, y se manda un error
+                return "Error: El identificador " + checkTok.image + " No ha sido declarada \r\nLinea: ";
             }
         }
-        catch(Exception e)
-        {
-            //Si TokenIzq.image no se encuentra en la tabla en la cual se agregan los tokens, el token no ha sido declarado, y se manda un error
-            return "Error: La funcion " + nombreFuncion.image + " No ha sido declarada \r\nLinea: ";
-        }
+        return "Error token no aceptado";
     }
 
     /*Metodo que verifica si una funcion ha sido declarada
