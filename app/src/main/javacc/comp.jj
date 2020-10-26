@@ -173,30 +173,23 @@ void Vars2_Global() :
 	Token var;
 }
 {
-    Tipo()
-    {
-		td = token.kind;
-	}
+    td = Tipo()
     var = <ID>
-    {
-		TokenAsignaciones.InsertarSimboloGlobal(var, td);
-	}
+    {TokenAsignaciones.InsertarSimboloGlobal(var, td);}
     Dim()
-    MasV_Global( td) <SEMICOLON> MasT_Global()
+    MasV_Global( td ) <SEMICOLON> MasT_Global()
 }
 
 
-void MasV_Global( int tipo) :
+void MasV_Global( int td) :
 {
-    int td;
     Token var;
 }
 {
         <COMMA>
         var = <ID>
         {
-            TokenAsignaciones.InsertarSimboloGlobal(var, tipo);
-            td = tipo;
+            TokenAsignaciones.InsertarSimboloGlobal(var, td);
         }
         Dim()
         MasV_Global(td)
@@ -231,15 +224,18 @@ void Vars2(Token func) :
 {
 	int td;
 	Token var;
+	String res;
 }
 {
-    (Tipo())
-    {
-		td = token.kind;
-	}
+    td = Tipo()
     var = <ID>
     {
-		TokenAsignaciones.InsertarSimbolo(var, td, func);
+		res = TokenAsignaciones.InsertarSimbolo(var, td, func);
+
+		if(res != " ")
+		{
+		    throw new ParseException(res);
+		}
 	}
     Dim()
     MasV( td, func ) <SEMICOLON> MasT(func)
@@ -273,17 +269,15 @@ void MasDim_Expresion(Token func) :
       | Empty()
 }
 
-void MasV( int tipo, Token func ) :
+void MasV( int td, Token func ) :
 {
-    int td;
     Token var;
 }
 {
         <COMMA>
         var = <ID>
         {
-            TokenAsignaciones.InsertarSimbolo(var, tipo, func);
-            td = tipo;
+            TokenAsignaciones.InsertarSimbolo(var, td, func);
         }
 
         MasV( td ,func)
@@ -312,13 +306,19 @@ void Funcion() :
 {
     int td;
 	Token func;
+	String res;
 }
 {
     <MODULE>
     td = Func1()
     func = <ID>
     {
-		TokenAsignaciones.InsertarFuncion(func, td);
+		res = TokenAsignaciones.InsertarFuncion(func, td);
+
+		if(res != " ")
+                {
+                    throw new ParseException(res);
+                }
 	}
     <PARENIZQ>Func2(func)<PARENDER>
 
@@ -329,11 +329,13 @@ void Funcion() :
 }
 
 int Func1() :
-{}
 {
-        Tipo_Retorno()
+    int td;
+}
+{
+        td = Tipo_Retorno()
         {
-            return token.kind;
+            return td;
         }
     |   Empty()
 }
@@ -367,13 +369,13 @@ void Mas_F() :
 }
 
 //////////////TIPO_RETORNO/////////////////
-void Tipo_Retorno() :
+int Tipo_Retorno() :
 {}
 {
-        <INT>
-    |   <FLOAT>
-    |   <CHAR>
-    |   <VOID>
+        (<INT> {return 4;})
+    |   (<FLOAT> {return 5;})
+    |   (<CHAR> {return 6;})
+    |   (<VOID> {return 7;})
 }
 
 //////////////MAIN/////////////////
@@ -404,13 +406,14 @@ void Main2(Token func) :
 
 void Parametros_Func( Token func) :
 {
+    int td;
     Token var;
 }
 {
-        Tipo()
+        td = Tipo()
         var = <ID>
         {
-            TokenAsignaciones.checkVariable(var, func);
+            TokenAsignaciones.InsertarSimbolo(var, td, func);
         }
         Dim_Expresion(func)
         Params_Func(func)
@@ -441,40 +444,6 @@ void Params( Token func ) :
         <COMMA> Parametros(func)
      |  Empty()
 }
-
-
-
-/*
-void Parametros( Token func) :
-{
-	int td;
-	Token var;
-}
-{
-    Tipo()
-    {
-		td = token.kind;
-	}
-    var = <ID>
-    {
-		TokenAsignaciones.InsertarSimbolo(var, td, func);
-	}
-    Params(func)
-}
-
-void Params( Token func ) :
-{}
-{
-        <CURLYIZQ><CTEI><CURLYDER>Params2(func)
-    |   Params2(func)
-    |   Empty()
-}
-
-void Params2( Token func ) :
-{}
-{
-    <OR><COMMA>Parametros(func)
-}*/
 
 //////////////LECTURA/////////////////
 void Lectura(Token func) :
@@ -678,15 +647,15 @@ Token Variable(Token func) :
 }
 
 //////////////TIPO/////////////////
-void Tipo() :
+int Tipo() :
 {}
 {
-        <INT>
-    |   <FLOAT>
-    |   <CHAR>
+        (<INT> {return 4;})
+    |   (<FLOAT> {return 5;})
+    |   (<CHAR> {return 6;})
 }
 
-//////////////TIPO/////////////////
+//////////////RETORNO/////////////////
 void Retorno(Token func) :
 {}
 {
@@ -734,11 +703,11 @@ Token Llamada( Token func ) :
     {
     res = TokenAsignaciones.checkFuncion(var);
 
-    		if(res != " ")
-    		{
-    			System.out.println(res);
-    			imp = true;
-    		}
+        if(res != " ")
+        {
+            throw new ParseException(res);
+            imp = true;
+        }
     }
     <PARENIZQ>Llamada2(func)<PARENDER>
     {return var;}

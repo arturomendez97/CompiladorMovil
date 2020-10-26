@@ -41,8 +41,7 @@ public class comp implements compConstants {
 
   static final public void Vars2_Global() throws ParseException {int td;
         Token var;
-    Tipo();
-td = token.kind;
+    td = Tipo();
     var = jj_consume_token(ID);
 TokenAsignaciones.InsertarSimboloGlobal(var, td);
     Dim();
@@ -51,14 +50,12 @@ TokenAsignaciones.InsertarSimboloGlobal(var, td);
     MasT_Global();
   }
 
-  static final public void MasV_Global(int tipo) throws ParseException {int td;
-    Token var;
+  static final public void MasV_Global(int td) throws ParseException {Token var;
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case COMMA:{
       jj_consume_token(COMMA);
       var = jj_consume_token(ID);
-TokenAsignaciones.InsertarSimboloGlobal(var, tipo);
-            td = tipo;
+TokenAsignaciones.InsertarSimboloGlobal(var, td);
       Dim();
       MasV_Global(td);
       break;
@@ -103,10 +100,15 @@ TokenAsignaciones.InsertarSimboloGlobal(var, tipo);
 
   static final public void Vars2(Token func) throws ParseException {int td;
         Token var;
-    Tipo();
-td = token.kind;
+        String res;
+    td = Tipo();
     var = jj_consume_token(ID);
-TokenAsignaciones.InsertarSimbolo(var, td, func);
+res = TokenAsignaciones.InsertarSimbolo(var, td, func);
+
+                if(res != " ")
+                {
+                    {if (true) throw new ParseException(res);}
+                }
     Dim();
     MasV(td, func);
     jj_consume_token(SEMICOLON);
@@ -171,14 +173,12 @@ TokenAsignaciones.InsertarSimbolo(var, td, func);
     }
   }
 
-  static final public void MasV(int tipo, Token func) throws ParseException {int td;
-    Token var;
+  static final public void MasV(int td, Token func) throws ParseException {Token var;
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case COMMA:{
       jj_consume_token(COMMA);
       var = jj_consume_token(ID);
-TokenAsignaciones.InsertarSimbolo(var, tipo, func);
-            td = tipo;
+TokenAsignaciones.InsertarSimbolo(var, td, func);
       MasV(td ,func);
       break;
       }
@@ -217,10 +217,16 @@ TokenAsignaciones.InsertarSimbolo(var, tipo, func);
 
   static final public void Funcion() throws ParseException {int td;
         Token func;
+        String res;
     jj_consume_token(MODULE);
     td = Func1();
     func = jj_consume_token(ID);
-TokenAsignaciones.InsertarFuncion(func, td);
+res = TokenAsignaciones.InsertarFuncion(func, td);
+
+                if(res != " ")
+                {
+                    {if (true) throw new ParseException(res);}
+                }
     jj_consume_token(PARENIZQ);
     Func2(func);
     jj_consume_token(PARENDER);
@@ -231,14 +237,14 @@ TokenAsignaciones.InsertarFuncion(func, td);
     Mas_F();
   }
 
-  static final public int Func1() throws ParseException {
+  static final public int Func1() throws ParseException {int td;
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case INT:
     case FLOAT:
     case CHAR:
     case VOID:{
-      Tipo_Retorno();
-{if ("" != null) return token.kind;}
+      td = Tipo_Retorno();
+{if ("" != null) return td;}
       break;
       }
     default:
@@ -288,22 +294,26 @@ TokenAsignaciones.InsertarFuncion(func, td);
   }
 
 //////////////TIPO_RETORNO/////////////////
-  static final public void Tipo_Retorno() throws ParseException {
+  static final public int Tipo_Retorno() throws ParseException {
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case INT:{
       jj_consume_token(INT);
+{if ("" != null) return 4;}
       break;
       }
     case FLOAT:{
       jj_consume_token(FLOAT);
+{if ("" != null) return 5;}
       break;
       }
     case CHAR:{
       jj_consume_token(CHAR);
+{if ("" != null) return 6;}
       break;
       }
     case VOID:{
       jj_consume_token(VOID);
+{if ("" != null) return 7;}
       break;
       }
     default:
@@ -311,6 +321,7 @@ TokenAsignaciones.InsertarFuncion(func, td);
       jj_consume_token(-1);
       throw new ParseException();
     }
+    throw new Error("Missing return statement in function");
   }
 
 //////////////MAIN/////////////////
@@ -345,14 +356,15 @@ TokenAsignaciones.InsertarMain(func);
 
 //////////////PARAMETROS_FUNC/////////////////
   static final public 
-void Parametros_Func(Token func) throws ParseException {Token var;
+void Parametros_Func(Token func) throws ParseException {int td;
+    Token var;
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case INT:
     case FLOAT:
     case CHAR:{
-      Tipo();
+      td = Tipo();
       var = jj_consume_token(ID);
-TokenAsignaciones.checkVariable(var, func);
+TokenAsignaciones.InsertarSimbolo(var, td, func);
       Dim_Expresion(func);
       Params_Func(func);
       break;
@@ -407,38 +419,6 @@ void Parametros(Token func) throws ParseException {Token var;
       Empty();
     }
   }
-
-/*
-void Parametros( Token func) :
-{
-	int td;
-	Token var;
-}
-{
-    Tipo()
-    {
-		td = token.kind;
-	}
-    var = <ID>
-    {
-		TokenAsignaciones.InsertarSimbolo(var, td, func);
-	}
-    Params(func)
-}
-
-void Params( Token func ) :
-{}
-{
-        <CURLYIZQ><CTEI><CURLYDER>Params2(func)
-    |   Params2(func)
-    |   Empty()
-}
-
-void Params2( Token func ) :
-{}
-{
-    <OR><COMMA>Parametros(func)
-}*/
 
 //////////////LECTURA/////////////////
   static final public void Lectura(Token func) throws ParseException {
@@ -567,7 +547,8 @@ void Params2( Token func ) :
 
 //////////////ASIGNACION/////////////////
   static final public 
-void Asignacion(Token func) throws ParseException {
+void Asignacion(Token func) throws ParseException {Token var;
+Token var2;
     Variable(func);
     jj_consume_token(ASIGNACION);
     Expresion(func);
@@ -586,6 +567,9 @@ void Asignacion(Token func) throws ParseException {
       Empty();
     }
   }
+
+//// throw new ParseException(res);
+//// res = TokenAsignaciones.checkAsing(v1, v2, func);
 
 /*
 void Asignacion( Token func) :
@@ -612,7 +596,7 @@ void Asignacion2(Token v1, Token v2, Token func) :
         res = TokenAsignaciones.checkAsing(v1, v2, func);
         if(res != " ")
         {
-            System.out.println(res);
+            throw new ParseException(res);
             imp = true;
         }
         }
@@ -691,18 +675,21 @@ res = TokenAsignaciones.checkVariable(var, func);
   }
 
 //////////////TIPO/////////////////
-  static final public void Tipo() throws ParseException {
+  static final public int Tipo() throws ParseException {
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case INT:{
       jj_consume_token(INT);
+{if ("" != null) return 4;}
       break;
       }
     case FLOAT:{
       jj_consume_token(FLOAT);
+{if ("" != null) return 5;}
       break;
       }
     case CHAR:{
       jj_consume_token(CHAR);
+{if ("" != null) return 6;}
       break;
       }
     default:
@@ -710,9 +697,10 @@ res = TokenAsignaciones.checkVariable(var, func);
       jj_consume_token(-1);
       throw new ParseException();
     }
+    throw new Error("Missing return statement in function");
   }
 
-//////////////TIPO/////////////////
+//////////////RETORNO/////////////////
   static final public void Retorno(Token func) throws ParseException {
     jj_consume_token(RETURN);
     jj_consume_token(PARENIZQ);
@@ -793,11 +781,11 @@ res = TokenAsignaciones.checkVariable(var, func);
     var = jj_consume_token(ID);
 res = TokenAsignaciones.checkFuncion(var);
 
-                if(res != " ")
-                {
-                        System.out.println(res);
-                        imp = true;
-                }
+        if(res != " ")
+        {
+            {if (true) throw new ParseException(res);}
+            imp = true;
+        }
     jj_consume_token(PARENIZQ);
     Llamada2(func);
     jj_consume_token(PARENDER);

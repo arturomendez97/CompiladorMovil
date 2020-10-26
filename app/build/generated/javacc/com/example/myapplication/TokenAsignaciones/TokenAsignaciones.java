@@ -7,10 +7,9 @@ import java.lang.String;
 import java.util.ArrayList;
 class CustomHash {
     int tipo;
-    Hashtable tablaV;
+    Hashtable tablaV = new Hashtable();
     public static void main(String[] args) {
         CustomHash myObj = new CustomHash();
-
     }
 }
 public class TokenAsignaciones {
@@ -20,7 +19,7 @@ public class TokenAsignaciones {
     private static Hashtable tablaVarsGlobal = new Hashtable();
 
     //Tabla que almacenara las funciones declaradas
-    private static Hashtable tablaFunc = new Hashtable();
+    private static Hashtable<String,CustomHash> tablaFunc = new Hashtable<String,CustomHash>();
 
     //Listas que guardaran los tipos compatibles de las variables
     private static ArrayList<Integer> intComp = new ArrayList();
@@ -42,15 +41,14 @@ public class TokenAsignaciones {
             CustomHash tabla;
             tabla = (CustomHash) tablaFunc.get(nombreFuncion.image);
             tabla.tablaV.put(identificador.image, tipo);
-            tablaFunc.put(nombreFuncion,tabla);
+            tablaFunc.put(nombreFuncion.image,tabla);
+            return " ";
 
         }
         catch(Exception e)
         {
-            //Si TokenIzq.image no se encuentra en la tabla en la cual se agregan los tokens, el token no ha sido declarado, y se manda un error
-            return "Error: La funcion " + identificador.image + " No ha sido declarada \r\nLinea: ";
+            return "Error: La funcion " + nombreFuncion.image + " No ha sido declarada \r\nLinea: ";
         }
-        return "";
     }
 
     public static void InsertarSimboloGlobal(Token identificador, int tipo)
@@ -60,12 +58,19 @@ public class TokenAsignaciones {
 
     }
 
-    public static void InsertarFuncion(Token identificador, int tipo)
+    public static String InsertarFuncion(Token nombreFuncion, int tipo)
     {
-        //En este metodo se agrega a la tabla de funciones el identificador que esta siendo declarado junto con su tipo de dato
-        CustomHash tabla = new CustomHash();
-        tabla.tipo=tipo;
-        tablaFunc.put(identificador.image,tabla);
+        try
+        {
+            CustomHash tabla = new CustomHash();
+            tabla.tipo=tipo;
+            tablaFunc.put(nombreFuncion.image,tabla);
+            return " ";
+        }
+        catch(Exception e)
+        {
+            return "Error: La funcion " + nombreFuncion.image + " No se pudo declarar \r\nLinea: ";
+        }
     }
     public static void InsertarMain(Token identificador)
     {
@@ -205,16 +210,17 @@ public class TokenAsignaciones {
         try
         {
             int tipoToken = (Integer)tablaVarsGlobal.get(checkTok.image);
+            return " ";
         }
         catch (Exception e)
         {
             try
             {
-                tabla = (CustomHash) tablaFunc.get(nombreFuncion.image);
+                tabla = tablaFunc.get(nombreFuncion.image);
                 try
                 {
                     //Intenta obtener el token a verificar(checkTok) de la tabla de los tokens
-                    int tipoIdent1 = (Integer)tabla.tablaV.get(checkTok.image);
+                    int token = (Integer)tabla.tablaV.get(checkTok.image);
                     return " ";
                 }
                 catch(Exception f)
@@ -226,26 +232,35 @@ public class TokenAsignaciones {
             catch(Exception g)
             {
                 //Si TokenIzq.image no se encuentra en la tabla en la cual se agregan los tokens, el token no ha sido declarado, y se manda un error
-                return "Error: El identificador " + checkTok.image + " No ha sido declarada \r\nLinea: ";
+                return "Error: La funcion  " + nombreFuncion.image + " No ha sido declarada \r\nLinea: ";
             }
         }
-        return "Error token no aceptado";
     }
 
     /*Metodo que verifica si una funcion ha sido declarada
         ej cuando hace una llamada*/
     public static String checkFuncion(Token nombreFuncion)
     {
-        CustomHash tabla;
-        try
+
+        CustomHash tabla = tablaFunc.get(nombreFuncion.image);
+
+        if (tabla != null){
+            return " ";
+        }
+        else{
+            //Si TokenIzq.image no se encuentra en la tabla en la cual se agregan los tokens, el token no ha sido declarado, y se manda un error
+            return "Error: La funcion " + nombreFuncion.image + " No ha sido declarada \r\nLinea: ";
+        }
+
+        /*try
         {
-            tabla = (CustomHash) tablaFunc.get(nombreFuncion.image);
+            CustomHash tabla = tablaFunc.get(nombreFuncion.image);
             return " ";
         }
         catch(Exception e)
         {
             //Si TokenIzq.image no se encuentra en la tabla en la cual se agregan los tokens, el token no ha sido declarado, y se manda un error
             return "Error: La funcion " + nombreFuncion.image + " No ha sido declarada \r\nLinea: ";
-        }
+        }*/
     }
 }
