@@ -89,7 +89,7 @@ static private int jjMoveStringLiteralDfa0_0(){
    switch(curChar)
    {
       case 13:
-         return jjMoveStringLiteralDfa1_0(0x400000000000L);
+         return jjMoveStringLiteralDfa1_0(0x1000000000000L);
       case 33:
          return jjMoveStringLiteralDfa1_0(0x800000000L);
       case 38:
@@ -115,12 +115,14 @@ static private int jjMoveStringLiteralDfa0_0(){
       case 59:
          return jjStopAtPos(0, 26);
       case 60:
-         return jjStopAtPos(0, 33);
+         jjmatchedKind = 33;
+         return jjMoveStringLiteralDfa1_0(0x400000000000L);
       case 61:
          jjmatchedKind = 31;
          return jjMoveStringLiteralDfa1_0(0x400000000L);
       case 62:
-         return jjStopAtPos(0, 32);
+         jjmatchedKind = 32;
+         return jjMoveStringLiteralDfa1_0(0x200000000000L);
       case 91:
          return jjStopAtPos(0, 42);
       case 93:
@@ -166,14 +168,18 @@ static private int jjMoveStringLiteralDfa1_0(long active0){
    switch(curChar)
    {
       case 10:
-         if ((active0 & 0x400000000000L) != 0L)
-            return jjStopAtPos(1, 46);
+         if ((active0 & 0x1000000000000L) != 0L)
+            return jjStopAtPos(1, 48);
          break;
       case 61:
          if ((active0 & 0x400000000L) != 0L)
             return jjStopAtPos(1, 34);
          else if ((active0 & 0x800000000L) != 0L)
             return jjStopAtPos(1, 35);
+         else if ((active0 & 0x200000000000L) != 0L)
+            return jjStopAtPos(1, 45);
+         else if ((active0 & 0x400000000000L) != 0L)
+            return jjStopAtPos(1, 46);
          break;
       case 97:
          return jjMoveStringLiteralDfa2_0(active0, 0x8000aL);
@@ -515,7 +521,8 @@ public static final String[] jjstrLiteralImages = {
 "\151\146", "\164\150\145\156", "\145\154\163\145", "\167\150\151\154\145", "\144\157", 
 "\146\157\162", "\164\157", "\143\141\154\154", "\50", "\51", "\173", "\175", "\54", "\72", 
 "\73", "\53", "\55", "\52", "\57", "\75", "\76", "\74", "\75\75", "\41\75", "\46", 
-"\174", null, null, null, null, "\133", "\135", "\47", null, null, null, null, };
+"\174", null, null, null, null, "\133", "\135", "\47", "\76\75", "\74\75", null, null, 
+null, null, };
 static protected Token jjFillToken()
 {
    final Token t;
@@ -833,6 +840,16 @@ static void TokenLexicalActions(Token matchedToken)
         lengthOfMatch = jjstrLiteralImages[44].length();
                        System.out.println("COMILLA -> "+image);
          break;
+      case 45 :
+        image.append(jjstrLiteralImages[45]);
+        lengthOfMatch = jjstrLiteralImages[45].length();
+                           System.out.println("MAYORIGUAL -> "+image);
+         break;
+      case 46 :
+        image.append(jjstrLiteralImages[46]);
+        lengthOfMatch = jjstrLiteralImages[46].length();
+                           System.out.println("MENORIGUAL -> "+image);
+         break;
       default :
          break;
    }
@@ -919,10 +936,10 @@ public static final String[] lexStateNames = {
    "DEFAULT",
 };
 static final long[] jjtoToken = {
-   0x1fffffffffffL, 
+   0x7fffffffffffL, 
 };
 static final long[] jjtoSkip = {
-   0x1e00000000000L, 
+   0x7800000000000L, 
 };
     static protected SimpleCharStream  input_stream;
 

@@ -25,6 +25,8 @@ options {
 PARSER_BEGIN(comp)
 package com.example.myapplication.parser;
 import com.example.myapplication.TokenAsignaciones.TokenAsignaciones;
+//import com.example.myapplication.TokenAsignaciones.cuboSemantico;
+
 
 public class comp {
 
@@ -127,6 +129,9 @@ TOKEN:
     <BRACKETIZQ: "[" > {System.out.println("BRACKETIZQ -> "+image);} //42
     | <BRACKETDER: "]" > {System.out.println("BRACKETDER -> "+image);} //43
     | <COMILLA: "'" > {System.out.println("COMILLA -> "+image);} //44
+    | <MAYORIGUAL: ">=" > {System.out.println("MAYORIGUAL -> "+image);} //45
+    | <MENORIGUAL: "<=" > {System.out.println("MENORIGUAL -> "+image);} //46
+
 
 }
 
@@ -524,15 +529,22 @@ Token var;
 Token var2;
 }
 {
-    Variable(func)<ASIGNACION>Expresion(func)Asignacion2(func)<SEMICOLON>
+    Variable(func)
+    <ASIGNACION>
+    Expresion(func)
+    <SEMICOLON>
 }
 
-void Asignacion2(Token func) :
+
+/*
+
+void Asignacion2(Token func, int tipo2) :
 {}
 {
-        Asignacion(func)
+        Asignacion(func, tipo2)
      |  Empty()
 }
+
 //// throw new ParseException(res);
 //// res = TokenAsignaciones.checkAsing(v1, v2, func);
 
@@ -734,6 +746,7 @@ void Estatuto(Token func) :
     |   Llamada(func)<SEMICOLON>Estatuto2(func)
 }
 
+
 void Estatuto2(Token func) :
 {}
 {
@@ -793,6 +806,8 @@ void G_Exp2(Token func) :
     |   <MASQUE>M_Exp(func)
     |   <IGUAL>M_Exp(func)
     |   <NOIGUAL>M_Exp(func)
+    |   <MAYORIGUAL> M_Exp(func)
+    |   <MENORIGUAL> M_Exp(func)
     |   Empty()
 }
 

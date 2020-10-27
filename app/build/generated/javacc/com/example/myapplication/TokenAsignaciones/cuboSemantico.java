@@ -5,13 +5,13 @@ import java.lang.String;
 public class cuboSemantico {
 /// Se definen los diferentes operadores y tipos
 
-    String types[] = new String[]{"int", "float", "string", "char", "bool"};
-    String operators[] = new String[]{"+", "-", "*", "/", "==", "!=", ">=", "<="};
+    String types[] = new String[]{"int", "float", "char"};
+    String operators[] = new String[]{"+", "-", "*", "/", "==", "!=", ">=", "<=", "<", ">"};
     String mathOP[] = new String[]{"+", "-", "*", "/"};
     String numTypes[] = new String[]{"int","float"};
     String charOP[] = new String[]{"+"};
     String charTypes[] = new String[]{"char","string"};
-    String logOp[] = new String[]{"==", "!=", ">=", "<="};
+    String logOp[] = new String[]{"==", "!=", ">=", "<=", "<", ">"};
     String boolOp[] = new String[]{"==", "!="};
     String logTypes[] = new String[]{"bool"};
     private String[][][] cubo;
@@ -38,8 +38,63 @@ public class cuboSemantico {
         }
     }
     /// Funcion para aceder al tipo de cualquir renglon
-    public String getType(String firstType, String secondType, String op){
-        return this.cubo[0][0][0];
+    public String getType(int firstType, int secondType, String op){
+
+       int indice_I;
+       int indice_J;
+       int indice_K;
+
+        switch (firstType)
+        {
+            case 4:  indice_I = 0;
+                break;
+            case 5:  indice_I = 1;
+                break;
+            case 6:  indice_I = 2;
+                break;
+            default: indice_I = -1;
+                break;
+        }
+
+        switch (secondType)
+        {
+            case 4:  indice_J = 0;
+                break;
+            case 5:  indice_J = 1;
+                break;
+            case 6:  indice_J = 2;
+                break;
+            default: indice_J = -1;
+                break;
+        }
+
+        switch (op)
+        {
+            case "+":  indice_K = 0;
+                break;
+            case "-":  indice_K = 1;
+                break;
+            case "*":  indice_K = 2;
+                break;
+            case "/":  indice_K = 3;
+                break;
+            case "==":  indice_K = 4;
+                break;
+            case "!=":  indice_K = 5;
+                break;
+            case ">=":  indice_K = 6;
+                break;
+            case "<=":  indice_K = 7;
+                break;
+            case "<":  indice_K = 8;
+                break;
+            case ">":  indice_K = 9;
+                break;
+            default: indice_K = -1;
+                break;
+        }
+
+        return this.cubo[indice_I][indice_J][indice_K];
     }
     /// Funcion para agregar una regla
     public  void insertTypeRule(String firstType, String secondType, String op,String result) {

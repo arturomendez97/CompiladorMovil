@@ -98,6 +98,10 @@ public interface compConstants {
   int BRACKETDER = 43;
   /** RegularExpression Id. */
   int COMILLA = 44;
+  /** RegularExpression Id. */
+  int MAYORIGUAL = 45;
+  /** RegularExpression Id. */
+  int MENORIGUAL = 46;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -149,6 +153,8 @@ public interface compConstants {
     "\"[\"",
     "\"]\"",
     "\"\\\'\"",
+    "\">=\"",
+    "\"<=\"",
     "\" \"",
     "\"\\r\\n\"",
     "\"\\t\"",
