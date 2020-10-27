@@ -25,7 +25,8 @@ options {
 PARSER_BEGIN(comp)
 package com.example.myapplication.parser;
 import com.example.myapplication.TokenAsignaciones.TokenAsignaciones;
-//import com.example.myapplication.TokenAsignaciones.cuboSemantico;
+import com.example.myapplication.TokenAsignaciones.cuboSemantico;
+import com.example.myapplication.TokenAsignaciones.Quadruple;
 
 
 public class comp {
@@ -153,6 +154,7 @@ void Programa() :
 	Token var;
 }
 {
+    {System.out.println("HOLA");}
     <PROGRAMA><ID><SEMICOLON>Mis_Vars_Global()Mis_Func()Main()<EOF>//
 
 

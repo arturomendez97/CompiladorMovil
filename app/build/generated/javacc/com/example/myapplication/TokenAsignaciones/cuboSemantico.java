@@ -1,5 +1,4 @@
-
-
+package com.example.myapplication.TokenAsignaciones;
 import java.lang.String;
 
 public class cuboSemantico {
