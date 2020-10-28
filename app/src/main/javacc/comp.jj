@@ -801,6 +801,7 @@ Token T_Exp(Token func) :
     {
             if (TokenAsignaciones.checkPilaOP("&"))
                 {
+
                     TokenAsignaciones.pushPilaVP(TokenAsignaciones.popPilaOP());
                 }
             return var;
@@ -877,6 +878,10 @@ void M_Exp2(Token func) :
 Token T(Token func) :
 {
     Token var;
+    Token op;
+    Token arg1;
+    Token arg2;
+    // temporal;
 }
 {
     var = F(func)
@@ -884,7 +889,19 @@ Token T(Token func) :
     {
                    if (TokenAsignaciones.checkPilaOP("*") | TokenAsignaciones.checkPilaOP("/"))
                        {
-                           TokenAsignaciones.pushPilaVP(TokenAsignaciones.popPilaOP());
+                           op = TokenAsignaciones.popPilaOP();
+                           arg1 = TokenAsignaciones.popPilaVP();
+                           arg2 = TokenAsignaciones.popPilaVP();
+
+                           //temporal.image = cuboSemantico.funcion()
+                           //Aqui llamas al cubo sem
+                           //Y el temporal es del tipo que te regrese.
+
+
+                           //Meter el temporal a la pila del vector polaco
+
+
+                           //TokenAsignaciones.pushPilaVP();
                        }
                    return var;
                }

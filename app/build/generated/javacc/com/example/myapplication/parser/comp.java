@@ -905,6 +905,7 @@ TokenAsignaciones.pushPilaOP(var); System.out.println(TokenAsignaciones.returnPi
     T_Exp2(func);
 if (TokenAsignaciones.checkPilaOP("&"))
                 {
+
                     TokenAsignaciones.pushPilaVP(TokenAsignaciones.popPilaOP());
                 }
             {if ("" != null) return var;}
@@ -1015,11 +1016,28 @@ TokenAsignaciones.pushPilaOP(var); System.out.println(TokenAsignaciones.returnPi
 
 //////////////T(TERMINO)/////////////////
   static final public Token T(Token func) throws ParseException {Token var;
+    Token op;
+    Token arg1;
+    Token arg2;
+    // temporal;
+
     var = F(func);
     T2(func);
 if (TokenAsignaciones.checkPilaOP("*") | TokenAsignaciones.checkPilaOP("/"))
                        {
-                           TokenAsignaciones.pushPilaVP(TokenAsignaciones.popPilaOP());
+                           op = TokenAsignaciones.popPilaOP();
+                           arg1 = TokenAsignaciones.popPilaVP();
+                           arg2 = TokenAsignaciones.popPilaVP();
+
+                           //temporal.image = cuboSemantico.funcion()
+                           //Aqui llamas al cubo sem
+                           //Y el temporal es del tipo que te regrese.
+
+
+                           //Meter el temporal a la pila del vector polaco
+
+
+                           //TokenAsignaciones.pushPilaVP();
                        }
                    {if ("" != null) return var;}
     throw new Error("Missing return statement in function");
