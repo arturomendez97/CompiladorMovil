@@ -15,7 +15,6 @@ public class comp implements compConstants {
 //////////////PROGRAMA/////////////////
   static final public void Programa() throws ParseException {TokenAsignaciones.SetTables();
         Token var;
-System.out.println("HOLA");
     jj_consume_token(PROGRAMA);
     jj_consume_token(ID);
     jj_consume_token(SEMICOLON);
@@ -23,6 +22,10 @@ System.out.println("HOLA");
     Mis_Func();
     Main();
     jj_consume_token(0);
+System.out.println("Pila OP: " + TokenAsignaciones.returnPilaOP());
+        System.out.println("Pila VP: " + TokenAsignaciones.returnPilaVP());
+        TokenAsignaciones.emptyPilaOP();
+        TokenAsignaciones.emptyPilaVP();
   }
 
 //////////////MIS_VARS_GLOBAL/////////////////
@@ -669,6 +672,9 @@ res = TokenAsignaciones.checkVariable(var, func);
             {if (true) throw new ParseException(res);}
             imp = true;
         }
+
+        TokenAsignaciones.pushPilaVP(var);
+        System.out.println(TokenAsignaciones.returnPilaVP());
     Dim_Expresion(func);
 {if ("" != null) return var;}
     throw new Error("Missing return statement in function");
@@ -871,15 +877,20 @@ res = TokenAsignaciones.checkFuncion(var);
   static final public Token Expresion(Token func) throws ParseException {Token var;
     var = T_Exp(func);
     Expresion2(func);
-{if ("" != null) return var;}
+if (TokenAsignaciones.checkPilaOP("|"))
+            {
+                TokenAsignaciones.pushPilaVP(TokenAsignaciones.popPilaOP());
+            }
+        {if ("" != null) return var;}
     throw new Error("Missing return statement in function");
   }
 
-  static final public void Expresion2(Token func) throws ParseException {
+  static final public void Expresion2(Token func) throws ParseException {Token var;
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case OR:{
-      jj_consume_token(OR);
+      var = jj_consume_token(OR);
       Expresion(func);
+TokenAsignaciones.pushPilaOP(var); System.out.println(TokenAsignaciones.returnPilaOP());
       break;
       }
     default:
@@ -892,15 +903,20 @@ res = TokenAsignaciones.checkFuncion(var);
   static final public Token T_Exp(Token func) throws ParseException {Token var;
     var = G_Exp(func);
     T_Exp2(func);
-{if ("" != null) return var;}
+if (TokenAsignaciones.checkPilaOP("&"))
+                {
+                    TokenAsignaciones.pushPilaVP(TokenAsignaciones.popPilaOP());
+                }
+            {if ("" != null) return var;}
     throw new Error("Missing return statement in function");
   }
 
-  static final public void T_Exp2(Token func) throws ParseException {
+  static final public void T_Exp2(Token func) throws ParseException {Token var;
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case AND:{
-      jj_consume_token(AND);
+      var = jj_consume_token(AND);
       T_Exp(func);
+TokenAsignaciones.pushPilaOP(var); System.out.println(TokenAsignaciones.returnPilaOP());
       break;
       }
     default:
@@ -913,40 +929,50 @@ res = TokenAsignaciones.checkFuncion(var);
   static final public Token G_Exp(Token func) throws ParseException {Token var;
     var = M_Exp(func);
     G_Exp2(func);
-{if ("" != null) return var;}
+if (TokenAsignaciones.checkPilaOP("<") | TokenAsignaciones.checkPilaOP(">") | TokenAsignaciones.checkPilaOP("==") | TokenAsignaciones.checkPilaOP("!=") | TokenAsignaciones.checkPilaOP(">=") | TokenAsignaciones.checkPilaOP("<="))
+               {
+                   TokenAsignaciones.pushPilaVP(TokenAsignaciones.popPilaOP());
+               }
+           {if ("" != null) return var;}
     throw new Error("Missing return statement in function");
   }
 
-  static final public void G_Exp2(Token func) throws ParseException {
+  static final public void G_Exp2(Token func) throws ParseException {Token var;
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case MENOSQUE:{
-      jj_consume_token(MENOSQUE);
+      var = jj_consume_token(MENOSQUE);
       M_Exp(func);
+TokenAsignaciones.pushPilaOP(var); System.out.println(TokenAsignaciones.returnPilaOP());
       break;
       }
     case MASQUE:{
-      jj_consume_token(MASQUE);
+      var = jj_consume_token(MASQUE);
       M_Exp(func);
+TokenAsignaciones.pushPilaOP(var); System.out.println(TokenAsignaciones.returnPilaOP());
       break;
       }
     case IGUAL:{
-      jj_consume_token(IGUAL);
+      var = jj_consume_token(IGUAL);
       M_Exp(func);
+TokenAsignaciones.pushPilaOP(var); System.out.println(TokenAsignaciones.returnPilaOP());
       break;
       }
     case NOIGUAL:{
-      jj_consume_token(NOIGUAL);
+      var = jj_consume_token(NOIGUAL);
       M_Exp(func);
+TokenAsignaciones.pushPilaOP(var); System.out.println(TokenAsignaciones.returnPilaOP());
       break;
       }
     case MAYORIGUAL:{
-      jj_consume_token(MAYORIGUAL);
+      var = jj_consume_token(MAYORIGUAL);
       M_Exp(func);
+TokenAsignaciones.pushPilaOP(var); System.out.println(TokenAsignaciones.returnPilaOP());
       break;
       }
     case MENORIGUAL:{
-      jj_consume_token(MENORIGUAL);
+      var = jj_consume_token(MENORIGUAL);
       M_Exp(func);
+TokenAsignaciones.pushPilaOP(var); System.out.println(TokenAsignaciones.returnPilaOP());
       break;
       }
     default:
@@ -959,20 +985,26 @@ res = TokenAsignaciones.checkFuncion(var);
   static final public Token M_Exp(Token func) throws ParseException {Token var;
     var = T(func);
     M_Exp2(func);
-{if ("" != null) return var;}
+if (TokenAsignaciones.checkPilaOP("+") | TokenAsignaciones.checkPilaOP("-"))
+                   {
+                       TokenAsignaciones.pushPilaVP(TokenAsignaciones.popPilaOP());
+                   }
+               {if ("" != null) return var;}
     throw new Error("Missing return statement in function");
   }
 
-  static final public void M_Exp2(Token func) throws ParseException {
+  static final public void M_Exp2(Token func) throws ParseException {Token var;
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case MAS:{
-      jj_consume_token(MAS);
+      var = jj_consume_token(MAS);
       M_Exp(func);
+TokenAsignaciones.pushPilaOP(var); System.out.println(TokenAsignaciones.returnPilaOP());
       break;
       }
     case MENOS:{
-      jj_consume_token(MENOS);
+      var = jj_consume_token(MENOS);
       M_Exp(func);
+TokenAsignaciones.pushPilaOP(var); System.out.println(TokenAsignaciones.returnPilaOP());
       break;
       }
     default:
@@ -985,20 +1017,26 @@ res = TokenAsignaciones.checkFuncion(var);
   static final public Token T(Token func) throws ParseException {Token var;
     var = F(func);
     T2(func);
-{if ("" != null) return var;}
+if (TokenAsignaciones.checkPilaOP("*") | TokenAsignaciones.checkPilaOP("/"))
+                       {
+                           TokenAsignaciones.pushPilaVP(TokenAsignaciones.popPilaOP());
+                       }
+                   {if ("" != null) return var;}
     throw new Error("Missing return statement in function");
   }
 
-  static final public void T2(Token func) throws ParseException {
+  static final public void T2(Token func) throws ParseException {Token var;
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case MULT:{
-      jj_consume_token(MULT);
+      var = jj_consume_token(MULT);
       T(func);
+TokenAsignaciones.pushPilaOP(var); System.out.println(TokenAsignaciones.returnPilaOP());
       break;
       }
     case DIV:{
-      jj_consume_token(DIV);
+      var = jj_consume_token(DIV);
       T(func);
+TokenAsignaciones.pushPilaOP(var); System.out.println(TokenAsignaciones.returnPilaOP());
       break;
       }
     default:

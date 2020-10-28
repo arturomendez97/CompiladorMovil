@@ -154,10 +154,14 @@ void Programa() :
 	Token var;
 }
 {
-    {System.out.println("HOLA");}
     <PROGRAMA><ID><SEMICOLON>Mis_Vars_Global()Mis_Func()Main()<EOF>//
+    {
+        System.out.println("Pila OP: " + TokenAsignaciones.returnPilaOP());
+        System.out.println("Pila VP: " + TokenAsignaciones.returnPilaVP());
+        TokenAsignaciones.emptyPilaOP();
+        TokenAsignaciones.emptyPilaVP();
 
-
+    }
 }
 
 //////////////MIS_VARS_GLOBAL/////////////////
@@ -653,6 +657,9 @@ Token Variable(Token func) :
             throw new ParseException(res);
             imp = true;
         }
+
+        TokenAsignaciones.pushPilaVP(var);
+        System.out.println(TokenAsignaciones.returnPilaVP());
     }
     Dim_Expresion(func)
     {
@@ -762,14 +769,24 @@ Token Expresion(Token func) :
     Token var;
 }
 {
-    var = T_Exp(func)Expresion2(func)
-    {return var;}
+    var = T_Exp(func)
+    Expresion2(func)
+
+    {
+        if (TokenAsignaciones.checkPilaOP("|"))
+            {
+                TokenAsignaciones.pushPilaVP(TokenAsignaciones.popPilaOP());
+            }
+        return var;
+    }
 }
 
 void Expresion2(Token func) :
-{}
 {
-        <OR>Expresion(func)
+    Token var;
+}
+{
+        var = <OR>Expresion(func)  {TokenAsignaciones.pushPilaOP(var); System.out.println(TokenAsignaciones.returnPilaOP());}
     |   Empty()
 }
 
@@ -781,13 +798,21 @@ Token T_Exp(Token func) :
 {
     var = G_Exp(func)
     T_Exp2(func)
-    {return var;}
+    {
+            if (TokenAsignaciones.checkPilaOP("&"))
+                {
+                    TokenAsignaciones.pushPilaVP(TokenAsignaciones.popPilaOP());
+                }
+            return var;
+        }
 }
 
 void T_Exp2(Token func) :
-{}
 {
-        <AND>T_Exp(func)
+    Token var;
+}
+{
+        var= <AND>T_Exp(func) {TokenAsignaciones.pushPilaOP(var); System.out.println(TokenAsignaciones.returnPilaOP());}
     |   Empty()
 }
 
@@ -798,18 +823,26 @@ Token G_Exp(Token func) :
 }
 {
    var = M_Exp(func)G_Exp2(func)
-   {return var;}
+   {
+           if (TokenAsignaciones.checkPilaOP("<") | TokenAsignaciones.checkPilaOP(">") | TokenAsignaciones.checkPilaOP("==") | TokenAsignaciones.checkPilaOP("!=") | TokenAsignaciones.checkPilaOP(">=") | TokenAsignaciones.checkPilaOP("<="))
+               {
+                   TokenAsignaciones.pushPilaVP(TokenAsignaciones.popPilaOP());
+               }
+           return var;
+       }
 }
 
 void G_Exp2(Token func) :
-{}
 {
-        <MENOSQUE>M_Exp(func)
-    |   <MASQUE>M_Exp(func)
-    |   <IGUAL>M_Exp(func)
-    |   <NOIGUAL>M_Exp(func)
-    |   <MAYORIGUAL> M_Exp(func)
-    |   <MENORIGUAL> M_Exp(func)
+    Token var;
+}
+{
+        var = <MENOSQUE>M_Exp(func) {TokenAsignaciones.pushPilaOP(var); System.out.println(TokenAsignaciones.returnPilaOP());}
+    |   var= <MASQUE>M_Exp(func) {TokenAsignaciones.pushPilaOP(var); System.out.println(TokenAsignaciones.returnPilaOP());}
+    |   var = <IGUAL>M_Exp(func) {TokenAsignaciones.pushPilaOP(var); System.out.println(TokenAsignaciones.returnPilaOP());}
+    |   var = <NOIGUAL>M_Exp(func) {TokenAsignaciones.pushPilaOP(var); System.out.println(TokenAsignaciones.returnPilaOP());}
+    |   var = <MAYORIGUAL> M_Exp(func) {TokenAsignaciones.pushPilaOP(var); System.out.println(TokenAsignaciones.returnPilaOP());}
+    |   var = <MENORIGUAL> M_Exp(func) {TokenAsignaciones.pushPilaOP(var); System.out.println(TokenAsignaciones.returnPilaOP());}
     |   Empty()
 }
 
@@ -821,14 +854,22 @@ Token M_Exp(Token func) :
 {
     var = T(func)
     M_Exp2(func)
-    {return var;}
+    {
+               if (TokenAsignaciones.checkPilaOP("+") | TokenAsignaciones.checkPilaOP("-"))
+                   {
+                       TokenAsignaciones.pushPilaVP(TokenAsignaciones.popPilaOP());
+                   }
+               return var;
+           }
 }
 
 void M_Exp2(Token func) :
-{}
 {
-        <MAS>M_Exp(func)
-    |   <MENOS>M_Exp(func)
+    Token var;
+}
+{
+        var = <MAS>M_Exp(func)    {TokenAsignaciones.pushPilaOP(var); System.out.println(TokenAsignaciones.returnPilaOP());}
+    |   var = <MENOS>M_Exp(func)  {TokenAsignaciones.pushPilaOP(var); System.out.println(TokenAsignaciones.returnPilaOP());}
     |   Empty()
 }
 
@@ -840,14 +881,22 @@ Token T(Token func) :
 {
     var = F(func)
     T2(func)
-    {return var;}
+    {
+                   if (TokenAsignaciones.checkPilaOP("*") | TokenAsignaciones.checkPilaOP("/"))
+                       {
+                           TokenAsignaciones.pushPilaVP(TokenAsignaciones.popPilaOP());
+                       }
+                   return var;
+               }
 }
 
 void T2(Token func) :
-{}
 {
-        <MULT>T(func)
-    |   <DIV>T(func)
+    Token var;
+}
+{
+        var = <MULT>T(func) {TokenAsignaciones.pushPilaOP(var); System.out.println(TokenAsignaciones.returnPilaOP());}
+    |   var = <DIV>T(func) {TokenAsignaciones.pushPilaOP(var); System.out.println(TokenAsignaciones.returnPilaOP());}
     |   Empty()
 }
 

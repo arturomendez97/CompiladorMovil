@@ -5,6 +5,10 @@ import java.io.PrintStream;
 import java.util.Hashtable;
 import java.lang.String;
 import java.util.ArrayList;
+import java.util.*;
+
+
+
 class CustomHash {
     int tipo;
     Hashtable tablaV = new Hashtable();
@@ -17,9 +21,11 @@ public class TokenAsignaciones {
     public static int segunda = 0;
     //Tabla que almacenara los tokens declarados globalmente
     private static Hashtable tablaVarsGlobal = new Hashtable();
-
     //Tabla que almacenara las funciones declaradas
     private static Hashtable<String,CustomHash> tablaFunc = new Hashtable<String,CustomHash>();
+    //Pila para cuadruplos
+    private static Stack<Token> pilaOP = new Stack<Token>();
+    private static Stack<Token> pilaVP = new Stack<Token>();
 
     //Listas que guardaran los tipos compatibles de las variables
     private static ArrayList<Integer> intComp = new ArrayList();
@@ -27,10 +33,86 @@ public class TokenAsignaciones {
     //private static ArrayList<Integer> strComp = new ArrayList();
     private static ArrayList<Integer> chrComp = new ArrayList();
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////        PILAOP
+
+    public static void pushPilaOP(Token token)
+    {
+        pilaOP.push(token);
+    }
+
+    public static Token popPilaOP()
+    {
+        return pilaOP.pop();
+    }
+
+    public static Stack returnPilaOP()
+    {
+        return pilaOP;
+    }
+
+    public static Boolean checkPilaOP(String token)
+    {
+        try
+        {
+            Token tokenPila = pilaOP.peek();
+            //System.out.println("1: " + tokenPila.image);
+            //System.out.println("2: " + token);
+
+
+            if (tokenPila.image == token)
+            {
+                return true;            }
+            else
+            {
+                return false;
+            }
+        }
+        catch( Exception e)
+        {
+            return false;
+        }
+    }
+
+    public static void emptyPilaOP()
+    {
+        pilaOP.clear();
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////        PILAVP
+
+    public static void pushPilaVP(Token token)
+    {
+        pilaVP.push(token);
+    }
+
+    public static Token popPilaVP()
+    {
+        return pilaVP.pop();
+    }
+
+    public static Stack returnPilaVP()
+    {
+        return pilaVP;
+    }
+
+    public static Token peekPilaVP()
+    {
+        return pilaVP.peek();
+    }
+
+    public static void emptyPilaVP()
+    {
+        pilaVP.clear();
+    }
+
+
     public static Hashtable GetTabla()
     {
         return tablaVarsGlobal;
     }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////        TABLAS
+
 
     //variable		//tipoDato
     public static String InsertarSimbolo(Token identificador, int tipo, Token nombreFuncion)
