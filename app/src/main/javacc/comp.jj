@@ -151,11 +151,14 @@ SKIP :
 void Programa() :
 {
 	TokenAsignaciones.SetTables();
+	///cuboSemantico.constructor();
 	Token var;
 }
 {
     <PROGRAMA><ID><SEMICOLON>Mis_Vars_Global()Mis_Func()Main()<EOF>//
     {
+
+        ///cuboSemantico.printCombination();
         System.out.println("Pila OP: " + TokenAsignaciones.returnPilaOP());
         System.out.println("Pila VP: " + TokenAsignaciones.returnPilaVP());
         TokenAsignaciones.emptyPilaOP();

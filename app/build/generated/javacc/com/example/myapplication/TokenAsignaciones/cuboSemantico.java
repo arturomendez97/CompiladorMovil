@@ -4,37 +4,232 @@ import java.lang.String;
 public class cuboSemantico {
 /// Se definen los diferentes operadores y tipos
 
-    String types[] = new String[]{"int", "float", "char"};
-    String operators[] = new String[]{"+", "-", "*", "/", "==", "!=", ">=", "<=", "<", ">"};
-    String mathOP[] = new String[]{"+", "-", "*", "/"};
-    String numTypes[] = new String[]{"int","float"};
-    String charOP[] = new String[]{"+"};
-    String charTypes[] = new String[]{"char","string"};
-    String logOp[] = new String[]{"==", "!=", ">=", "<=", "<", ">"};
-    String boolOp[] = new String[]{"==", "!="};
-    String logTypes[] = new String[]{"bool"};
-    private String[][][] cubo;
+   public static String types[] = new String[]{"int", "float", "char"};
+   public static String operators[] = new String[]{"+", "-", "*", "/", "==", "!=", ">=", "<=", "<", ">"};
+    public static String[][][] cubo;
 
-    /// private operators: Array<string> = ['+', '-', '*', '/', '<', '>', '==', '!=', '>=', '<='];
-    // /private logOp: Array<string> = ['<', '>', '==', '!=', '>=', '<='];
-   /// private cubo Object;
    public static void main(String[] args) {
        cuboSemantico cubo = new cuboSemantico();
 
    }
 
-    void constructor() {
+    public static void constructor() {
 
 
-        for (int i = 0; i < this.types.length; i++) {
-            this.cubo[i][0][0] = types[i];
-            for (int j = 0; j < this.types.length; j++) {
-                this.cubo[i][j][0] = types[j];
-                for (int k = 0; k < this.operators.length; k++) {
-                    this.cubo[i][j][k] = null;
+        for (int i = 0; i < types.length; i++) {
+            cubo[i][0][0] = types[i];
+            for (int j = 0; j < types.length; j++) {
+                cubo[i][j][0] = types[j];
+                for (int k = 0; k < operators.length; k++) {
+                    cubo[i][j][k] = null;
                 }
             }
         }
+        /// int int
+            /// +
+        cubo[0][0][0]= "int";
+            /// -
+        cubo[0][0][1]= "int";
+             /// *
+        cubo[0][0][2]= "int";
+             /// "/"
+        cubo[0][0][3]= "int";
+            /// "=="
+        cubo[0][0][4]="bool";
+            /// "!="
+        cubo[0][0][5]="bool";
+            /// ">="
+        cubo[0][0][6]="bool";
+            /// "<="
+        cubo[0][0][7]="bool";
+            /// "<"
+        cubo[0][0][8]="bool";
+            /// ">"
+        cubo[0][0][9]="bool";
+
+        //-------------------------------//
+
+        /// int float
+        /// +
+        cubo[0][1][0]= "float";
+        /// -
+        cubo[0][1][1]= "float";
+        /// *
+        cubo[0][1][2]= "float";
+        /// "/"
+        cubo[0][1][3]= "float";
+        /// "=="
+        cubo[0][1][4]="null";
+        /// "!="
+        cubo[0][1][5]="null";
+        /// ">="
+        cubo[0][1][6]="bool";
+        /// "<="
+        cubo[0][1][7]="bool";
+        /// "<"
+        cubo[0][1][8]="bool";
+        /// ">"
+        cubo[0][1][9]="bool";
+
+        //-------------------------------//
+        /// int char
+            /// +
+        cubo[0][2][0]= "null";
+            /// -
+        cubo[0][2][1]= "null";
+            /// *
+        cubo[0][2][2]= "null";
+            /// "/"
+        cubo[0][2][3]= "null";
+            /// "=="
+        cubo[0][2][4]="null";
+            /// "!="
+        cubo[0][2][5]="null";
+            /// ">="
+        cubo[0][2][6]="null";
+            /// "<="
+        cubo[0][2][7]="null";
+            /// "<"
+        cubo[0][2][8]="null";
+            /// ">"
+        cubo[0][2][9]="null";
+
+        ///*************************//
+        //float int
+            ///+
+        cubo[1][0][0]= "float";
+            /// -
+        cubo[1][0][1]= "float";
+            /// *
+        cubo[1][0][2]= "float";
+             /// "/"
+        cubo[1][0][3]= "float";
+            /// "=="
+        cubo[1][0][4]="null";
+            /// "!="
+        cubo[1][0][5]="null";
+            /// ">="
+        cubo[1][0][6]="bool";
+            /// "<="
+        cubo[1][0][7]="bool";
+            /// "<"
+        cubo[1][0][8]="bool";
+            /// ">"
+        cubo[1][0][9]="bool";
+
+        ///*************************//
+        //float float
+             ///+
+        cubo[1][1][0]= "float";
+            /// -
+        cubo[1][1][1]= "float";
+            /// *
+        cubo[1][1][2]= "float";
+            /// "/"
+        cubo[1][1][3]= "float";
+            /// "=="
+        cubo[1][1][4]="bool";
+            /// "!="
+        cubo[1][1][5]="bool";
+            /// ">="
+        cubo[1][1][6]="bool";
+            /// "<="
+        cubo[1][1][7]="bool";
+            /// "<"
+        cubo[1][1][8]="bool";
+            /// ">"
+        cubo[1][1][9]="bool";
+        ///*************************//
+        //float char
+             /// +
+        cubo[1][2][0]= "null";
+             /// -
+        cubo[1][2][1]= "null";
+             /// *
+        cubo[1][2][2]= "null";
+            /// "/"
+        cubo[1][2][3]= "null";
+            /// "=="
+        cubo[1][2][4]="null";
+            /// "!="
+        cubo[1][2][5]="null";
+            /// ">="
+        cubo[1][2][6]="null";
+            /// "<="
+        cubo[1][2][7]="null";
+            /// "<"
+        cubo[1][2][8]="null";
+            /// ">"
+        cubo[1][2][9]="null";
+
+        ///*************************//
+        //char int
+            ///+
+        cubo[2][0][0]= "null";
+            /// -
+        cubo[2][0][1]= "null";
+             /// *
+        cubo[2][0][2]= "null";
+            /// "/"
+        cubo[2][0][3]= "null";
+            /// "=="
+        cubo[2][0][4]="null";
+            /// "!="
+        cubo[2][0][5]="null";
+            /// ">="
+        cubo[2][0][6]="null";
+            /// "<="
+        cubo[2][0][7]="null";
+            /// "<"
+        cubo[2][0][8]="null";
+            /// ">"
+        cubo[2][0][9]="null";
+
+        ///*************************//
+        //char float
+            /// +
+        cubo[2][1][0]= "null";
+            /// -
+        cubo[2][1][1]= "null";
+            /// *
+        cubo[2][1][2]= "null";
+            /// "/"
+        cubo[2][1][3]= "null";
+            /// "=="
+        cubo[2][1][4]="null";
+            /// "!="
+        cubo[2][1][5]="null";
+            /// ">="
+        cubo[2][1][6]="null";
+            /// "<="
+        cubo[2][1][7]="null";
+            /// "<"
+        cubo[2][1][8]="null";
+            /// ">"
+        cubo[2][1][9]="null";
+
+        ///*************************//
+        //char char
+        /// +
+        cubo[2][2][0]= "null";
+        /// -
+        cubo[2][2][1]= "null";
+        /// *
+        cubo[2][2][2]= "null";
+        /// "/"
+        cubo[2][2][3]= "null";
+        /// "=="
+        cubo[2][2][4]="bool";
+        /// "!="
+        cubo[2][2][5]="bool";
+        /// ">="
+        cubo[2][2][6]="null";
+        /// "<="
+        cubo[2][2][7]="null";
+        /// "<"
+        cubo[2][2][8]="null";
+        /// ">"
+        cubo[2][2][9]="null";
     }
     /// Funcion para aceder al tipo de cualquir renglon
     public String getType(int firstType, int secondType, String op){
@@ -95,43 +290,13 @@ public class cuboSemantico {
 
         return this.cubo[indice_I][indice_J][indice_K];
     }
-    /// Funcion para agregar una regla
-    public  void insertTypeRule(String firstType, String secondType, String op,String result) {
-        ///this.cubo[firstType][secondType][op] = result;
-    }
-
-    public  void prepareSemanticRules(String types[], String op[]) {
+    /// Prints
+    public  static void printCombination() {
         for (int i = 0; i < types.length; i++) {
             for (int j = 0; j < types.length; j++) {
-                for (int k = 0; k < op.length; k++) {
-                    if(types[i] == types[j]) {
-                        this.insertTypeRule(types[i], types[j], op[k], types[i]);
-                    } else {
-                        this.insertTypeRule(types[i], types[j], op[k], types[types.length - 1]);
-                    }
-                }
-            }
-        }
-    }
-    /// Reglas
-    public  void setRules() {
-        /// Tipos con numeros con operadores para numeros
-        this.prepareSemanticRules(this.numTypes, this.mathOP);
-        /// Tipos de char con operadores de char
-        this.prepareSemanticRules(this.charTypes, this.charOP);
-        /// Tipos de numeros con operadores log
-        this.prepareSemanticRules(this.numTypes, this.logOp);
-        /// Tipos de log con aperadores bool
-        this.prepareSemanticRules(this.logTypes, this.boolOp);
-    }
-
-    /// Prints
-    public  void printCombination() {
-        for (int i = 0; i < this.types.length; i++) {
-            for (int j = 0; j < this.types.length; j++) {
-                for (int k = 0; k < this.operators.length; k++) {
-                    ///console.log("Type 1: ", this.types[i],  " Type 2: ", this.types[j], " OP: ", this.operators[k]);
-                   /// console.log("Produce: ", this.cubo[this.types[i]][this.types[j]][this.operators[k]]);
+                for (int k = 0; k < operators.length; k++) {
+                    System.out.println("Type 1: "+ types[i]+ " Type 2: "+types[j]+" OP: "+ operators[k]);
+                    System.out.println("Produce: "+ cubo[i][j][k]);
                 }
             }
         }

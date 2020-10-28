@@ -14,6 +14,7 @@ public class comp implements compConstants {
 
 //////////////PROGRAMA/////////////////
   static final public void Programa() throws ParseException {TokenAsignaciones.SetTables();
+        ///cuboSemantico.constructor();
         Token var;
     jj_consume_token(PROGRAMA);
     jj_consume_token(ID);
@@ -22,7 +23,8 @@ public class comp implements compConstants {
     Mis_Func();
     Main();
     jj_consume_token(0);
-System.out.println("Pila OP: " + TokenAsignaciones.returnPilaOP());
+///cuboSemantico.printCombination();
+        System.out.println("Pila OP: " + TokenAsignaciones.returnPilaOP());
         System.out.println("Pila VP: " + TokenAsignaciones.returnPilaVP());
         TokenAsignaciones.emptyPilaOP();
         TokenAsignaciones.emptyPilaVP();
