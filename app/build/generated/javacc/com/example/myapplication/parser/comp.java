@@ -22,7 +22,7 @@ public class comp implements compConstants {
     Mis_Func();
     Main();
     jj_consume_token(0);
-///cuboSemantico.printCombination();
+TokenAsignaciones.printCuadruplos();
         System.out.println("Pila OP: " + TokenAsignaciones.returnPilaOP());
         System.out.println("Pila VP: " + TokenAsignaciones.returnPilaVP());
         TokenAsignaciones.emptyPilaOP();
@@ -555,11 +555,40 @@ void Parametros(Token func) throws ParseException {Token var;
 
 //////////////ASIGNACION/////////////////
   static final public 
-void Asignacion(Token func) throws ParseException {Token var;
-Token var2;
+void Asignacion(Token func) throws ParseException {Token arg1;
+    Token arg2;
+    Token op;
+    int aux;
+    int aux2;
     Variable(func);
-    jj_consume_token(ASIGNACION);
+    op = jj_consume_token(ASIGNACION);
     Expresion(func);
+arg1 = TokenAsignaciones.popPilaVP();
+        arg2 = TokenAsignaciones.popPilaVP();
+
+        if ( arg1.kind == 4 | arg1.kind == 5 | arg1.kind == 6 | arg1.kind == 47 )
+        {
+            aux = arg1.kind;
+        }
+        else{
+            aux = TokenAsignaciones.getType(arg1, func);
+        }
+
+        if ( arg2.kind == 4 | arg2.kind == 5 | arg2.kind == 6 | arg2.kind == 47 )
+        {
+            aux2 = arg2.kind;
+        }
+        else{
+            aux2 = TokenAsignaciones.getType(arg2, func);
+        }
+
+        //Hay que hacer el check asign aquí
+
+
+        Quadruple quad = new Quadruple(op, arg1, null, arg2);
+        TokenAsignaciones.meterCuadruplo(quad);
+            //quad.print();
+
     jj_consume_token(SEMICOLON);
   }
 
@@ -1073,7 +1102,9 @@ op = TokenAsignaciones.popPilaOP();
     temporal.image = String.valueOf(TokenAsignaciones.getContTemporal(temporal.kind));
     TokenAsignaciones.pushPilaVP(temporal);
     Quadruple quad = new Quadruple(op, arg1, arg2, temporal);
-    quad.print();
+    TokenAsignaciones.meterCuadruplo(quad);
+    //quad.print();
+
   }
 
   static final public void T2(Token func) throws ParseException {Token var;

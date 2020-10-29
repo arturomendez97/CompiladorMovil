@@ -158,7 +158,7 @@ void Programa() :
     <PROGRAMA><ID><SEMICOLON>Mis_Vars_Global()Mis_Func()Main()<EOF>//
     {
 
-        ///cuboSemantico.printCombination();
+        TokenAsignaciones.printCuadruplos();
         System.out.println("Pila OP: " + TokenAsignaciones.returnPilaOP());
         System.out.println("Pila VP: " + TokenAsignaciones.returnPilaVP());
         TokenAsignaciones.emptyPilaOP();
@@ -534,13 +534,44 @@ void EDD3(Token func) :
 
 void Asignacion( Token func) :
 {
-Token var;
-Token var2;
+    Token arg1;
+    Token arg2;
+    Token op;
+    int aux;
+    int aux2;
 }
 {
     Variable(func)
-    <ASIGNACION>
+    op = <ASIGNACION>
     Expresion(func)
+    {
+        arg1 = TokenAsignaciones.popPilaVP();
+        arg2 = TokenAsignaciones.popPilaVP();
+
+        if ( arg1.kind == 4 | arg1.kind == 5 | arg1.kind == 6 | arg1.kind == 47 )
+        {
+            aux = arg1.kind;
+        }
+        else{
+            aux = TokenAsignaciones.getType(arg1, func);
+        }
+
+        if ( arg2.kind == 4 | arg2.kind == 5 | arg2.kind == 6 | arg2.kind == 47 )
+        {
+            aux2 = arg2.kind;
+        }
+        else{
+            aux2 = TokenAsignaciones.getType(arg2, func);
+        }
+
+        //Hay que hacer el check asign aquí
+
+
+        Quadruple quad = new Quadruple(op, arg1, null, arg2);
+        TokenAsignaciones.meterCuadruplo(quad);
+            //quad.print();
+
+    }
     <SEMICOLON>
 }
 
@@ -946,7 +977,8 @@ void creaCuadruplo(Token func) :
     temporal.image = String.valueOf(TokenAsignaciones.getContTemporal(temporal.kind));
     TokenAsignaciones.pushPilaVP(temporal);
     Quadruple quad = new Quadruple(op, arg1, arg2, temporal);
-    quad.print();
+    TokenAsignaciones.meterCuadruplo(quad);
+    //quad.print();
      }
 }
 

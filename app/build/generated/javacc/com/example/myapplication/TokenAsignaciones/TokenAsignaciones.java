@@ -1,6 +1,8 @@
 package com.example.myapplication.TokenAsignaciones;
 import com.example.myapplication.parser.Token;
 import com.example.myapplication.TokenAsignaciones.cuboSemantico;
+import com.example.myapplication.TokenAsignaciones.Quadruple;
+
 
 
 import java.io.PrintStream;
@@ -31,6 +33,10 @@ public class TokenAsignaciones {
     private static Stack<Token> pilaOP = new Stack<Token>();
     private static Stack<Token> pilaVP = new Stack<Token>();
     private static cuboSemantico cubo = new cuboSemantico();
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////         DECLARACION ARRAY CUADRUPLOS
+    private static ArrayList<Quadruple> cuadruplos = new ArrayList<Quadruple>();
+
 
     ///////////////////////////////////////////////////////////////////////////////////////////////         DECLARACION DIRECCIONES DE MEMORIA
 
@@ -71,6 +77,23 @@ public class TokenAsignaciones {
     public static int getCuboType(int arg1, int arg2, String op)
     {
         return cuboSemantico.getType(arg1, arg2, op);
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////        QUADRUPLOS
+
+    public static void meterCuadruplo(Quadruple quad)
+    {
+        cuadruplos.add(quad);
+    }
+
+    public static void printCuadruplos()
+    {
+        Quadruple aux;
+        for (int j = 0; j < cuadruplos.size(); j++) {
+            aux = cuadruplos.get(j);
+            aux.print();
+        }
+
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////        CONTADORES
