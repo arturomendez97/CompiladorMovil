@@ -5,21 +5,25 @@ import com.example.myapplication.parser.Token;
 
 
 public class Quadruple {
-    Object operator;
-    Object arg1;
-    Object arg2;
-    Object resultado;
+    public Token operator;
+    public Token arg1;
+    public Token arg2;
+    public Token resultado;
 
-    public static void main(String[] args) {
-        Quadruple myObj = new Quadruple();
+    //public static void main(String[] args) {
+        //Quadruple myObj = new Quadruple();
+    //}
+
+    public Quadruple(Token op, Token ar1, Token ar2, Token res) {
+
+        operator = op;
+        arg1 = ar1;
+        arg2 = ar2;
+        resultado = res;
+
     }
 
-    void constructor(Object operator, Object arg1, Object arg2, Object Resultado) {
-
-        this.operator = operator;
-        this.arg1 = arg1;
-        this.arg2 = arg2;
-        this.resultado = resultado;
-
+    public void print(){
+        System.out.println("QUADRUPLO: [" + operator + " " + arg1 + " " + arg2 + " " + resultado + "]");
     }
 }

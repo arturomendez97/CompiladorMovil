@@ -19,19 +19,71 @@ class CustomHash {
 public class TokenAsignaciones {
     //Variable para validar asignaciones a caracteres(ichr)
     public static int segunda = 0;
+    ///////////////////////////////////////////////////////////////////////////////////////////////         DECLARACION TABLAS
     //Tabla que almacenara los tokens declarados globalmente
-    private static Hashtable tablaVarsGlobal = new Hashtable();
+    private static Hashtable<String, Integer> tablaVarsGlobal = new Hashtable();
     //Tabla que almacenara las funciones declaradas
     private static Hashtable<String,CustomHash> tablaFunc = new Hashtable<String,CustomHash>();
-    //Pila para cuadruplos
+    ///////////////////////////////////////////////////////////////////////////////////////////////         DECLARACION PILAS
     private static Stack<Token> pilaOP = new Stack<Token>();
     private static Stack<Token> pilaVP = new Stack<Token>();
 
+    ///////////////////////////////////////////////////////////////////////////////////////////////         DECLARACION DIRECCIONES DE MEMORIA
+
+    // I = INT
+    // F = FLOAT
+    // C = CHAR
+    // B = BOOL
+
+    // G = GLOBAL
+    // L = LOCAL
+    // T = TEMPORAL
+    // C = CTE
+
+    private static int contGI = 1000;
+    private static int contGF = 2000;
+    private static int contGC = 3000;
+    private static int contLI = 4000;
+    private static int contLF = 5000;
+    private static int contLC = 6000;
+    private static int contTI = 7000;
+    private static int contTF = 8000;
+    private static int contTC = 9000;
+    private static int contTB = 10000;
+    private static int contCI = 11000;
+    private static int contCF = 12000;
+    private static int contCC = 13000;
+
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////         DECLARACION COSAS DEL CHECKASIGN
     //Listas que guardaran los tipos compatibles de las variables
     private static ArrayList<Integer> intComp = new ArrayList();
     private static ArrayList<Integer> decComp = new ArrayList();
     //private static ArrayList<Integer> strComp = new ArrayList();
     private static ArrayList<Integer> chrComp = new ArrayList();
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////        CONTADORES
+
+    public static int getContLocal(int tipo)
+    {
+        int temp;
+        switch (tipo)
+        {
+            case 4:
+                temp = contGI;
+                contGI++;
+                return temp;
+            case 5:
+                temp = contGF;
+                contGF++;
+                return temp;
+            case 6:
+                temp = contGC;
+                contGC++;
+                return temp;
+            default: return -1;
+        }
+    }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////        PILAOP
 
@@ -137,6 +189,13 @@ public class TokenAsignaciones {
     {
         //En este metodo se agrega a la tabla de tokens el identificador que esta siendo declarado junto con su tipo de dato
         tablaVarsGlobal.put(identificador.image, tipo);
+
+    }
+
+    public static int getTypeGlobal(Token token)
+    {
+        //En este metodo se agrega a la tabla de tokens el identificador que esta siendo declarado junto con su tipo de dato
+        return tablaVarsGlobal.get(token.image);
 
     }
 

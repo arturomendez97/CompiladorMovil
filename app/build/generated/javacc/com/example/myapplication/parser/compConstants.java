@@ -102,6 +102,8 @@ public interface compConstants {
   int MAYORIGUAL = 45;
   /** RegularExpression Id. */
   int MENORIGUAL = 46;
+  /** RegularExpression Id. */
+  int BOOL = 47;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -155,6 +157,7 @@ public interface compConstants {
     "\"\\\'\"",
     "\">=\"",
     "\"<=\"",
+    "\"bool\"",
     "\" \"",
     "\"\\r\\n\"",
     "\"\\t\"",

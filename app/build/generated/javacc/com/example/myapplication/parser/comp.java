@@ -1021,8 +1021,9 @@ TokenAsignaciones.pushPilaOP(var); System.out.println(TokenAsignaciones.returnPi
     Token op;
     Token arg1;
     Token arg2;
-    // temporal;
-
+    Token temporal;
+    int aux;
+    cuboSemantico.constructor();
     var = F(func);
     T2(func);
 if (TokenAsignaciones.checkPilaOP("*") | TokenAsignaciones.checkPilaOP("/"))
@@ -1031,15 +1032,33 @@ if (TokenAsignaciones.checkPilaOP("*") | TokenAsignaciones.checkPilaOP("/"))
                            arg1 = TokenAsignaciones.popPilaVP();
                            arg2 = TokenAsignaciones.popPilaVP();
 
-                           //temporal.image = cuboSemantico.funcion()
-                           //Aqui llamas al cubo sem
-                           //Y el temporal es del tipo que te regrese.
+                           temporal = op.newToken(op.kind);
 
+                           //System.out.println("image: " + arg1 + " type: " + TokenAsignaciones.getTypeGlobal(arg1));
+                           //System.out.println("image: " + arg2 + " type: " + TokenAsignaciones.getTypeGlobal(arg2));
 
-                           //Meter el temporal a la pila del vector polaco
+                           temporal.kind = cuboSemantico.getType(TokenAsignaciones.getTypeGlobal(arg1), TokenAsignaciones.getTypeGlobal(arg2), op.image);
 
+                           System.out.println("temporal.kind: " + temporal.kind);
 
-                           //TokenAsignaciones.pushPilaVP();
+                           if(temporal.kind == 0)
+                           {
+                               {if (true) throw new ParseException("Los argumentos: " + arg1.image + " y " + arg2.image + " no son compatibles.");}
+                           }
+
+                           System.out.println("op: " + op);
+
+                           temporal.image = String.valueOf(TokenAsignaciones.getContLocal(temporal.kind));
+
+                           System.out.println("op: " + op);
+
+                           TokenAsignaciones.pushPilaVP(temporal);
+
+                           Quadruple quad = new Quadruple(op, arg1, arg2, temporal);
+
+                           System.out.println("op: " + op);
+
+                           quad.print();
                        }
                    {if ("" != null) return var;}
     throw new Error("Missing return statement in function");
@@ -1296,7 +1315,7 @@ TokenAsignaciones.pushPilaOP(var); System.out.println(TokenAsignaciones.returnPi
   /** Generate ParseException. */
   static public ParseException generateParseException() {
     jj_expentries.clear();
-    boolean[] la1tokens = new boolean[51];
+    boolean[] la1tokens = new boolean[52];
     if (jj_kind >= 0) {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
@@ -1313,7 +1332,7 @@ TokenAsignaciones.pushPilaOP(var); System.out.println(TokenAsignaciones.returnPi
         }
       }
     }
-    for (int i = 0; i < 51; i++) {
+    for (int i = 0; i < 52; i++) {
       if (la1tokens[i]) {
         jj_expentry = new int[1];
         jj_expentry[0] = i;
