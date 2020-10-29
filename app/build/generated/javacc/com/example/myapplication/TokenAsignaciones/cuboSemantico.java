@@ -10,7 +10,7 @@ public class cuboSemantico {
 
 
 
-    public static void constructor() {
+    public cuboSemantico() {
 
 
 

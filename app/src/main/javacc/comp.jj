@@ -25,7 +25,6 @@ options {
 PARSER_BEGIN(comp)
 package com.example.myapplication.parser;
 import com.example.myapplication.TokenAsignaciones.TokenAsignaciones;
-import com.example.myapplication.TokenAsignaciones.cuboSemantico;
 import com.example.myapplication.TokenAsignaciones.Quadruple;
 
 
@@ -882,12 +881,6 @@ void M_Exp2(Token func) :
 Token T(Token func) :
 {
     Token var;
-    Token op;
-    Token arg1;
-    Token arg2;
-    Token temporal;
-    int aux;
-    cuboSemantico.constructor();
 }
 {
     var = F(func)
@@ -895,40 +888,46 @@ Token T(Token func) :
     {
                    if (TokenAsignaciones.checkPilaOP("*") | TokenAsignaciones.checkPilaOP("/"))
                        {
-                           op = TokenAsignaciones.popPilaOP();
-                           arg1 = TokenAsignaciones.popPilaVP();
-                           arg2 = TokenAsignaciones.popPilaVP();
 
-                           temporal = op.newToken(op.kind);
-
-                           //System.out.println("image: " + arg1 + " type: " + TokenAsignaciones.getTypeGlobal(arg1));
-                           //System.out.println("image: " + arg2 + " type: " + TokenAsignaciones.getTypeGlobal(arg2));
-
-                           temporal.kind = cuboSemantico.getType(TokenAsignaciones.getTypeGlobal(arg1), TokenAsignaciones.getTypeGlobal(arg2), op.image);
-
-                           System.out.println("temporal.kind: " + temporal.kind);
-
-                           if(temporal.kind == 0)
-                           {
-                               throw new ParseException("Los argumentos: " + arg1.image + " y " + arg2.image + " no son compatibles.");
-                           }
-
-                           System.out.println("op: " + op);
-
-                           temporal.image = String.valueOf(TokenAsignaciones.getContLocal(temporal.kind));
-
-                           System.out.println("op: " + op);
-
-                           TokenAsignaciones.pushPilaVP(temporal);
-
-                           Quadruple quad = new Quadruple(op, arg1, arg2, temporal);
-
-                           System.out.println("op: " + op);
-
-                           quad.print();
+                           creaCuadruplo();
                        }
                    return var;
                }
+}
+
+
+// Esta función hace pop de la pila de operadores, y dos pops de la pila del vector polaco. Con esto llama al cubo Semántico para crear
+// un temporal del tipo correspondiente. Crea el cuadruplo con esos 4 elementos, y guarda el temporal en la pila del vector polaco.
+void creaCuadruplo() :
+{
+     Token op;
+     Token arg1;
+     Token arg2;
+     Token temporal;
+}
+{
+    {
+    op = TokenAsignaciones.popPilaOP();
+    arg1 = TokenAsignaciones.popPilaVP();
+    arg2 = TokenAsignaciones.popPilaVP();
+    temporal = op.newToken(op.kind);
+    System.out.println("image: " + arg1 + " type: " + TokenAsignaciones.getTypeGlobal(arg1));
+    System.out.println("image: " + arg2 + " type: " + TokenAsignaciones.getTypeGlobal(arg2));
+
+    temporal.kind = TokenAsignaciones.getCuboType(TokenAsignaciones.getTypeGlobal(arg1), TokenAsignaciones.getTypeGlobal(arg2), op.image);
+
+    System.out.println("temporal.kind: " + temporal.kind);
+
+    if(temporal.kind == 0)
+    {
+        throw new ParseException("Los argumentos: " + arg1.image + " y " + arg2.image + " no son compatibles.");
+    }
+
+    temporal.image = String.valueOf(TokenAsignaciones.getContLocal(temporal.kind));
+    TokenAsignaciones.pushPilaVP(temporal);
+    Quadruple quad = new Quadruple(op, arg1, arg2, temporal);
+    quad.print();
+     }
 }
 
 void T2(Token func) :

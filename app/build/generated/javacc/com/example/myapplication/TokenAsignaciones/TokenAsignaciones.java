@@ -1,5 +1,7 @@
 package com.example.myapplication.TokenAsignaciones;
 import com.example.myapplication.parser.Token;
+import com.example.myapplication.TokenAsignaciones.cuboSemantico;
+
 
 import java.io.PrintStream;
 import java.util.Hashtable;
@@ -17,6 +19,7 @@ class CustomHash {
     }
 }
 public class TokenAsignaciones {
+
     //Variable para validar asignaciones a caracteres(ichr)
     public static int segunda = 0;
     ///////////////////////////////////////////////////////////////////////////////////////////////         DECLARACION TABLAS
@@ -27,6 +30,7 @@ public class TokenAsignaciones {
     ///////////////////////////////////////////////////////////////////////////////////////////////         DECLARACION PILAS
     private static Stack<Token> pilaOP = new Stack<Token>();
     private static Stack<Token> pilaVP = new Stack<Token>();
+    private static cuboSemantico cubo = new cuboSemantico();
 
     ///////////////////////////////////////////////////////////////////////////////////////////////         DECLARACION DIRECCIONES DE MEMORIA
 
@@ -61,6 +65,13 @@ public class TokenAsignaciones {
     private static ArrayList<Integer> decComp = new ArrayList();
     //private static ArrayList<Integer> strComp = new ArrayList();
     private static ArrayList<Integer> chrComp = new ArrayList();
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////        CUBO SEMANTICO
+
+    public static int getCuboType(int arg1, int arg2, String op)
+    {
+        return cuboSemantico.getType(arg1, arg2, op);
+    }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////        CONTADORES
 
