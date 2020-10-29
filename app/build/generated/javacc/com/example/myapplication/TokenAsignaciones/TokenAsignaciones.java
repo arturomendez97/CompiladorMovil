@@ -75,7 +75,57 @@ public class TokenAsignaciones {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////        CONTADORES
 
+
+    //Este se usa para crear variables temporales. (Se usa dentro de expresiones etc...)
+    public static int getContTemporal(int tipo)
+    {
+        int temp;
+        switch (tipo)
+        {
+            case 4:
+                temp = contTI;
+                contTI++;
+                return temp;
+            case 5:
+                temp = contTF;
+                contTF++;
+                return temp;
+            case 6:
+                temp = contTC;
+                contTC++;
+                return temp;
+            case 47:
+                temp = contTB;
+                contTB++;
+                return temp;
+            default: return -1;
+        }
+    }
+
+    //Este se usa para crear variables locales, se usa en el vars local.
     public static int getContLocal(int tipo)
+    {
+        int temp;
+        switch (tipo)
+        {
+            case 4:
+                temp = contLI;
+                contLI++;
+                return temp;
+            case 5:
+                temp = contLF;
+                contLF++;
+                return temp;
+            case 6:
+                temp = contLC;
+                contLC++;
+                return temp;
+            default: return -1;
+        }
+    }
+
+    //Este se usa para crear variables globales, se usa en el vars global.
+    public static int getContGlobal(int tipo)
     {
         int temp;
         switch (tipo)
@@ -91,6 +141,28 @@ public class TokenAsignaciones {
             case 6:
                 temp = contGC;
                 contGC++;
+                return temp;
+            default: return -1;
+        }
+    }
+
+    //Este se usa para guardar constantes
+    public static int getContConst(int tipo)
+    {
+        int temp;
+        switch (tipo)
+        {
+            case 4:
+                temp = contCI;
+                contCI++;
+                return temp;
+            case 5:
+                temp = contCF;
+                contCF++;
+                return temp;
+            case 6:
+                temp = contCC;
+                contCC++;
                 return temp;
             default: return -1;
         }
@@ -203,10 +275,37 @@ public class TokenAsignaciones {
 
     }
 
-    public static int getTypeGlobal(Token token)
+
+    //Este metodo regresa el tipo int del token solicitado.
+    public static int getType(Token checkTok, Token nombreFuncion)
     {
-        //En este metodo se agrega a la tabla de tokens el identificador que esta siendo declarado junto con su tipo de dato
-        return tablaVarsGlobal.get(token.image);
+        CustomHash tabla;
+
+        try
+        {
+            return tablaVarsGlobal.get(checkTok.image);
+        }
+        catch (Exception e)
+        {
+            try
+            {
+                tabla = tablaFunc.get(nombreFuncion.image);
+                try
+                {
+                    //Intenta obtener el token a verificar(checkTok) de la tabla de los tokens
+                    return (Integer)tabla.tablaV.get(checkTok.image);
+                }
+                catch(Exception f)
+                {
+                    //Si no lo puede obtener, manda el error
+                    return -1;
+                }
+            }
+            catch(Exception g)
+            {
+                return -1;
+            }
+        }
 
     }
 

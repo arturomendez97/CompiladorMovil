@@ -880,7 +880,7 @@ res = TokenAsignaciones.checkFuncion(var);
     Expresion2(func);
 if (TokenAsignaciones.checkPilaOP("|"))
             {
-                TokenAsignaciones.pushPilaVP(TokenAsignaciones.popPilaOP());
+                creaCuadruplo(func);
             }
         {if ("" != null) return var;}
     throw new Error("Missing return statement in function");
@@ -907,7 +907,7 @@ TokenAsignaciones.pushPilaOP(var); System.out.println(TokenAsignaciones.returnPi
 if (TokenAsignaciones.checkPilaOP("&"))
                 {
 
-                    TokenAsignaciones.pushPilaVP(TokenAsignaciones.popPilaOP());
+                    creaCuadruplo(func);
                 }
             {if ("" != null) return var;}
     throw new Error("Missing return statement in function");
@@ -933,7 +933,7 @@ TokenAsignaciones.pushPilaOP(var); System.out.println(TokenAsignaciones.returnPi
     G_Exp2(func);
 if (TokenAsignaciones.checkPilaOP("<") | TokenAsignaciones.checkPilaOP(">") | TokenAsignaciones.checkPilaOP("==") | TokenAsignaciones.checkPilaOP("!=") | TokenAsignaciones.checkPilaOP(">=") | TokenAsignaciones.checkPilaOP("<="))
                {
-                   TokenAsignaciones.pushPilaVP(TokenAsignaciones.popPilaOP());
+                   creaCuadruplo(func);
                }
            {if ("" != null) return var;}
     throw new Error("Missing return statement in function");
@@ -989,7 +989,7 @@ TokenAsignaciones.pushPilaOP(var); System.out.println(TokenAsignaciones.returnPi
     M_Exp2(func);
 if (TokenAsignaciones.checkPilaOP("+") | TokenAsignaciones.checkPilaOP("-"))
                    {
-                       TokenAsignaciones.pushPilaVP(TokenAsignaciones.popPilaOP());
+                       creaCuadruplo(func);
                    }
                {if ("" != null) return var;}
     throw new Error("Missing return statement in function");
@@ -1022,7 +1022,7 @@ TokenAsignaciones.pushPilaOP(var); System.out.println(TokenAsignaciones.returnPi
 if (TokenAsignaciones.checkPilaOP("*") | TokenAsignaciones.checkPilaOP("/"))
                        {
 
-                           creaCuadruplo();
+                           creaCuadruplo(func);
                        }
                    {if ("" != null) return var;}
     throw new Error("Missing return statement in function");
@@ -1030,18 +1030,38 @@ if (TokenAsignaciones.checkPilaOP("*") | TokenAsignaciones.checkPilaOP("/"))
 
 // Esta función hace pop de la pila de operadores, y dos pops de la pila del vector polaco. Con esto llama al cubo Semántico para crear
 // un temporal del tipo correspondiente. Crea el cuadruplo con esos 4 elementos, y guarda el temporal en la pila del vector polaco.
-  static final public void creaCuadruplo() throws ParseException {Token op;
+  static final public void creaCuadruplo(Token func) throws ParseException {Token op;
      Token arg1;
      Token arg2;
      Token temporal;
+     int aux;
+     int aux2;
 op = TokenAsignaciones.popPilaOP();
     arg1 = TokenAsignaciones.popPilaVP();
     arg2 = TokenAsignaciones.popPilaVP();
     temporal = op.newToken(op.kind);
-    System.out.println("image: " + arg1 + " type: " + TokenAsignaciones.getTypeGlobal(arg1));
-    System.out.println("image: " + arg2 + " type: " + TokenAsignaciones.getTypeGlobal(arg2));
+    //System.out.println("image: " + arg1 + " type: " + TokenAsignaciones.getTypeGlobal(arg1));
+    //System.out.println("image: " + arg2 + " type: " + TokenAsignaciones.getTypeGlobal(arg2));
 
-    temporal.kind = TokenAsignaciones.getCuboType(TokenAsignaciones.getTypeGlobal(arg1), TokenAsignaciones.getTypeGlobal(arg2), op.image);
+    //Entra qui si el argumento es un temporal, porque su tipo
+    if ( arg1.kind == 4 | arg1.kind == 5 | arg1.kind == 6 | arg1.kind == 47 )
+    {
+        aux = arg1.kind;
+    }
+    else{
+        aux = TokenAsignaciones.getType(arg1, func);
+        }
+
+
+    if ( arg2.kind == 4 | arg2.kind == 5 | arg2.kind == 6 | arg2.kind == 47 )
+        {
+            aux2 = arg2.kind;
+        }
+        else{
+            aux2 = TokenAsignaciones.getType(arg2, func);
+            }
+
+    temporal.kind = TokenAsignaciones.getCuboType(aux, aux2, op.image);
 
     System.out.println("temporal.kind: " + temporal.kind);
 
@@ -1050,7 +1070,7 @@ op = TokenAsignaciones.popPilaOP();
         {if (true) throw new ParseException("Los argumentos: " + arg1.image + " y " + arg2.image + " no son compatibles.");}
     }
 
-    temporal.image = String.valueOf(TokenAsignaciones.getContLocal(temporal.kind));
+    temporal.image = String.valueOf(TokenAsignaciones.getContTemporal(temporal.kind));
     TokenAsignaciones.pushPilaVP(temporal);
     Quadruple quad = new Quadruple(op, arg1, arg2, temporal);
     quad.print();
