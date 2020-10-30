@@ -23,8 +23,8 @@ public class comp implements compConstants {
     Main();
     jj_consume_token(0);
 TokenAsignaciones.printCuadruplos();
-        System.out.println("Pila OP: " + TokenAsignaciones.returnPilaOP());
-        System.out.println("Pila VP: " + TokenAsignaciones.returnPilaVP());
+        //System.out.println("Pila OP: " + TokenAsignaciones.returnPilaOP());
+        //System.out.println("Pila VP: " + TokenAsignaciones.returnPilaVP());
         TokenAsignaciones.emptyPilaOP();
         TokenAsignaciones.emptyPilaVP();
   }
@@ -429,30 +429,50 @@ void Parametros(Token func) throws ParseException {Token var;
   }
 
 //////////////LECTURA/////////////////
-  static final public void Lectura(Token func) throws ParseException {
-    jj_consume_token(READ);
+  static final public void Lectura(Token func) throws ParseException {Token op;
+    op = jj_consume_token(READ);
     jj_consume_token(PARENIZQ);
-    Lectura2(func);
+    Lectura2(func, op);
     jj_consume_token(PARENDER);
     jj_consume_token(SEMICOLON);
   }
 
-  static final public void Lectura2(Token func) throws ParseException {
+  static final public void Lectura2(Token func, Token op) throws ParseException {
     Variable(func);
-    Lectura3(func);
+    creaCuadruploLectura(op, func);
+    Lectura3(func, op);
   }
 
-  static final public void Lectura3(Token func) throws ParseException {
+  static final public void Lectura3(Token func, Token op) throws ParseException {
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case COMMA:{
       jj_consume_token(COMMA);
-      Lectura2(func);
+      Lectura2(func, op);
       break;
       }
     default:
       jj_la1[20] = jj_gen;
       Empty();
     }
+  }
+
+  static final public void creaCuadruploLectura(Token op, Token func) throws ParseException {Token arg1;
+     int aux;
+arg1 = TokenAsignaciones.popPilaVP();
+
+    //Entra qui si el argumento es un temporal, porque su tipo
+    if ( arg1.kind == 4 | arg1.kind == 5 | arg1.kind == 6 | arg1.kind == 47 )
+    {
+        aux = arg1.kind;
+    }
+    else{
+        aux = TokenAsignaciones.getType(arg1, func);
+        }
+
+    Quadruple quad = new Quadruple(op, arg1, null, null);
+    TokenAsignaciones.meterCuadruplo(quad);
+    //quad.print();
+
   }
 
 //////////////ESCRITURA/////////////////
@@ -555,41 +575,47 @@ void Parametros(Token func) throws ParseException {Token var;
 
 //////////////ASIGNACION/////////////////
   static final public 
-void Asignacion(Token func) throws ParseException {Token arg1;
-    Token arg2;
-    Token op;
-    int aux;
-    int aux2;
+void Asignacion(Token func) throws ParseException {Token op;
     Variable(func);
     op = jj_consume_token(ASIGNACION);
     Expresion(func);
-arg1 = TokenAsignaciones.popPilaVP();
-        arg2 = TokenAsignaciones.popPilaVP();
-
-        if ( arg1.kind == 4 | arg1.kind == 5 | arg1.kind == 6 | arg1.kind == 47 )
-        {
-            aux = arg1.kind;
-        }
-        else{
-            aux = TokenAsignaciones.getType(arg1, func);
-        }
-
-        if ( arg2.kind == 4 | arg2.kind == 5 | arg2.kind == 6 | arg2.kind == 47 )
-        {
-            aux2 = arg2.kind;
-        }
-        else{
-            aux2 = TokenAsignaciones.getType(arg2, func);
-        }
-
-        //Hay que hacer el check asign aquí
-
-
-        Quadruple quad = new Quadruple(op, arg1, null, arg2);
-        TokenAsignaciones.meterCuadruplo(quad);
-            //quad.print();
-
+    creaCuadruploAsignacion(op, func);
     jj_consume_token(SEMICOLON);
+  }
+
+//////////////CREA CUADRUPLO GENERICO/////////////////
+  static final public 
+
+void creaCuadruploAsignacion(Token op, Token func) throws ParseException {Token arg1;
+     Token arg2;
+     int aux;
+     int aux2;
+arg1 = TokenAsignaciones.popPilaVP();
+         arg2 = TokenAsignaciones.popPilaVP();
+
+         if ( arg1.kind == 4 | arg1.kind == 5 | arg1.kind == 6 | arg1.kind == 47 )
+         {
+             aux = arg1.kind;
+         }
+         else{
+             aux = TokenAsignaciones.getType(arg1, func);
+         }
+
+         if ( arg2.kind == 4 | arg2.kind == 5 | arg2.kind == 6 | arg2.kind == 47 )
+         {
+             aux2 = arg2.kind;
+         }
+         else{
+             aux2 = TokenAsignaciones.getType(arg2, func);
+         }
+
+         //Hay que hacer el check asign aquí
+
+
+         Quadruple quad = new Quadruple(op, arg1, null, arg2);
+         TokenAsignaciones.meterCuadruplo(quad);
+             //quad.print();
+
   }
 
 /*
@@ -704,7 +730,8 @@ res = TokenAsignaciones.checkVariable(var, func);
         }
 
         TokenAsignaciones.pushPilaVP(var);
-        System.out.println(TokenAsignaciones.returnPilaVP());
+        //System.out.println(TokenAsignaciones.returnPilaVP());
+
     Dim_Expresion(func);
 {if ("" != null) return var;}
     throw new Error("Missing return statement in function");
@@ -737,12 +764,32 @@ res = TokenAsignaciones.checkVariable(var, func);
   }
 
 //////////////RETORNO/////////////////
-  static final public void Retorno(Token func) throws ParseException {
-    jj_consume_token(RETURN);
+  static final public void Retorno(Token func) throws ParseException {Token op;
+    op = jj_consume_token(RETURN);
     jj_consume_token(PARENIZQ);
     Expresion(func);
     jj_consume_token(PARENDER);
     jj_consume_token(SEMICOLON);
+    creaCuadruploRetorno(op, func);
+  }
+
+  static final public void creaCuadruploRetorno(Token op, Token func) throws ParseException {Token arg1;
+     int aux;
+arg1 = TokenAsignaciones.popPilaVP();
+
+         if ( arg1.kind == 4 | arg1.kind == 5 | arg1.kind == 6 | arg1.kind == 47 )
+         {
+             aux = arg1.kind;
+         }
+         else{
+             aux = TokenAsignaciones.getType(arg1, func);
+         }
+
+
+         Quadruple quad = new Quadruple(op, null, null, arg1);
+         TokenAsignaciones.meterCuadruplo(quad);
+             //quad.print();
+
   }
 
 //////////////CONDICIONAL/////////////////
@@ -909,7 +956,7 @@ res = TokenAsignaciones.checkFuncion(var);
     Expresion2(func);
 if (TokenAsignaciones.checkPilaOP("|"))
             {
-                creaCuadruplo(func);
+                creaCuadruploExp(func);
             }
         {if ("" != null) return var;}
     throw new Error("Missing return statement in function");
@@ -936,7 +983,7 @@ TokenAsignaciones.pushPilaOP(var); System.out.println(TokenAsignaciones.returnPi
 if (TokenAsignaciones.checkPilaOP("&"))
                 {
 
-                    creaCuadruplo(func);
+                    creaCuadruploExp(func);
                 }
             {if ("" != null) return var;}
     throw new Error("Missing return statement in function");
@@ -962,7 +1009,7 @@ TokenAsignaciones.pushPilaOP(var); System.out.println(TokenAsignaciones.returnPi
     G_Exp2(func);
 if (TokenAsignaciones.checkPilaOP("<") | TokenAsignaciones.checkPilaOP(">") | TokenAsignaciones.checkPilaOP("==") | TokenAsignaciones.checkPilaOP("!=") | TokenAsignaciones.checkPilaOP(">=") | TokenAsignaciones.checkPilaOP("<="))
                {
-                   creaCuadruplo(func);
+                   creaCuadruploExp(func);
                }
            {if ("" != null) return var;}
     throw new Error("Missing return statement in function");
@@ -1018,7 +1065,7 @@ TokenAsignaciones.pushPilaOP(var); System.out.println(TokenAsignaciones.returnPi
     M_Exp2(func);
 if (TokenAsignaciones.checkPilaOP("+") | TokenAsignaciones.checkPilaOP("-"))
                    {
-                       creaCuadruplo(func);
+                       creaCuadruploExp(func);
                    }
                {if ("" != null) return var;}
     throw new Error("Missing return statement in function");
@@ -1051,7 +1098,7 @@ TokenAsignaciones.pushPilaOP(var); System.out.println(TokenAsignaciones.returnPi
 if (TokenAsignaciones.checkPilaOP("*") | TokenAsignaciones.checkPilaOP("/"))
                        {
 
-                           creaCuadruplo(func);
+                           creaCuadruploExp(func);
                        }
                    {if ("" != null) return var;}
     throw new Error("Missing return statement in function");
@@ -1059,7 +1106,7 @@ if (TokenAsignaciones.checkPilaOP("*") | TokenAsignaciones.checkPilaOP("/"))
 
 // Esta función hace pop de la pila de operadores, y dos pops de la pila del vector polaco. Con esto llama al cubo Semántico para crear
 // un temporal del tipo correspondiente. Crea el cuadruplo con esos 4 elementos, y guarda el temporal en la pila del vector polaco.
-  static final public void creaCuadruplo(Token func) throws ParseException {Token op;
+  static final public void creaCuadruploExp(Token func) throws ParseException {Token op;
      Token arg1;
      Token arg2;
      Token temporal;

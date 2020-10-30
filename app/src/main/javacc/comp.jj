@@ -159,8 +159,8 @@ void Programa() :
     {
 
         TokenAsignaciones.printCuadruplos();
-        System.out.println("Pila OP: " + TokenAsignaciones.returnPilaOP());
-        System.out.println("Pila VP: " + TokenAsignaciones.returnPilaVP());
+        //System.out.println("Pila OP: " + TokenAsignaciones.returnPilaOP());
+        //System.out.println("Pila VP: " + TokenAsignaciones.returnPilaVP());
         TokenAsignaciones.emptyPilaOP();
         TokenAsignaciones.emptyPilaVP();
 
@@ -190,6 +190,7 @@ void Vars2_Global() :
     td = Tipo()
     var = <ID>
     {TokenAsignaciones.InsertarSimboloGlobal(var, td);}
+    //creaCuadruploVarsGlobal(var)
     Dim()
     MasV_Global( td ) <SEMICOLON> MasT_Global()
 }
@@ -205,6 +206,7 @@ void MasV_Global( int td) :
         {
             TokenAsignaciones.InsertarSimboloGlobal(var, td);
         }
+        //creaCuadruploVarsGlobal(var)
         Dim()
         MasV_Global(td)
      | Empty()
@@ -217,6 +219,7 @@ void MasT_Global() :
         Vars2_Global()
       | Empty()
 }
+
 
 
 //////////////MIS_VARS/////////////////
@@ -461,24 +464,53 @@ void Params( Token func ) :
 
 //////////////LECTURA/////////////////
 void Lectura(Token func) :
-{}
 {
-    <READ><PARENIZQ>Lectura2(func)<PARENDER><SEMICOLON>
+    Token op;
+}
+{
+    op = <READ>
+    <PARENIZQ>Lectura2(func, op)<PARENDER><SEMICOLON>
 }
 
-void Lectura2(Token func) :
+void Lectura2(Token func, Token op) :
 {}
 {
-        Variable(func)Lectura3(func)
+        Variable(func)
+        creaCuadruploLectura(op, func)
+        Lectura3(func, op)
 
 
 }
-void Lectura3(Token func) :
+void Lectura3(Token func, Token op) :
 {}
 {
-        <COMMA>Lectura2(func)
+        <COMMA>Lectura2(func, op)
       | Empty()
 
+}
+
+void creaCuadruploLectura(Token op, Token func) :
+{
+     Token arg1;
+     int aux;
+}
+{
+    {
+    arg1 = TokenAsignaciones.popPilaVP();
+
+    //Entra qui si el argumento es un temporal, porque su tipo
+    if ( arg1.kind == 4 | arg1.kind == 5 | arg1.kind == 6 | arg1.kind == 47 )
+    {
+        aux = arg1.kind;
+    }
+    else{
+        aux = TokenAsignaciones.getType(arg1, func);
+        }
+
+    Quadruple quad = new Quadruple(op, arg1, null, null);
+    TokenAsignaciones.meterCuadruplo(quad);
+    //quad.print();
+     }
 }
 
 
@@ -534,47 +566,55 @@ void EDD3(Token func) :
 
 void Asignacion( Token func) :
 {
-    Token arg1;
-    Token arg2;
     Token op;
-    int aux;
-    int aux2;
 }
 {
     Variable(func)
     op = <ASIGNACION>
     Expresion(func)
-    {
-        arg1 = TokenAsignaciones.popPilaVP();
-        arg2 = TokenAsignaciones.popPilaVP();
-
-        if ( arg1.kind == 4 | arg1.kind == 5 | arg1.kind == 6 | arg1.kind == 47 )
-        {
-            aux = arg1.kind;
-        }
-        else{
-            aux = TokenAsignaciones.getType(arg1, func);
-        }
-
-        if ( arg2.kind == 4 | arg2.kind == 5 | arg2.kind == 6 | arg2.kind == 47 )
-        {
-            aux2 = arg2.kind;
-        }
-        else{
-            aux2 = TokenAsignaciones.getType(arg2, func);
-        }
-
-        //Hay que hacer el check asign aquí
-
-
-        Quadruple quad = new Quadruple(op, arg1, null, arg2);
-        TokenAsignaciones.meterCuadruplo(quad);
-            //quad.print();
-
-    }
+    creaCuadruploAsignacion(op, func)
     <SEMICOLON>
 }
 
+//////////////CREA CUADRUPLO GENERICO/////////////////
+
+
+void creaCuadruploAsignacion(Token op, Token func) :
+{
+     Token arg1;
+     Token arg2;
+     int aux;
+     int aux2;
+}
+{
+    {
+         arg1 = TokenAsignaciones.popPilaVP();
+         arg2 = TokenAsignaciones.popPilaVP();
+
+         if ( arg1.kind == 4 | arg1.kind == 5 | arg1.kind == 6 | arg1.kind == 47 )
+         {
+             aux = arg1.kind;
+         }
+         else{
+             aux = TokenAsignaciones.getType(arg1, func);
+         }
+
+         if ( arg2.kind == 4 | arg2.kind == 5 | arg2.kind == 6 | arg2.kind == 47 )
+         {
+             aux2 = arg2.kind;
+         }
+         else{
+             aux2 = TokenAsignaciones.getType(arg2, func);
+         }
+
+         //Hay que hacer el check asign aquí
+
+
+         Quadruple quad = new Quadruple(op, arg1, null, arg2);
+         TokenAsignaciones.meterCuadruplo(quad);
+             //quad.print();
+    }
+}
 
 /*
 
@@ -693,7 +733,7 @@ Token Variable(Token func) :
         }
 
         TokenAsignaciones.pushPilaVP(var);
-        System.out.println(TokenAsignaciones.returnPilaVP());
+        //System.out.println(TokenAsignaciones.returnPilaVP());
     }
     Dim_Expresion(func)
     {
@@ -712,9 +752,37 @@ int Tipo() :
 
 //////////////RETORNO/////////////////
 void Retorno(Token func) :
-{}
 {
-    <RETURN><PARENIZQ>Expresion(func)<PARENDER><SEMICOLON>
+    Token op;
+}
+{
+    op=<RETURN>
+    <PARENIZQ>Expresion(func)<PARENDER><SEMICOLON>
+    creaCuadruploRetorno(op, func)
+}
+
+void creaCuadruploRetorno(Token op, Token func) :
+{
+     Token arg1;
+     int aux;
+}
+{
+    {
+         arg1 = TokenAsignaciones.popPilaVP();
+
+         if ( arg1.kind == 4 | arg1.kind == 5 | arg1.kind == 6 | arg1.kind == 47 )
+         {
+             aux = arg1.kind;
+         }
+         else{
+             aux = TokenAsignaciones.getType(arg1, func);
+         }
+
+
+         Quadruple quad = new Quadruple(op, null, null, arg1);
+         TokenAsignaciones.meterCuadruplo(quad);
+             //quad.print();
+    }
 }
 
 //////////////CONDICIONAL/////////////////
@@ -779,8 +847,8 @@ void Llamada2( Token func ) :
 void Estatuto(Token func) :
 {}
 {
-        Asignacion(func)Estatuto2(func)
-    |   Lectura(func)Estatuto2(func)
+        Asignacion(func)Estatuto2(func) //Cuadruplos listos
+    |   Lectura(func)Estatuto2(func) // Cuadruplos listos
     |   Escritura(func)Estatuto2(func)
     |   Retorno(func)Estatuto2(func)
     |   Estatuto_De_Decision(func)Estatuto2(func)
@@ -809,7 +877,7 @@ Token Expresion(Token func) :
     {
         if (TokenAsignaciones.checkPilaOP("|"))
             {
-                creaCuadruplo(func);
+                creaCuadruploExp(func);
             }
         return var;
     }
@@ -836,7 +904,7 @@ Token T_Exp(Token func) :
             if (TokenAsignaciones.checkPilaOP("&"))
                 {
 
-                    creaCuadruplo(func);
+                    creaCuadruploExp(func);
                 }
             return var;
         }
@@ -861,7 +929,7 @@ Token G_Exp(Token func) :
    {
            if (TokenAsignaciones.checkPilaOP("<") | TokenAsignaciones.checkPilaOP(">") | TokenAsignaciones.checkPilaOP("==") | TokenAsignaciones.checkPilaOP("!=") | TokenAsignaciones.checkPilaOP(">=") | TokenAsignaciones.checkPilaOP("<="))
                {
-                   creaCuadruplo(func);
+                   creaCuadruploExp(func);
                }
            return var;
        }
@@ -892,7 +960,7 @@ Token M_Exp(Token func) :
     {
                if (TokenAsignaciones.checkPilaOP("+") | TokenAsignaciones.checkPilaOP("-"))
                    {
-                       creaCuadruplo(func);
+                       creaCuadruploExp(func);
                    }
                return var;
            }
@@ -920,7 +988,7 @@ Token T(Token func) :
                    if (TokenAsignaciones.checkPilaOP("*") | TokenAsignaciones.checkPilaOP("/"))
                        {
 
-                           creaCuadruplo(func);
+                           creaCuadruploExp(func);
                        }
                    return var;
                }
@@ -929,7 +997,7 @@ Token T(Token func) :
 
 // Esta función hace pop de la pila de operadores, y dos pops de la pila del vector polaco. Con esto llama al cubo Semántico para crear
 // un temporal del tipo correspondiente. Crea el cuadruplo con esos 4 elementos, y guarda el temporal en la pila del vector polaco.
-void creaCuadruplo(Token func) :
+void creaCuadruploExp(Token func) :
 {
      Token op;
      Token arg1;

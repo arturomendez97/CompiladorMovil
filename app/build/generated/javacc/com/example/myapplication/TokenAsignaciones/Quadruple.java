@@ -23,7 +23,7 @@ public class Quadruple {
 
     }
 
-    public void print(){
-        System.out.println("QUADRUPLO: [" + operator + " " + arg1 + " " + arg2 + " " + resultado + "]");
+    public void print(int num){
+        System.out.println(num +". [" + operator + " " + arg1 + " " + arg2 + " " + resultado + "]");
     }
 }

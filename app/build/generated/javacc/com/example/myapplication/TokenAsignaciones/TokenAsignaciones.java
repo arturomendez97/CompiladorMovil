@@ -91,7 +91,7 @@ public class TokenAsignaciones {
         Quadruple aux;
         for (int j = 0; j < cuadruplos.size(); j++) {
             aux = cuadruplos.get(j);
-            aux.print();
+            aux.print(j);
         }
 
     }
