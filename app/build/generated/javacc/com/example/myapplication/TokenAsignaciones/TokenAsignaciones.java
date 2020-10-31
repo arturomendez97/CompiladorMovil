@@ -11,11 +11,20 @@ import java.lang.String;
 import java.util.ArrayList;
 import java.util.*;
 
+class Tipo_Dir{
+    int tipo;
+    int dir;
 
+    public Tipo_Dir(int t, int d)
+    {
+        tipo = t;
+        dir = d;
+    }
+}
 
 class CustomHash {
     int tipo;
-    Hashtable tablaV = new Hashtable();
+    Hashtable<String, Tipo_Dir> tablaV = new Hashtable();
     public static void main(String[] args) {
         CustomHash myObj = new CustomHash();
     }
@@ -26,7 +35,7 @@ public class TokenAsignaciones {
     public static int segunda = 0;
     ///////////////////////////////////////////////////////////////////////////////////////////////         DECLARACION TABLAS
     //Tabla que almacenara los tokens declarados globalmente
-    private static Hashtable<String, Integer> tablaVarsGlobal = new Hashtable();
+    private static Hashtable<String, Tipo_Dir> tablaVarsGlobal = new Hashtable();
     //Tabla que almacenara las funciones declaradas
     private static Hashtable<String,CustomHash> tablaFunc = new Hashtable<String,CustomHash>();
     ///////////////////////////////////////////////////////////////////////////////////////////////         DECLARACION PILAS
@@ -87,6 +96,11 @@ public class TokenAsignaciones {
             aux.print(j);
         }
 
+    }
+
+    public static void emptyCuadruplos()
+    {
+        cuadruplos.clear();
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////        CONTADORES
@@ -268,12 +282,13 @@ public class TokenAsignaciones {
     //variable		//tipoDato
     public static String InsertarSimbolo(Token identificador, int tipo, Token nombreFuncion)
     {
-        //En este metodo se agrega a la tabla de tokens el identificador que esta siendo declarado junto con su tipo de dato
+        //En este metodo se agrega a la tabla de tokens el identificador que esta siendo declarado junto con su tipo de dato y su dirección
         try
         {
             CustomHash tabla;
+            Tipo_Dir objeto = new Tipo_Dir(tipo, getContLocal(tipo));
             tabla = (CustomHash) tablaFunc.get(nombreFuncion.image);
-            tabla.tablaV.put(identificador.image, tipo);
+            tabla.tablaV.put(identificador.image, objeto);
             tablaFunc.put(nombreFuncion.image,tabla);
             return " ";
 
@@ -286,8 +301,9 @@ public class TokenAsignaciones {
 
     public static void InsertarSimboloGlobal(Token identificador, int tipo)
     {
-        //En este metodo se agrega a la tabla de tokens el identificador que esta siendo declarado junto con su tipo de dato
-        tablaVarsGlobal.put(identificador.image, tipo);
+        //En este metodo se agrega a la tabla de tokens el identificador que esta siendo declarado junto con su tipo de dato y direccion
+        Tipo_Dir objeto = new Tipo_Dir(tipo, getContGlobal(tipo));
+        tablaVarsGlobal.put(identificador.image, objeto);
 
     }
 
@@ -296,10 +312,12 @@ public class TokenAsignaciones {
     public static int getType(Token checkTok, Token nombreFuncion)
     {
         CustomHash tabla;
+        Tipo_Dir aux;
 
         try
         {
-            return tablaVarsGlobal.get(checkTok.image);
+            aux = tablaVarsGlobal.get(checkTok.image);
+            return aux.tipo;
         }
         catch (Exception e)
         {
@@ -309,7 +327,8 @@ public class TokenAsignaciones {
                 try
                 {
                     //Intenta obtener el token a verificar(checkTok) de la tabla de los tokens
-                    return (Integer)tabla.tablaV.get(checkTok.image);
+                    aux = tabla.tablaV.get(checkTok.image);
+                    return aux.tipo;
                 }
                 catch(Exception f)
                 {
@@ -353,10 +372,12 @@ public class TokenAsignaciones {
     public static String checkVariable(Token checkTok, Token nombreFuncion)
     {
         CustomHash tabla;
+        Tipo_Dir aux;
 
         try
         {
-            int tipoToken = (Integer)tablaVarsGlobal.get(checkTok.image);
+            aux = tablaVarsGlobal.get(checkTok.image);
+            int tipoToken = aux.tipo;
             return " ";
         }
         catch (Exception e)
@@ -367,7 +388,8 @@ public class TokenAsignaciones {
                 try
                 {
                     //Intenta obtener el token a verificar(checkTok) de la tabla de los tokens
-                    int token = (Integer)tabla.tablaV.get(checkTok.image);
+                    aux = tabla.tablaV.get(checkTok.image);
+                    int token = aux.tipo;
                     return " ";
                 }
                 catch(Exception f)

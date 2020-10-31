@@ -27,6 +27,7 @@ TokenAsignaciones.printCuadruplos();
         //System.out.println("Pila VP: " + TokenAsignaciones.returnPilaVP());
         TokenAsignaciones.emptyPilaOP();
         TokenAsignaciones.emptyPilaVP();
+        TokenAsignaciones.emptyCuadruplos();
   }
 
 //////////////MIS_VARS_GLOBAL/////////////////
@@ -692,7 +693,7 @@ res = TokenAsignaciones.checkVariable(var, func);
      int aux;
 arg1 = TokenAsignaciones.popPilaVP();
 
-         if ( arg1.kind == 4 | arg1.kind == 5 | arg1.kind == 6 | arg1.kind == 47 )
+         if ( arg1.kind == 4 | arg1.kind == 5 | arg1.kind == 6 | arg1.kind == 47 | arg1.kind == 38 | arg1.kind == 39 | arg1.kind == 41)
          {
              aux = arg1.kind;
          }
@@ -1035,7 +1036,7 @@ op = TokenAsignaciones.popPilaOP();
     //System.out.println("image: " + arg2 + " type: " + TokenAsignaciones.getTypeGlobal(arg2));
 
     //Entra qui si el argumento es un temporal, porque su tipo
-    if ( arg1.kind == 4 | arg1.kind == 5 | arg1.kind == 6 | arg1.kind == 47 )
+    if ( arg1.kind == 4 | arg1.kind == 5 | arg1.kind == 6 | arg1.kind == 47 | arg1.kind == 38 | arg1.kind == 39 | arg1.kind == 41)
     {
         aux = arg1.kind;
     }
@@ -1044,7 +1045,7 @@ op = TokenAsignaciones.popPilaOP();
         }
 
 
-    if ( arg2.kind == 4 | arg2.kind == 5 | arg2.kind == 6 | arg2.kind == 47 )
+    if (  arg2.kind == 4 | arg2.kind == 5 | arg2.kind == 6 | arg2.kind == 47 | arg2.kind == 38 | arg2.kind == 39 | arg2.kind == 41 )
         {
             aux2 = arg2.kind;
         }
