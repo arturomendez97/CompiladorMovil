@@ -12,7 +12,7 @@ public class comp implements compConstants {
 
 
 //////////////PROGRAMA/////////////////
-  static final public void Programa() throws ParseException {TokenAsignaciones.SetTables();
+  static final public void Programa() throws ParseException {//TokenAsignaciones.SetTables();
         ///cuboSemantico.constructor();
         Token var;
     jj_consume_token(PROGRAMA);
@@ -404,7 +404,8 @@ void Parametros(Token func) throws ParseException {Token var;
     case PARENIZQ:
     case CTEI:
     case CTEF:
-    case ID:{
+    case ID:
+    case CTEC:{
       Expresion(func);
       Params(func);
       break;
@@ -495,7 +496,8 @@ arg1 = TokenAsignaciones.popPilaVP();
     case PARENIZQ:
     case CTEI:
     case CTEF:
-    case ID:{
+    case ID:
+    case CTEC:{
       Expresion(func);
       Escritura3(func);
       break;
@@ -593,15 +595,19 @@ void creaCuadruploAsignacion(Token op, Token func) throws ParseException {Token 
 arg1 = TokenAsignaciones.popPilaVP();
          arg2 = TokenAsignaciones.popPilaVP();
 
-         if ( arg1.kind == 4 | arg1.kind == 5 | arg1.kind == 6 | arg1.kind == 47 )
+
+
+         //El if es para cuando es un temporal o una constante
+         if ( arg1.kind == 4 | arg1.kind == 5 | arg1.kind == 6 | arg1.kind == 47 | arg1.kind == 38 | arg1.kind == 39 | arg1.kind == 41)
          {
              aux = arg1.kind;
          }
-         else{
+         else
+         {
              aux = TokenAsignaciones.getType(arg1, func);
          }
 
-         if ( arg2.kind == 4 | arg2.kind == 5 | arg2.kind == 6 | arg2.kind == 47 )
+         if ( arg2.kind == 4 | arg2.kind == 5 | arg2.kind == 6 | arg2.kind == 47 | arg2.kind == 38 | arg2.kind == 39 | arg2.kind == 41)
          {
              aux2 = arg2.kind;
          }
@@ -609,7 +615,14 @@ arg1 = TokenAsignaciones.popPilaVP();
              aux2 = TokenAsignaciones.getType(arg2, func);
          }
 
-         //Hay que hacer el check asign aquí
+         System.out.println("aux: " + aux);
+
+         System.out.println("aux2: " + aux2);
+
+         if (TokenAsignaciones.getCuboType(aux2,aux,op.image) == 0)
+             {
+                 {if (true) throw new ParseException("Los argumentos: " + arg1.image + " y " + arg2.image + " no son compatibles.");}
+             }
 
 
          Quadruple quad = new Quadruple(op, arg1, null, arg2);
@@ -617,104 +630,6 @@ arg1 = TokenAsignaciones.popPilaVP();
              //quad.print();
 
   }
-
-/*
-
-void Asignacion2(Token func, int tipo2) :
-{}
-{
-        Asignacion(func, tipo2)
-     |  Empty()
-}
-
-//// throw new ParseException(res);
-//// res = TokenAsignaciones.checkAsing(v1, v2, func);
-
-/*
-void Asignacion( Token func) :
-{
-	int td;
-	Token var;
-	Token var2;
-}
-{
-    var = Variable()
-    <ASIGNACION> var2= <ID>
-    Asignacion2(var, var2, func)
-}
-
-void Asignacion2(Token v1, Token v2, Token func) :
-{
-	Token v3;
-	String res;
-	boolean imp = false;
-}
-{
-        <PARENIZQ>Parametros(func)<PARENDER>
-        {
-        res = TokenAsignaciones.checkAsing(v1, v2, func);
-        if(res != " ")
-        {
-            throw new ParseException(res);
-            imp = true;
-        }
-        }
-
-        Asignacion3(func)
-
-    |   Expresion(func)
-        v3 = Asignacion3(func)
-        {
-         res = TokenAsignaciones.checkAsing(v2, v3, func);
-                if(res != " ")
-        		{
-        			System.out.println(res);
-        			imp = true;
-        		}
-                res = TokenAsignaciones.checkAsing(v1, v2, func);
-                if(res != " ")
-        		{
-        			System.out.println(res);
-        			imp = true;
-        		}
-        }
-
-}
-
-Token Asignacion3(Token func) :
-{
-    Token v1;
-}
-{
-        <SEMICOLON>
-        v1 = Asignacion4(func)
-        {
-         return v1;
-        }
-
-}
-Token Asignacion4(Token func) :
-{
-    Token v1;
-    Token v2;
-    String res;
-    boolean imp = false;
-}
-{
-        v1 = Expresion(func)
-        v2 = Asignacion3(func)
-        {
-        res = TokenAsignaciones.checkAsing(v1, v2, func);
-
-        		if(res != " ")
-        		{
-        			System.out.println(res);
-        			imp = true;
-        		}
-                return v1;
-        }
-      | Empty() {return func;}
-}*/
 
 //////////////VARIABLE/////////////////
   static final public Token Variable(Token func) throws ParseException {Token var;
@@ -1195,7 +1110,8 @@ TokenAsignaciones.pushPilaOP(var); System.out.println(TokenAsignaciones.returnPi
       break;
       }
     case CTEI:
-    case CTEF:{
+    case CTEF:
+    case CTEC:{
       var = F2();
 {if ("" != null) return var;}
       break;
@@ -1212,17 +1128,20 @@ TokenAsignaciones.pushPilaOP(var); System.out.println(TokenAsignaciones.returnPi
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case CTEI:{
       var = jj_consume_token(CTEI);
-{if ("" != null) return var;}
+TokenAsignaciones.pushPilaVP(var);
+            {if ("" != null) return var;}
       break;
       }
     case CTEF:{
       var = jj_consume_token(CTEF);
-{if ("" != null) return var;}
+TokenAsignaciones.pushPilaVP(var);
+            {if ("" != null) return var;}
       break;
       }
-    case ID:{
-      var = jj_consume_token(ID);
-{if ("" != null) return var;}
+    case CTEC:{
+      var = jj_consume_token(CTEC);
+TokenAsignaciones.pushPilaVP(var);
+            {if ("" != null) return var;}
       break;
       }
     default:
@@ -1259,7 +1178,7 @@ TokenAsignaciones.pushPilaOP(var); System.out.println(TokenAsignaciones.returnPi
       jj_la1_0 = new int[] {0x8,0x1000000,0x70,0x8,0x0,0x0,0x0,0x0,0x1000000,0x70,0x100,0xf0,0xa9e00,0x100,0xf0,0xa9e00,0x70,0x1000000,0x180000,0x1000000,0x1000000,0x180000,0x1000000,0xa9e00,0x4000,0x70,0xa9e00,0xa9e00,0xa9e00,0xa9e00,0x0,0x0,0x0,0x18000000,0x60000000,0x180000,0x0,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0x0,0x0,0x0,0x0,0x400,0x400,0x400,0x400,0x0,0x0,0x0,0x0,0x100,0x0,0x0,0x100,0x0,0x0,0x1c0,0x0,0x0,0x11c0,0x0,0x100,0x0,0x0,0x100,0x100,0x100,0x100,0x20,0x10,0x600f,0x0,0x0,0x1c0,0x1c0,};
+      jj_la1_1 = new int[] {0x0,0x0,0x0,0x0,0x400,0x400,0x400,0x400,0x0,0x0,0x0,0x0,0x100,0x0,0x0,0x100,0x0,0x0,0x3c0,0x0,0x0,0x13c0,0x0,0x100,0x0,0x0,0x100,0x100,0x100,0x100,0x20,0x10,0x600f,0x0,0x0,0x3c0,0x2c0,};
    }
 
   /** Constructor with InputStream. */
