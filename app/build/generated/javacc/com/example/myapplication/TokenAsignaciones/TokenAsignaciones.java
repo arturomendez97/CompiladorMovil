@@ -182,20 +182,49 @@ public class TokenAsignaciones {
         int temp;
         switch (tipo)
         {
-            case 4:
+            case 38:
                 temp = contCI;
                 contCI++;
                 return temp;
-            case 5:
+            case 39:
                 temp = contCF;
                 contCF++;
                 return temp;
-            case 6:
+            case 41:
                 temp = contCC;
                 contCC++;
                 return temp;
             default: return -1;
         }
+    }
+
+    public static void resetContsGlobal()
+    {
+        contGI = 1000;
+        contGF = 2000;
+        contGC = 3000;
+    }
+
+    public static void resetContsLocal()
+    {
+        contLI = 4000;
+        contLF = 5000;
+        contLC = 6000;
+    }
+
+    public static void resetContsTemporal()
+    {
+        contTI = 7000;
+        contTF = 8000;
+        contTC = 9000;
+        contTB = 10000;
+    }
+
+    public static void resetContsConstantes()
+    {
+        contCI = 11000;
+        contCF = 12000;
+        contCC = 13000;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////        PILAOP
@@ -278,6 +307,40 @@ public class TokenAsignaciones {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////        TABLAS
 
+    public static int getDir(Token checkTok, Token nombreFuncion)
+    {
+        CustomHash tabla;
+        Tipo_Dir aux;
+
+        try
+        {
+            aux = tablaVarsGlobal.get(checkTok.image);
+            return aux.dir;
+        }
+        catch (Exception e)
+        {
+            try
+            {
+                tabla = tablaFunc.get(nombreFuncion.image);
+                try
+                {
+                    //Intenta obtener el token a verificar(checkTok) de la tabla de los tokens
+                    aux = tabla.tablaV.get(checkTok.image);
+                    return aux.dir;
+                }
+                catch(Exception f)
+                {
+                    //Si no lo puede obtener, manda el error
+                    return -1;
+                }
+            }
+            catch(Exception g)
+            {
+                return -1;
+            }
+        }
+    }
+
 
     //variable		//tipoDato
     public static String InsertarSimbolo(Token identificador, int tipo, Token nombreFuncion)
@@ -343,6 +406,7 @@ public class TokenAsignaciones {
         }
 
     }
+
 
     public static String InsertarFuncion(Token nombreFuncion, int tipo)
     {

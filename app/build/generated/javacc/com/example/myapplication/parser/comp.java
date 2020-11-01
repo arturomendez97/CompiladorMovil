@@ -28,6 +28,11 @@ TokenAsignaciones.printCuadruplos();
         TokenAsignaciones.emptyPilaOP();
         TokenAsignaciones.emptyPilaVP();
         TokenAsignaciones.emptyCuadruplos();
+        // RESETEAR TODOS LOS CONTADORES
+        TokenAsignaciones.resetContsGlobal();
+        TokenAsignaciones.resetContsLocal();
+        TokenAsignaciones.resetContsTemporal();
+        TokenAsignaciones.resetContsConstantes();
   }
 
 //////////////MIS_VARS_GLOBAL/////////////////
@@ -243,6 +248,9 @@ res = TokenAsignaciones.InsertarFuncion(func, td);
     jj_consume_token(CURLYIZQ);
     Func4(func);
     jj_consume_token(CURLYDER);
+//RESETEAR LOS CONTS
+        TokenAsignaciones.resetContsLocal();
+        TokenAsignaciones.resetContsTemporal();
     Mas_F();
   }
 
@@ -471,6 +479,8 @@ arg1 = TokenAsignaciones.popPilaVP();
         aux = TokenAsignaciones.getType(arg1, func);
         }
 
+    arg1.image = tokenToDir(arg1, func);
+
     Quadruple quad = new Quadruple(op, arg1, null, null);
     TokenAsignaciones.meterCuadruplo(quad);
     //quad.print();
@@ -625,6 +635,9 @@ arg1 = TokenAsignaciones.popPilaVP();
                  {if (true) throw new ParseException("Los argumentos: " + arg1.image + " y " + arg2.image + " no son compatibles.");}
              }
 
+         arg1.image = tokenToDir(arg1, func);
+         arg2.image = tokenToDir(arg2, func);
+
 
          Quadruple quad = new Quadruple(op, arg1, null, arg2);
          TokenAsignaciones.meterCuadruplo(quad);
@@ -700,6 +713,8 @@ arg1 = TokenAsignaciones.popPilaVP();
          else{
              aux = TokenAsignaciones.getType(arg1, func);
          }
+
+         arg1.image = tokenToDir(arg1, func);
 
 
          Quadruple quad = new Quadruple(op, null, null, arg1);
@@ -1055,12 +1070,20 @@ op = TokenAsignaciones.popPilaOP();
 
     temporal.kind = TokenAsignaciones.getCuboType(aux, aux2, op.image);
 
-    System.out.println("temporal.kind: " + temporal.kind);
+    //System.out.println("temporal.kind: " + temporal.kind);
 
     if(temporal.kind == 0)
     {
         {if (true) throw new ParseException("Los argumentos: " + arg1.image + " y " + arg2.image + " no son compatibles.");}
     }
+        System.out.println("aaaaaa: " + arg1.kind);
+        System.out.println("aaaaaa: " + arg2.image);
+
+    ////////////////////////////////////////////////// Aquí cambia los tokens por sus direcciones antes de meterlos.
+
+    arg1.image = tokenToDir(arg1, func);
+    arg2.image = tokenToDir(arg2, func);
+
 
     temporal.image = String.valueOf(TokenAsignaciones.getContTemporal(temporal.kind));
     TokenAsignaciones.pushPilaVP(temporal);
@@ -1068,6 +1091,26 @@ op = TokenAsignaciones.popPilaOP();
     TokenAsignaciones.meterCuadruplo(quad);
     //quad.print();
 
+  }
+
+//Esta función convierte un token a una direccion. Cambia su image de ej: b -> 1000
+//Si el token es un temporal o constante, lo deja igual porque su image ya es la dirección
+  static final public String tokenToDir(Token arg, Token func) throws ParseException {
+switch (arg.kind)
+                {
+                    case 4:
+                    case 5:
+                    case 6:
+                    case 47:
+                    case 38:
+                    case 39:
+                    case 41:
+                            {if ("" != null) return arg.image;}
+                             break;
+                    default: {if ("" != null) return String.valueOf(TokenAsignaciones.getDir(arg, func));}
+                             break;
+                }
+    throw new Error("Missing return statement in function");
   }
 
   static final public void T2(Token func) throws ParseException {Token var;
@@ -1129,19 +1172,22 @@ TokenAsignaciones.pushPilaOP(var); System.out.println(TokenAsignaciones.returnPi
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case CTEI:{
       var = jj_consume_token(CTEI);
-TokenAsignaciones.pushPilaVP(var);
+var.image = Integer.toString(TokenAsignaciones.getContConst(var.kind));
+            TokenAsignaciones.pushPilaVP(var);
             {if ("" != null) return var;}
       break;
       }
     case CTEF:{
       var = jj_consume_token(CTEF);
-TokenAsignaciones.pushPilaVP(var);
+var.image = Integer.toString(TokenAsignaciones.getContConst(var.kind));
+            TokenAsignaciones.pushPilaVP(var);
             {if ("" != null) return var;}
       break;
       }
     case CTEC:{
       var = jj_consume_token(CTEC);
-TokenAsignaciones.pushPilaVP(var);
+var.image = Integer.toString(TokenAsignaciones.getContConst(var.kind));
+            TokenAsignaciones.pushPilaVP(var);
             {if ("" != null) return var;}
       break;
       }
