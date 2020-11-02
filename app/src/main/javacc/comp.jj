@@ -159,7 +159,7 @@ void Programa() :
     {
 
         TokenAsignaciones.printCuadruplos();
-        //System.out.println("Pila OP: " + TokenAsignaciones.returnPilaOP());
+        System.out.println("Pila Saltos: " + TokenAsignaciones.returnPilaSaltos());
         //System.out.println("Pila VP: " + TokenAsignaciones.returnPilaVP());
         TokenAsignaciones.emptyPilaOP();
         TokenAsignaciones.emptyPilaVP();
@@ -169,6 +169,9 @@ void Programa() :
         TokenAsignaciones.resetContsLocal();
         TokenAsignaciones.resetContsTemporal();
         TokenAsignaciones.resetContsConstantes();
+        TokenAsignaciones.emptyPilaSaltos();
+        TokenAsignaciones.resetContCuadruplos();
+
     }
 }
 
@@ -518,8 +521,9 @@ void creaCuadruploLectura(Token op, Token func) :
 
     arg1.image = tokenToDir(arg1, func);
 
-    Quadruple quad = new Quadruple(op, arg1, null, null);
+    Quadruple quad = new Quadruple(op.image, arg1, null, null);
     TokenAsignaciones.meterCuadruplo(quad);
+    TokenAsignaciones.subeContCuadruplos();
     //quad.print();
      }
 }
@@ -527,49 +531,166 @@ void creaCuadruploLectura(Token op, Token func) :
 
 //////////////ESCRITURA/////////////////
 void Escritura(Token func) :
-{}
 {
-    <WRITE><PARENIZQ>Escritura2(func)<PARENDER><SEMICOLON>
+    Token op;
+}
+{
+    op = <WRITE><PARENIZQ>Escritura2(op, func)<PARENDER><SEMICOLON>
 }
 
-void Escritura2(Token func) :
-{}
+void Escritura2(Token op, Token func) :
 {
-        Letrero()Escritura3(func)
-    |   Expresion(func)Escritura3(func)
+    Token var;
+}
+{
+        var = <CTEC>
+        {
+            var.image = Integer.toString(TokenAsignaciones.getContConst(var.kind));
+            TokenAsignaciones.pushPilaVP(var);
+            creaCuadruploEscritura(op, func);
+        }
+
+
+        Escritura3(op, func)
+
+
+    |   Expresion(func)
+        {creaCuadruploEscritura(op, func);}
+        Escritura3(op, func)
 }
 
-void Escritura3(Token func) :
+void Escritura3(Token op, Token func) :
 {}
 {
-        <COMMA>Escritura2(func)
+        <COMMA>Escritura2(op, func)
     |   Empty()
 }
 
+void creaCuadruploEscritura(Token op, Token func) :
+{
+     Token arg1;
+     int aux;
+}
+{
+    {
+         arg1 = TokenAsignaciones.popPilaVP();
+
+         if ( arg1.kind == 4 | arg1.kind == 5 | arg1.kind == 6 | arg1.kind == 47 | arg1.kind == 38 | arg1.kind == 39 | arg1.kind == 41)
+         {
+             aux = arg1.kind;
+         }
+         else{
+             aux = TokenAsignaciones.getType(arg1, func);
+         }
+
+         arg1.image = tokenToDir(arg1, func);
+
+
+         Quadruple quad = new Quadruple(op.image, null, null, arg1);
+         TokenAsignaciones.meterCuadruplo(quad);
+             TokenAsignaciones.subeContCuadruplos();
+
+             //quad.print();
+    }
+}
+
+/*
 void Letrero() :
 {}
 {
     <COMILLA> <ID> <COMILLA>
 }
+*/
 
 //////////////ESTATUTO DE DECISION/////////////////
 void Estatuto_De_Decision(Token func) :
 {}
 {
-    <IF><PARENIZQ>Expresion(func)<PARENDER><THEN><CURLYIZQ>EDD2(func)<CURLYDER>EDD3(func)
+    <IF><PARENIZQ>Expresion(func)
+    creaCuadruploGotoF(func) <PARENDER><THEN><CURLYIZQ>EDD2(func)<CURLYDER>
+    rellenaCuadruploGoto()
+    EDD3(func)
+    rellenaCuadruploGoto()
+}
+
+void rellenaCuadruploGoto() :
+{
+    int cuadruploActual;
+    int cuadruploModificar;
+}
+{
+    {
+        cuadruploActual = TokenAsignaciones.getContCuadruplos();
+        cuadruploModificar = TokenAsignaciones.popPilaSaltos();
+        TokenAsignaciones.completaGOTO(cuadruploModificar, cuadruploActual);
+    }
+}
+
+void creaCuadruploGotoF(Token func) :
+{
+     Token arg1;
+     int aux;
+}
+{
+    {
+         arg1 = TokenAsignaciones.popPilaVP();
+
+
+         if ( arg1.kind == 4 | arg1.kind == 5 | arg1.kind == 6 | arg1.kind == 47 | arg1.kind == 38 | arg1.kind == 39 | arg1.kind == 41)
+         {
+             aux = arg1.kind;
+         }
+         else{
+             aux = TokenAsignaciones.getType(arg1, func);
+         }
+
+         arg1.image = tokenToDir(arg1, func);
+
+
+         Quadruple quad = new Quadruple("GOTOF", arg1, null, null );
+         TokenAsignaciones.meterCuadruplo(quad);
+         TokenAsignaciones.pushPilaSaltos(TokenAsignaciones.getContCuadruplos());
+         TokenAsignaciones.subeContCuadruplos();
+
+
+             //quad.print();
+    }
+}
+
+void creaCuadruploGoto(Token func) :
+{
+     int aux;
+}
+{
+    {
+
+         Quadruple quad = new Quadruple("GOTO", null, null, null );
+         TokenAsignaciones.meterCuadruplo(quad);
+         TokenAsignaciones.pushPilaSaltos(TokenAsignaciones.getContCuadruplos());
+         TokenAsignaciones.subeContCuadruplos();
+    }
 }
 
 void EDD2(Token func) :
 {}
 {
         Estatuto(func)
+        {creaCuadruploGoto(func);}
     |   Empty()
+        {creaCuadruploGoto(func);}
 }
 
 void EDD3(Token func) :
 {}
 {
-        <ELSE><CURLYIZQ>EDD2(func)<CURLYDER>
+        <ELSE><CURLYIZQ>EDD4(func)<CURLYDER>
+    |   Empty()
+}
+
+void EDD4(Token func) :
+{}
+{
+        Estatuto(func)
     |   Empty()
 }
 
@@ -635,8 +756,10 @@ void creaCuadruploAsignacion(Token op, Token func) :
          arg2.image = tokenToDir(arg2, func);
 
 
-         Quadruple quad = new Quadruple(op, arg1, null, arg2);
+         Quadruple quad = new Quadruple(op.image, arg1, null, arg2);
          TokenAsignaciones.meterCuadruplo(quad);
+             TokenAsignaciones.subeContCuadruplos();
+
              //quad.print();
     }
 }
@@ -708,8 +831,10 @@ void creaCuadruploRetorno(Token op, Token func) :
          arg1.image = tokenToDir(arg1, func);
 
 
-         Quadruple quad = new Quadruple(op, null, null, arg1);
+         Quadruple quad = new Quadruple(op.image, null, null, arg1);
          TokenAsignaciones.meterCuadruplo(quad);
+             TokenAsignaciones.subeContCuadruplos();
+
              //quad.print();
     }
 }
@@ -778,9 +903,9 @@ void Estatuto(Token func) :
 {
         Asignacion(func)Estatuto2(func) //Cuadruplos listos
     |   Lectura(func)Estatuto2(func) // Cuadruplos listos
-    |   Escritura(func)Estatuto2(func)
+    |   Escritura(func)Estatuto2(func) // Cuadruolos listos
     |   Retorno(func)Estatuto2(func) // Cuadruplos listos
-    |   Estatuto_De_Decision(func)Estatuto2(func)
+    |   Estatuto_De_Decision(func)Estatuto2(func) // Cuadruplos listos
     |   Condicional(func)Estatuto2(func)
     |   No_condicional(func)Estatuto2(func)
     |   Llamada(func)<SEMICOLON>Estatuto2(func)
@@ -981,8 +1106,10 @@ void creaCuadruploExp(Token func) :
 
     temporal.image = String.valueOf(TokenAsignaciones.getContTemporal(temporal.kind));
     TokenAsignaciones.pushPilaVP(temporal);
-    Quadruple quad = new Quadruple(op, arg1, arg2, temporal);
+    Quadruple quad = new Quadruple(op.image, arg1, arg2, temporal);
     TokenAsignaciones.meterCuadruplo(quad);
+        TokenAsignaciones.subeContCuadruplos();
+
     //quad.print();
      }
 }

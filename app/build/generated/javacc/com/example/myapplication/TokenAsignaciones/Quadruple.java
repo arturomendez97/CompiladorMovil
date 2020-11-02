@@ -5,7 +5,7 @@ import com.example.myapplication.parser.Token;
 
 
 public class Quadruple {
-    public Token operator;
+    public String operator;
     public Token arg1;
     public Token arg2;
     public Token resultado;
@@ -14,7 +14,7 @@ public class Quadruple {
         //Quadruple myObj = new Quadruple();
     //}
 
-    public Quadruple(Token op, Token ar1, Token ar2, Token res) {
+    public Quadruple(String op, Token ar1, Token ar2, Token res) {
 
         operator = op;
         arg1 = ar1;

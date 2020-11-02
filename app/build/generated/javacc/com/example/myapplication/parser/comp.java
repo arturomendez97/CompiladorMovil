@@ -23,7 +23,7 @@ public class comp implements compConstants {
     Main();
     jj_consume_token(0);
 TokenAsignaciones.printCuadruplos();
-        //System.out.println("Pila OP: " + TokenAsignaciones.returnPilaOP());
+        System.out.println("Pila Saltos: " + TokenAsignaciones.returnPilaSaltos());
         //System.out.println("Pila VP: " + TokenAsignaciones.returnPilaVP());
         TokenAsignaciones.emptyPilaOP();
         TokenAsignaciones.emptyPilaVP();
@@ -33,6 +33,8 @@ TokenAsignaciones.printCuadruplos();
         TokenAsignaciones.resetContsLocal();
         TokenAsignaciones.resetContsTemporal();
         TokenAsignaciones.resetContsConstantes();
+        TokenAsignaciones.emptyPilaSaltos();
+        TokenAsignaciones.resetContCuadruplos();
   }
 
 //////////////MIS_VARS_GLOBAL/////////////////
@@ -481,36 +483,40 @@ arg1 = TokenAsignaciones.popPilaVP();
 
     arg1.image = tokenToDir(arg1, func);
 
-    Quadruple quad = new Quadruple(op, arg1, null, null);
+    Quadruple quad = new Quadruple(op.image, arg1, null, null);
     TokenAsignaciones.meterCuadruplo(quad);
+    TokenAsignaciones.subeContCuadruplos();
     //quad.print();
 
   }
 
 //////////////ESCRITURA/////////////////
-  static final public void Escritura(Token func) throws ParseException {
-    jj_consume_token(WRITE);
+  static final public void Escritura(Token func) throws ParseException {Token op;
+    op = jj_consume_token(WRITE);
     jj_consume_token(PARENIZQ);
-    Escritura2(func);
+    Escritura2(op, func);
     jj_consume_token(PARENDER);
     jj_consume_token(SEMICOLON);
   }
 
-  static final public void Escritura2(Token func) throws ParseException {
+  static final public void Escritura2(Token op, Token func) throws ParseException {Token var;
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-    case COMILLA:{
-      Letrero();
-      Escritura3(func);
+    case CTEC:{
+      var = jj_consume_token(CTEC);
+var.image = Integer.toString(TokenAsignaciones.getContConst(var.kind));
+            TokenAsignaciones.pushPilaVP(var);
+            creaCuadruploEscritura(op, func);
+      Escritura3(op, func);
       break;
       }
     case CALL:
     case PARENIZQ:
     case CTEI:
     case CTEF:
-    case ID:
-    case CTEC:{
+    case ID:{
       Expresion(func);
-      Escritura3(func);
+creaCuadruploEscritura(op, func);
+      Escritura3(op, func);
       break;
       }
     default:
@@ -520,11 +526,11 @@ arg1 = TokenAsignaciones.popPilaVP();
     }
   }
 
-  static final public void Escritura3(Token func) throws ParseException {
+  static final public void Escritura3(Token op, Token func) throws ParseException {
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case COMMA:{
       jj_consume_token(COMMA);
-      Escritura2(func);
+      Escritura2(op, func);
       break;
       }
     default:
@@ -533,23 +539,91 @@ arg1 = TokenAsignaciones.popPilaVP();
     }
   }
 
-  static final public void Letrero() throws ParseException {
-    jj_consume_token(COMILLA);
-    jj_consume_token(ID);
-    jj_consume_token(COMILLA);
+  static final public void creaCuadruploEscritura(Token op, Token func) throws ParseException {Token arg1;
+     int aux;
+arg1 = TokenAsignaciones.popPilaVP();
+
+         if ( arg1.kind == 4 | arg1.kind == 5 | arg1.kind == 6 | arg1.kind == 47 | arg1.kind == 38 | arg1.kind == 39 | arg1.kind == 41)
+         {
+             aux = arg1.kind;
+         }
+         else{
+             aux = TokenAsignaciones.getType(arg1, func);
+         }
+
+         arg1.image = tokenToDir(arg1, func);
+
+
+         Quadruple quad = new Quadruple(op.image, null, null, arg1);
+         TokenAsignaciones.meterCuadruplo(quad);
+             TokenAsignaciones.subeContCuadruplos();
+
+             //quad.print();
+
   }
+
+/*
+void Letrero() :
+{}
+{
+    <COMILLA> <ID> <COMILLA>
+}
+*/
 
 //////////////ESTATUTO DE DECISION/////////////////
   static final public void Estatuto_De_Decision(Token func) throws ParseException {
     jj_consume_token(IF);
     jj_consume_token(PARENIZQ);
     Expresion(func);
+    creaCuadruploGotoF(func);
     jj_consume_token(PARENDER);
     jj_consume_token(THEN);
     jj_consume_token(CURLYIZQ);
     EDD2(func);
     jj_consume_token(CURLYDER);
+    rellenaCuadruploGoto();
     EDD3(func);
+    rellenaCuadruploGoto();
+  }
+
+  static final public void rellenaCuadruploGoto() throws ParseException {int cuadruploActual;
+    int cuadruploModificar;
+cuadruploActual = TokenAsignaciones.getContCuadruplos();
+        cuadruploModificar = TokenAsignaciones.popPilaSaltos();
+        TokenAsignaciones.completaGOTO(cuadruploModificar, cuadruploActual);
+  }
+
+  static final public void creaCuadruploGotoF(Token func) throws ParseException {Token arg1;
+     int aux;
+arg1 = TokenAsignaciones.popPilaVP();
+
+
+         if ( arg1.kind == 4 | arg1.kind == 5 | arg1.kind == 6 | arg1.kind == 47 | arg1.kind == 38 | arg1.kind == 39 | arg1.kind == 41)
+         {
+             aux = arg1.kind;
+         }
+         else{
+             aux = TokenAsignaciones.getType(arg1, func);
+         }
+
+         arg1.image = tokenToDir(arg1, func);
+
+
+         Quadruple quad = new Quadruple("GOTOF", arg1, null, null );
+         TokenAsignaciones.meterCuadruplo(quad);
+         TokenAsignaciones.pushPilaSaltos(TokenAsignaciones.getContCuadruplos());
+         TokenAsignaciones.subeContCuadruplos();
+
+
+             //quad.print();
+
+  }
+
+  static final public void creaCuadruploGoto(Token func) throws ParseException {int aux;
+Quadruple quad = new Quadruple("GOTO", null, null, null );
+         TokenAsignaciones.meterCuadruplo(quad);
+         TokenAsignaciones.pushPilaSaltos(TokenAsignaciones.getContCuadruplos());
+         TokenAsignaciones.subeContCuadruplos();
   }
 
   static final public void EDD2(Token func) throws ParseException {
@@ -563,11 +637,13 @@ arg1 = TokenAsignaciones.popPilaVP();
     case CALL:
     case ID:{
       Estatuto(func);
+creaCuadruploGoto(func);
       break;
       }
     default:
       jj_la1[23] = jj_gen;
       Empty();
+creaCuadruploGoto(func);
     }
   }
 
@@ -576,12 +652,31 @@ arg1 = TokenAsignaciones.popPilaVP();
     case ELSE:{
       jj_consume_token(ELSE);
       jj_consume_token(CURLYIZQ);
-      EDD2(func);
+      EDD4(func);
       jj_consume_token(CURLYDER);
       break;
       }
     default:
       jj_la1[24] = jj_gen;
+      Empty();
+    }
+  }
+
+  static final public void EDD4(Token func) throws ParseException {
+    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+    case RETURN:
+    case READ:
+    case WRITE:
+    case IF:
+    case WHILE:
+    case FOR:
+    case CALL:
+    case ID:{
+      Estatuto(func);
+      break;
+      }
+    default:
+      jj_la1[25] = jj_gen;
       Empty();
     }
   }
@@ -639,8 +734,10 @@ arg1 = TokenAsignaciones.popPilaVP();
          arg2.image = tokenToDir(arg2, func);
 
 
-         Quadruple quad = new Quadruple(op, arg1, null, arg2);
+         Quadruple quad = new Quadruple(op.image, arg1, null, arg2);
          TokenAsignaciones.meterCuadruplo(quad);
+             TokenAsignaciones.subeContCuadruplos();
+
              //quad.print();
 
   }
@@ -685,7 +782,7 @@ res = TokenAsignaciones.checkVariable(var, func);
       break;
       }
     default:
-      jj_la1[25] = jj_gen;
+      jj_la1[26] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -717,8 +814,10 @@ arg1 = TokenAsignaciones.popPilaVP();
          arg1.image = tokenToDir(arg1, func);
 
 
-         Quadruple quad = new Quadruple(op, null, null, arg1);
+         Quadruple quad = new Quadruple(op.image, null, null, arg1);
          TokenAsignaciones.meterCuadruplo(quad);
+             TokenAsignaciones.subeContCuadruplos();
+
              //quad.print();
 
   }
@@ -749,7 +848,7 @@ arg1 = TokenAsignaciones.popPilaVP();
       break;
       }
     default:
-      jj_la1[26] = jj_gen;
+      jj_la1[27] = jj_gen;
       Empty();
     }
   }
@@ -782,7 +881,7 @@ arg1 = TokenAsignaciones.popPilaVP();
       break;
       }
     default:
-      jj_la1[27] = jj_gen;
+      jj_la1[28] = jj_gen;
       Empty();
     }
   }
@@ -856,7 +955,7 @@ res = TokenAsignaciones.checkFuncion(var);
       break;
       }
     default:
-      jj_la1[28] = jj_gen;
+      jj_la1[29] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -876,7 +975,7 @@ res = TokenAsignaciones.checkFuncion(var);
       break;
       }
     default:
-      jj_la1[29] = jj_gen;
+      jj_la1[30] = jj_gen;
       Empty();
     }
   }
@@ -902,7 +1001,7 @@ TokenAsignaciones.pushPilaOP(var); System.out.println(TokenAsignaciones.returnPi
       break;
       }
     default:
-      jj_la1[30] = jj_gen;
+      jj_la1[31] = jj_gen;
       Empty();
     }
   }
@@ -929,7 +1028,7 @@ TokenAsignaciones.pushPilaOP(var); System.out.println(TokenAsignaciones.returnPi
       break;
       }
     default:
-      jj_la1[31] = jj_gen;
+      jj_la1[32] = jj_gen;
       Empty();
     }
   }
@@ -985,7 +1084,7 @@ TokenAsignaciones.pushPilaOP(var); System.out.println(TokenAsignaciones.returnPi
       break;
       }
     default:
-      jj_la1[32] = jj_gen;
+      jj_la1[33] = jj_gen;
       Empty();
     }
   }
@@ -1017,7 +1116,7 @@ TokenAsignaciones.pushPilaOP(var); System.out.println(TokenAsignaciones.returnPi
       break;
       }
     default:
-      jj_la1[33] = jj_gen;
+      jj_la1[34] = jj_gen;
       Empty();
     }
   }
@@ -1087,8 +1186,10 @@ op = TokenAsignaciones.popPilaOP();
 
     temporal.image = String.valueOf(TokenAsignaciones.getContTemporal(temporal.kind));
     TokenAsignaciones.pushPilaVP(temporal);
-    Quadruple quad = new Quadruple(op, arg1, arg2, temporal);
+    Quadruple quad = new Quadruple(op.image, arg1, arg2, temporal);
     TokenAsignaciones.meterCuadruplo(quad);
+        TokenAsignaciones.subeContCuadruplos();
+
     //quad.print();
 
   }
@@ -1128,7 +1229,7 @@ TokenAsignaciones.pushPilaOP(var); System.out.println(TokenAsignaciones.returnPi
       break;
       }
     default:
-      jj_la1[34] = jj_gen;
+      jj_la1[35] = jj_gen;
       Empty();
     }
   }
@@ -1161,7 +1262,7 @@ TokenAsignaciones.pushPilaOP(var); System.out.println(TokenAsignaciones.returnPi
       break;
       }
     default:
-      jj_la1[35] = jj_gen;
+      jj_la1[36] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -1192,7 +1293,7 @@ var.image = Integer.toString(TokenAsignaciones.getContConst(var.kind));
       break;
       }
     default:
-      jj_la1[36] = jj_gen;
+      jj_la1[37] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -1214,7 +1315,7 @@ var.image = Integer.toString(TokenAsignaciones.getContConst(var.kind));
   static public Token jj_nt;
   static private int jj_ntk;
   static private int jj_gen;
-  static final private int[] jj_la1 = new int[37];
+  static final private int[] jj_la1 = new int[38];
   static private int[] jj_la1_0;
   static private int[] jj_la1_1;
   static {
@@ -1222,10 +1323,10 @@ var.image = Integer.toString(TokenAsignaciones.getContConst(var.kind));
       jj_la1_init_1();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x8,0x1000000,0x70,0x8,0x0,0x0,0x0,0x0,0x1000000,0x70,0x100,0xf0,0xa9e00,0x100,0xf0,0xa9e00,0x70,0x1000000,0x180000,0x1000000,0x1000000,0x180000,0x1000000,0xa9e00,0x4000,0x70,0xa9e00,0xa9e00,0xa9e00,0xa9e00,0x0,0x0,0x0,0x18000000,0x60000000,0x180000,0x0,};
+      jj_la1_0 = new int[] {0x8,0x1000000,0x70,0x8,0x0,0x0,0x0,0x0,0x1000000,0x70,0x100,0xf0,0xa9e00,0x100,0xf0,0xa9e00,0x70,0x1000000,0x180000,0x1000000,0x1000000,0x180000,0x1000000,0xa9e00,0x4000,0xa9e00,0x70,0xa9e00,0xa9e00,0xa9e00,0xa9e00,0x0,0x0,0x0,0x18000000,0x60000000,0x180000,0x0,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0x0,0x0,0x0,0x0,0x400,0x400,0x400,0x400,0x0,0x0,0x0,0x0,0x100,0x0,0x0,0x100,0x0,0x0,0x3c0,0x0,0x0,0x13c0,0x0,0x100,0x0,0x0,0x100,0x100,0x100,0x100,0x20,0x10,0x600f,0x0,0x0,0x3c0,0x2c0,};
+      jj_la1_1 = new int[] {0x0,0x0,0x0,0x0,0x400,0x400,0x400,0x400,0x0,0x0,0x0,0x0,0x100,0x0,0x0,0x100,0x0,0x0,0x3c0,0x0,0x0,0x3c0,0x0,0x100,0x0,0x100,0x0,0x100,0x100,0x100,0x100,0x20,0x10,0x600f,0x0,0x0,0x3c0,0x2c0,};
    }
 
   /** Constructor with InputStream. */
@@ -1246,7 +1347,7 @@ var.image = Integer.toString(TokenAsignaciones.getContConst(var.kind));
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 37; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 38; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -1260,7 +1361,7 @@ var.image = Integer.toString(TokenAsignaciones.getContConst(var.kind));
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 37; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 38; i++) jj_la1[i] = -1;
   }
 
   /** Constructor. */
@@ -1277,7 +1378,7 @@ var.image = Integer.toString(TokenAsignaciones.getContConst(var.kind));
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 37; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 38; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -1295,7 +1396,7 @@ var.image = Integer.toString(TokenAsignaciones.getContConst(var.kind));
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 37; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 38; i++) jj_la1[i] = -1;
   }
 
   /** Constructor with generated Token Manager. */
@@ -1311,7 +1412,7 @@ var.image = Integer.toString(TokenAsignaciones.getContConst(var.kind));
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 37; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 38; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -1320,7 +1421,7 @@ var.image = Integer.toString(TokenAsignaciones.getContConst(var.kind));
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 37; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 38; i++) jj_la1[i] = -1;
   }
 
   static private Token jj_consume_token(int kind) throws ParseException {
@@ -1376,7 +1477,7 @@ var.image = Integer.toString(TokenAsignaciones.getContConst(var.kind));
       la1tokens[jj_kind] = true;
       jj_kind = -1;
     }
-    for (int i = 0; i < 37; i++) {
+    for (int i = 0; i < 38; i++) {
       if (jj_la1[i] == jj_gen) {
         for (int j = 0; j < 32; j++) {
           if ((jj_la1_0[i] & (1<<j)) != 0) {

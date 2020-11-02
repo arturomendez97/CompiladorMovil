@@ -42,6 +42,8 @@ public class TokenAsignaciones {
     private static Stack<Token> pilaOP = new Stack<Token>();
     private static Stack<Token> pilaVP = new Stack<Token>();
     private static cuboSemantico cubo = new cuboSemantico();
+    private static Deque<Integer> pilaSaltos = new LinkedList<Integer>();
+    private static int contCuadruplos = 0;
 
     ///////////////////////////////////////////////////////////////////////////////////////////////         DECLARACION ARRAY CUADRUPLOS
     private static ArrayList<Quadruple> cuadruplos = new ArrayList<Quadruple>();
@@ -83,6 +85,16 @@ public class TokenAsignaciones {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////        QUADRUPLOS
 
+    public static void completaGOTO( int cuadruploModificar, int cuadruploActual)
+    {
+        Quadruple aux;
+        Token aux2 = new Token();
+        aux = cuadruplos.get(cuadruploModificar);
+        aux2.image = Integer.toString(cuadruploActual);
+        aux.resultado = aux2;
+        cuadruplos.set(cuadruploModificar, aux);
+    }
+
     public static void meterCuadruplo(Quadruple quad)
     {
         cuadruplos.add(quad);
@@ -98,6 +110,7 @@ public class TokenAsignaciones {
 
     }
 
+
     public static void emptyCuadruplos()
     {
         cuadruplos.clear();
@@ -105,6 +118,20 @@ public class TokenAsignaciones {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////        CONTADORES
 
+    public static void subeContCuadruplos()
+    {
+        contCuadruplos += 1;
+    }
+
+    public static int getContCuadruplos()
+    {
+        return contCuadruplos;
+    }
+
+    public static void resetContCuadruplos()
+    {
+        contCuadruplos = 0;
+    }
 
     //Este se usa para crear variables temporales. (Se usa dentro de expresiones etc...)
     public static int getContTemporal(int tipo)
@@ -226,6 +253,28 @@ public class TokenAsignaciones {
         contCF = 12000;
         contCC = 13000;
     }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////        PILA SALTOS
+    public static void pushPilaSaltos(int pos)
+    {
+        pilaSaltos.addFirst(pos);
+    }
+
+    public static int popPilaSaltos()
+    {
+        return pilaSaltos.removeLast();
+    }
+    public static Deque returnPilaSaltos()
+    {
+        return pilaSaltos;
+    }
+
+    public static void emptyPilaSaltos()
+    {
+        pilaSaltos.clear();
+    }
+
+
 
     ////////////////////////////////////////////////////////////////////////////////////////////////        PILAOP
 
