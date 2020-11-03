@@ -545,7 +545,7 @@ void Escritura2(Token op, Token func) :
 {
         var = <CTEC>
         {
-            var.image = Integer.toString(TokenAsignaciones.getContConst(var.kind));
+            var.image = TokenAsignaciones.InsertarConstante(var.image, TokenAsignaciones.getContConst(var.kind));
             TokenAsignaciones.pushPilaVP(var);
             creaCuadruploEscritura(op, func);
         }
@@ -664,6 +664,11 @@ void creaCuadruploGotoF(Token func) :
 
          arg1.image = tokenToDir(arg1, func);
 
+         if ( aux != 47)
+         {
+             throw new ParseException("La expresion dentro del if tiene que ser bool");
+         }
+
 
          Quadruple quad = new Quadruple("GOTOF", arg1, null, null );
          TokenAsignaciones.meterCuadruplo(quad);
@@ -714,16 +719,20 @@ void EDD4(Token func) :
 
 //////////////ASIGNACION/////////////////
 
-void Asignacion( Token func) :
+Token Asignacion( Token func) :
 {
     Token op;
+    Token var;
 }
 {
-    Variable(func)
+    var = Variable(func)
     op = <ASIGNACION>
     Expresion(func)
     creaCuadruploAsignacion(op, func)
     <SEMICOLON>
+    {
+        return var;
+    }
 }
 
 //////////////CREA CUADRUPLO GENERICO/////////////////
@@ -930,9 +939,37 @@ void rellenaCuadruploGotoCondicional() :
 
 //////////////NO_CONDICIONAL/////////////////
 void No_condicional(Token func) :
-{}
 {
-    <FOR>Variable(func)<ASIGNACION>Expresion(func)<TO>Expresion(func)<DO><CURLYIZQ>No_condicional2(func)<CURLYDER>
+    Token var;
+}
+{
+    <FOR>
+    var = Asignacion(func)
+    {TokenAsignaciones.pushPilaSaltos(TokenAsignaciones.getContCuadruplos());}
+    <TO>Expresion(func)
+
+    creaCuadruploGotoF(func)
+    <DO><CURLYIZQ>No_condicional2(func)
+    creaCuadruploSuma(var, func)
+    creaYRellenaGoto(func)
+    rellenaCuadruploGotoFCondicional()
+    <CURLYDER>
+}
+
+
+
+void creaCuadruploSuma(Token var, Token func) :
+{
+    Token aux = new Token();
+}
+{
+    {
+        aux.image = "1";
+        Quadruple quad = new Quadruple("+", var, aux, var );
+        TokenAsignaciones.meterCuadruplo(quad);
+        TokenAsignaciones.subeContCuadruplos();
+    }
+
 }
 
 void No_condicional2(Token func) :
@@ -982,7 +1019,7 @@ void Estatuto(Token func) :
     |   Retorno(func)Estatuto2(func) // Cuadruplos listos
     |   Estatuto_De_Decision(func)Estatuto2(func) // Cuadruplos listos
     |   Condicional(func)Estatuto2(func) // Cuadruplos listos
-    |   No_condicional(func)Estatuto2(func)
+    |   No_condicional(func)Estatuto2(func) // Cuadruplos listos
     |   Llamada(func)<SEMICOLON>Estatuto2(func)
 }
 

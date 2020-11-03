@@ -503,7 +503,7 @@ arg1 = TokenAsignaciones.popPilaVP();
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case CTEC:{
       var = jj_consume_token(CTEC);
-var.image = Integer.toString(TokenAsignaciones.getContConst(var.kind));
+var.image = TokenAsignaciones.InsertarConstante(var.image, TokenAsignaciones.getContConst(var.kind));
             TokenAsignaciones.pushPilaVP(var);
             creaCuadruploEscritura(op, func);
       Escritura3(op, func);
@@ -620,6 +620,11 @@ arg1 = TokenAsignaciones.popPilaVP();
 
          arg1.image = tokenToDir(arg1, func);
 
+         if ( aux != 47)
+         {
+             {if (true) throw new ParseException("La expresion dentro del if tiene que ser bool");}
+         }
+
 
          Quadruple quad = new Quadruple("GOTOF", arg1, null, null );
          TokenAsignaciones.meterCuadruplo(quad);
@@ -695,12 +700,15 @@ creaCuadruploGoto(func);
 
 //////////////ASIGNACION/////////////////
   static final public 
-void Asignacion(Token func) throws ParseException {Token op;
-    Variable(func);
+Token Asignacion(Token func) throws ParseException {Token op;
+    Token var;
+    var = Variable(func);
     op = jj_consume_token(ASIGNACION);
     Expresion(func);
     creaCuadruploAsignacion(op, func);
     jj_consume_token(SEMICOLON);
+{if ("" != null) return var;}
+    throw new Error("Missing return statement in function");
   }
 
 //////////////CREA CUADRUPLO GENERICO/////////////////
@@ -902,17 +910,27 @@ cuadruploActual = TokenAsignaciones.getContCuadruplos();
   }
 
 //////////////NO_CONDICIONAL/////////////////
-  static final public void No_condicional(Token func) throws ParseException {
+  static final public void No_condicional(Token func) throws ParseException {Token var;
     jj_consume_token(FOR);
-    Variable(func);
-    jj_consume_token(ASIGNACION);
-    Expresion(func);
+    var = Asignacion(func);
+TokenAsignaciones.pushPilaSaltos(TokenAsignaciones.getContCuadruplos());
     jj_consume_token(TO);
     Expresion(func);
+    creaCuadruploGotoF(func);
     jj_consume_token(DO);
     jj_consume_token(CURLYIZQ);
     No_condicional2(func);
+    creaCuadruploSuma(var, func);
+    creaYRellenaGoto(func);
+    rellenaCuadruploGotoFCondicional();
     jj_consume_token(CURLYDER);
+  }
+
+  static final public void creaCuadruploSuma(Token var, Token func) throws ParseException {Token aux = new Token();
+aux.image = "1";
+        Quadruple quad = new Quadruple("+", var, aux, var );
+        TokenAsignaciones.meterCuadruplo(quad);
+        TokenAsignaciones.subeContCuadruplos();
   }
 
   static final public void No_condicional2(Token func) throws ParseException {
