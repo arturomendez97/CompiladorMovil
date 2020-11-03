@@ -608,9 +608,27 @@ void Estatuto_De_Decision(Token func) :
 {
     <IF><PARENIZQ>Expresion(func)
     creaCuadruploGotoF(func) <PARENDER><THEN><CURLYIZQ>EDD2(func)<CURLYDER>
-    rellenaCuadruploGoto()
+    rellenaCuadruploGotoF()
     EDD3(func)
     rellenaCuadruploGoto()
+}
+
+void rellenaCuadruploGotoF() :
+{
+    int cuadruploActual;
+    int cuadruploModificar;
+    int cuadruploExtra;
+}
+{
+    {
+        cuadruploActual = TokenAsignaciones.getContCuadruplos();
+        //Haces pop de los últimos dos, y agarras el de mero atras
+        cuadruploExtra = TokenAsignaciones.popPilaSaltos();
+        cuadruploModificar = TokenAsignaciones.popPilaSaltos();
+        //Regresas el otro
+        TokenAsignaciones.pushPilaSaltos(cuadruploExtra);
+        TokenAsignaciones.completaGOTO(cuadruploModificar, cuadruploActual);
+    }
 }
 
 void rellenaCuadruploGoto() :
@@ -843,7 +861,13 @@ void creaCuadruploRetorno(Token op, Token func) :
 void Condicional(Token func) :
 {}
 {
-    <WHILE><PARENIZQ>Expresion(func)<PARENDER><DO><CURLYIZQ>Condicional2(func)<CURLYDER>
+    {TokenAsignaciones.pushPilaSaltos(TokenAsignaciones.getContCuadruplos());}
+    <WHILE><PARENIZQ>Expresion(func)
+    creaCuadruploGotoF(func)
+    <PARENDER><DO><CURLYIZQ>Condicional2(func)<CURLYDER>
+    creaYRellenaGoto(func)
+    rellenaCuadruploGotoFCondicional()
+
 }
 
 void Condicional2(Token func) :
@@ -851,6 +875,57 @@ void Condicional2(Token func) :
 {
         Estatuto(func)
     |   Empty()
+}
+
+void creaYRellenaGoto(Token func) :
+{
+     int aux;
+     int cuadruploActual;
+     int cuadruploExtra;
+     int resultado;
+     Token aux2 = new Token();
+}
+{
+    {
+         //Haces pop de los últimos dos, y agarras el de mero atras
+         cuadruploExtra = TokenAsignaciones.popPilaSaltos();
+         resultado = TokenAsignaciones.popPilaSaltos();
+         //Regresas el otro
+         TokenAsignaciones.pushPilaSaltos(cuadruploExtra);
+
+         //A la hora de generar el cuadruplo, ya sabemos a donde lleva. Así que se lo ponemos de una vez
+         aux2.image = Integer.toString(resultado);
+         Quadruple quad = new Quadruple("GOTO", null, null, aux2 );
+         TokenAsignaciones.meterCuadruplo(quad);
+         TokenAsignaciones.subeContCuadruplos();
+    }
+}
+
+
+void rellenaCuadruploGotoFCondicional() :
+{
+    int cuadruploActual;
+    int cuadruploModificar;
+}
+{
+    {
+        cuadruploActual = TokenAsignaciones.getContCuadruplos();
+        cuadruploModificar = TokenAsignaciones.popPilaSaltos();
+        TokenAsignaciones.completaGOTO(cuadruploModificar, cuadruploActual);
+    }
+}
+
+void rellenaCuadruploGotoCondicional() :
+{
+    int cuadruploActual;
+    int cuadruploModificar;
+}
+{
+    {
+        cuadruploActual = TokenAsignaciones.getContCuadruplos();
+        cuadruploModificar = TokenAsignaciones.popPilaSaltos();
+        TokenAsignaciones.completaGOTO(cuadruploModificar, cuadruploActual);
+    }
 }
 
 //////////////NO_CONDICIONAL/////////////////
@@ -906,7 +981,7 @@ void Estatuto(Token func) :
     |   Escritura(func)Estatuto2(func) // Cuadruolos listos
     |   Retorno(func)Estatuto2(func) // Cuadruplos listos
     |   Estatuto_De_Decision(func)Estatuto2(func) // Cuadruplos listos
-    |   Condicional(func)Estatuto2(func)
+    |   Condicional(func)Estatuto2(func) // Cuadruplos listos
     |   No_condicional(func)Estatuto2(func)
     |   Llamada(func)<SEMICOLON>Estatuto2(func)
 }
@@ -1172,19 +1247,19 @@ Token F2() :
 {
         var = <CTEI>
         {
-            var.image = Integer.toString(TokenAsignaciones.getContConst(var.kind));
+            var.image = TokenAsignaciones.InsertarConstante(var.image, TokenAsignaciones.getContConst(var.kind));
             TokenAsignaciones.pushPilaVP(var);
             return var;
         }
     |   var = <CTEF>
         {
-            var.image = Integer.toString(TokenAsignaciones.getContConst(var.kind));
+            var.image = TokenAsignaciones.InsertarConstante(var.image, TokenAsignaciones.getContConst(var.kind));
             TokenAsignaciones.pushPilaVP(var);
             return var;
         }
     |   var = <CTEC>
         {
-            var.image = Integer.toString(TokenAsignaciones.getContConst(var.kind));
+            var.image = TokenAsignaciones.InsertarConstante(var.image, TokenAsignaciones.getContConst(var.kind));
             TokenAsignaciones.pushPilaVP(var);
             return var;
         }

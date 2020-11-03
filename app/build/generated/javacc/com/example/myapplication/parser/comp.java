@@ -581,9 +581,21 @@ void Letrero() :
     jj_consume_token(CURLYIZQ);
     EDD2(func);
     jj_consume_token(CURLYDER);
-    rellenaCuadruploGoto();
+    rellenaCuadruploGotoF();
     EDD3(func);
     rellenaCuadruploGoto();
+  }
+
+  static final public void rellenaCuadruploGotoF() throws ParseException {int cuadruploActual;
+    int cuadruploModificar;
+    int cuadruploExtra;
+cuadruploActual = TokenAsignaciones.getContCuadruplos();
+        //Haces pop de los últimos dos, y agarras el de mero atras
+        cuadruploExtra = TokenAsignaciones.popPilaSaltos();
+        cuadruploModificar = TokenAsignaciones.popPilaSaltos();
+        //Regresas el otro
+        TokenAsignaciones.pushPilaSaltos(cuadruploExtra);
+        TokenAsignaciones.completaGOTO(cuadruploModificar, cuadruploActual);
   }
 
   static final public void rellenaCuadruploGoto() throws ParseException {int cuadruploActual;
@@ -824,14 +836,18 @@ arg1 = TokenAsignaciones.popPilaVP();
 
 //////////////CONDICIONAL/////////////////
   static final public void Condicional(Token func) throws ParseException {
+TokenAsignaciones.pushPilaSaltos(TokenAsignaciones.getContCuadruplos());
     jj_consume_token(WHILE);
     jj_consume_token(PARENIZQ);
     Expresion(func);
+    creaCuadruploGotoF(func);
     jj_consume_token(PARENDER);
     jj_consume_token(DO);
     jj_consume_token(CURLYIZQ);
     Condicional2(func);
     jj_consume_token(CURLYDER);
+    creaYRellenaGoto(func);
+    rellenaCuadruploGotoFCondicional();
   }
 
   static final public void Condicional2(Token func) throws ParseException {
@@ -851,6 +867,38 @@ arg1 = TokenAsignaciones.popPilaVP();
       jj_la1[27] = jj_gen;
       Empty();
     }
+  }
+
+  static final public void creaYRellenaGoto(Token func) throws ParseException {int aux;
+     int cuadruploActual;
+     int cuadruploExtra;
+     int resultado;
+     Token aux2 = new Token();
+//Haces pop de los últimos dos, y agarras el de mero atras
+         cuadruploExtra = TokenAsignaciones.popPilaSaltos();
+         resultado = TokenAsignaciones.popPilaSaltos();
+         //Regresas el otro
+         TokenAsignaciones.pushPilaSaltos(cuadruploExtra);
+
+         //A la hora de generar el cuadruplo, ya sabemos a donde lleva. Así que se lo ponemos de una vez
+         aux2.image = Integer.toString(resultado);
+         Quadruple quad = new Quadruple("GOTO", null, null, aux2 );
+         TokenAsignaciones.meterCuadruplo(quad);
+         TokenAsignaciones.subeContCuadruplos();
+  }
+
+  static final public void rellenaCuadruploGotoFCondicional() throws ParseException {int cuadruploActual;
+    int cuadruploModificar;
+cuadruploActual = TokenAsignaciones.getContCuadruplos();
+        cuadruploModificar = TokenAsignaciones.popPilaSaltos();
+        TokenAsignaciones.completaGOTO(cuadruploModificar, cuadruploActual);
+  }
+
+  static final public void rellenaCuadruploGotoCondicional() throws ParseException {int cuadruploActual;
+    int cuadruploModificar;
+cuadruploActual = TokenAsignaciones.getContCuadruplos();
+        cuadruploModificar = TokenAsignaciones.popPilaSaltos();
+        TokenAsignaciones.completaGOTO(cuadruploModificar, cuadruploActual);
   }
 
 //////////////NO_CONDICIONAL/////////////////
@@ -1273,21 +1321,21 @@ TokenAsignaciones.pushPilaOP(var); System.out.println(TokenAsignaciones.returnPi
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case CTEI:{
       var = jj_consume_token(CTEI);
-var.image = Integer.toString(TokenAsignaciones.getContConst(var.kind));
+var.image = TokenAsignaciones.InsertarConstante(var.image, TokenAsignaciones.getContConst(var.kind));
             TokenAsignaciones.pushPilaVP(var);
             {if ("" != null) return var;}
       break;
       }
     case CTEF:{
       var = jj_consume_token(CTEF);
-var.image = Integer.toString(TokenAsignaciones.getContConst(var.kind));
+var.image = TokenAsignaciones.InsertarConstante(var.image, TokenAsignaciones.getContConst(var.kind));
             TokenAsignaciones.pushPilaVP(var);
             {if ("" != null) return var;}
       break;
       }
     case CTEC:{
       var = jj_consume_token(CTEC);
-var.image = Integer.toString(TokenAsignaciones.getContConst(var.kind));
+var.image = TokenAsignaciones.InsertarConstante(var.image, TokenAsignaciones.getContConst(var.kind));
             TokenAsignaciones.pushPilaVP(var);
             {if ("" != null) return var;}
       break;

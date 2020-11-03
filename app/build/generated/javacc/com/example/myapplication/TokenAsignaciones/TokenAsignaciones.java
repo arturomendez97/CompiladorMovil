@@ -38,11 +38,12 @@ public class TokenAsignaciones {
     private static Hashtable<String, Tipo_Dir> tablaVarsGlobal = new Hashtable();
     //Tabla que almacenara las funciones declaradas
     private static Hashtable<String,CustomHash> tablaFunc = new Hashtable<String,CustomHash>();
+    private static Hashtable<String, Integer> tablaConst = new Hashtable<String, Integer>();
     ///////////////////////////////////////////////////////////////////////////////////////////////         DECLARACION PILAS
     private static Stack<Token> pilaOP = new Stack<Token>();
     private static Stack<Token> pilaVP = new Stack<Token>();
     private static cuboSemantico cubo = new cuboSemantico();
-    private static Deque<Integer> pilaSaltos = new LinkedList<Integer>();
+    private static Stack<Integer> pilaSaltos = new Stack<Integer>();
     private static int contCuadruplos = 0;
 
     ///////////////////////////////////////////////////////////////////////////////////////////////         DECLARACION ARRAY CUADRUPLOS
@@ -257,14 +258,14 @@ public class TokenAsignaciones {
     ////////////////////////////////////////////////////////////////////////////////////////////////        PILA SALTOS
     public static void pushPilaSaltos(int pos)
     {
-        pilaSaltos.addFirst(pos);
+        pilaSaltos.push(pos);
     }
 
     public static int popPilaSaltos()
     {
-        return pilaSaltos.removeLast();
+        return pilaSaltos.pop();
     }
-    public static Deque returnPilaSaltos()
+    public static Stack returnPilaSaltos()
     {
         return pilaSaltos;
     }
@@ -355,6 +356,13 @@ public class TokenAsignaciones {
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////        TABLAS
+
+
+    public static String InsertarConstante( String constante, int direccion )
+    {
+        tablaConst.put(constante, direccion);
+        return Integer.toString(direccion);
+    }
 
     public static int getDir(Token checkTok, Token nombreFuncion)
     {
