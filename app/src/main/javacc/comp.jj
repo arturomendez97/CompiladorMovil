@@ -155,7 +155,13 @@ void Programa() :
 	Token var;
 }
 {
-    <PROGRAMA><ID><SEMICOLON>Mis_Vars_Global()Mis_Func()Main()<EOF>//
+    {
+	    //Crea goto a main
+        creaCuadruploGoto();
+     }
+    <PROGRAMA><ID><SEMICOLON>Mis_Vars_Global()Mis_Func()Main()
+    creaCuadruploEnd()
+    <EOF>//
     {
 
         TokenAsignaciones.printCuadruplos();
@@ -171,7 +177,16 @@ void Programa() :
         TokenAsignaciones.resetContsConstantes();
         TokenAsignaciones.emptyPilaSaltos();
         TokenAsignaciones.resetContCuadruplos();
+    }
+}
 
+void creaCuadruploEnd() :
+{}
+{
+    {
+         Quadruple quad = new Quadruple("END", null, null, null);
+         TokenAsignaciones.meterCuadruplo(quad);
+         TokenAsignaciones.subeContCuadruplos();
     }
 }
 
@@ -336,7 +351,7 @@ void Funcion() :
     td = Func1()
     func = <ID>
     {
-		res = TokenAsignaciones.InsertarFuncion(func, td);
+		res = TokenAsignaciones.InsertarFuncion(func, td, TokenAsignaciones.getContCuadruplos());
 
 		if(res != " ")
                 {
@@ -349,12 +364,24 @@ void Funcion() :
     <CURLYIZQ>
     Func4(func)
     <CURLYDER>
+
     {
         //RESETEAR LOS CONTS
         TokenAsignaciones.resetContsLocal();
         TokenAsignaciones.resetContsTemporal();
+        creaCuadruploEndFunc();
     }
     Mas_F()
+}
+
+void creaCuadruploEndFunc() :
+{}
+{
+    {
+        Quadruple quad = new Quadruple("ENDFUNC", null, null, null );
+        TokenAsignaciones.meterCuadruplo(quad);
+        TokenAsignaciones.subeContCuadruplos();
+    }
 }
 
 int Func1() :
@@ -414,6 +441,7 @@ void Main() :
 	Token func;
 }
 {
+    {rellenaCuadruploGoto();}
 
      func =<MAIN>
      {
@@ -437,12 +465,19 @@ void Parametros_Func( Token func) :
 {
     int td;
     Token var;
+    String res;
 }
 {
         td = Tipo()
         var = <ID>
         {
             TokenAsignaciones.InsertarSimbolo(var, td, func);
+            res = TokenAsignaciones.InsertarParametrosFunc(td, func);
+            if (res != " ")
+            {
+                throw new ParseException(res);
+            }
+
         }
         Dim_Expresion(func)
         Params_Func(func)
@@ -458,19 +493,66 @@ void Params_Func( Token func ) :
 
 //////////////PARAMETROS/////////////////
 
-void Parametros( Token func) :
+void Parametros( Token func, Token funcLlamada) :
 {
     Token var;
 }
 {
-        Expresion(func)Params(func)
+        Expresion(func)
+        creaCuadruploParametro(func, funcLlamada)
+        {System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" + TokenAsignaciones.getParams(funcLlamada));}
+        Params(func, funcLlamada)
      |  Empty()
 }
 
-void Params( Token func ) :
+void creaCuadruploParametro(Token func, Token funcLlamada) :
+{
+     Token arg1;
+     Token par = new Token();
+     int aux;
+     int contParams;
+}
+{
+    {
+         arg1 = TokenAsignaciones.popPilaVP();
+         contParams = TokenAsignaciones.getContParams();
+         par.image = "par" + Integer.toString(contParams);
+
+
+         //El if es para cuando es un temporal o una constante
+         if ( arg1.kind == 4 | arg1.kind == 5 | arg1.kind == 6 | arg1.kind == 47 | arg1.kind == 38 | arg1.kind == 39 | arg1.kind == 41)
+         {
+             aux = arg1.kind;
+         }
+         else
+         {
+             aux = TokenAsignaciones.getType(arg1, func);
+         }
+
+
+         arg1.image = tokenToDir(arg1, func);
+
+         //System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" + TokenAsignaciones.getContParams());
+
+         if (!TokenAsignaciones.checaTipoParams(aux, funcLlamada))
+         {
+             TokenAsignaciones.resetContParams();
+            throw new ParseException("El parametro enviado no es del mismo tipo que el declarado o es un parametro extra");
+         }
+
+
+         Quadruple quad = new Quadruple("PARAM", arg1, null, par);
+         TokenAsignaciones.meterCuadruplo(quad);
+         TokenAsignaciones.subeContCuadruplos();
+
+             //quad.print();
+    }
+}
+
+void Params( Token func, Token funcLlamada) :
 {}
 {
-        <COMMA> Parametros(func)
+        <COMMA> Parametros(func, funcLlamada)
      |  Empty()
 }
 
@@ -680,7 +762,7 @@ void creaCuadruploGotoF(Token func) :
     }
 }
 
-void creaCuadruploGoto(Token func) :
+void creaCuadruploGoto() :
 {
      int aux;
 }
@@ -698,9 +780,9 @@ void EDD2(Token func) :
 {}
 {
         Estatuto(func)
-        {creaCuadruploGoto(func);}
+        {creaCuadruploGoto();}
     |   Empty()
-        {creaCuadruploGoto(func);}
+        {creaCuadruploGoto();}
 }
 
 void EDD3(Token func) :
@@ -982,30 +1064,66 @@ void No_condicional2(Token func) :
 //////////////Llamada/////////////////
 Token Llamada( Token func ) :
 {
-	Token var;
+	Token funcLlamada;
     String res;
 	boolean imp = false;
 }
 {
     <CALL>
-    var = <ID>
+    funcLlamada = <ID>
     {
-    res = TokenAsignaciones.checkFuncion(var);
+    res = TokenAsignaciones.checkFuncion(funcLlamada);
 
         if(res != " ")
         {
             throw new ParseException(res);
             imp = true;
         }
+        creaCuadruploEra(funcLlamada);
     }
-    <PARENIZQ>Llamada2(func)<PARENDER>
-    {return var;}
+    <PARENIZQ>Llamada2(func, funcLlamada)<PARENDER>
+    creaCuadruploGoSub(funcLlamada)
+    {return funcLlamada;}
 }
 
-void Llamada2( Token func ) :
+void creaCuadruploGoSub(Token funcLlamada) :
+{
+     Token aux = new Token();
+}
+{
+    {
+         aux.image = Integer.toString(TokenAsignaciones.getInitialAddress(funcLlamada));
+         Quadruple quad = new Quadruple("GOSUB", funcLlamada, null, aux );
+         TokenAsignaciones.meterCuadruplo(quad);
+         TokenAsignaciones.subeContCuadruplos();
+    }
+}
+
+void creaCuadruploEra(Token var) :
+{
+     int aux;
+}
+{
+    {
+
+         Quadruple quad = new Quadruple("ERA", null, null, var );
+         TokenAsignaciones.meterCuadruplo(quad);
+         TokenAsignaciones.subeContCuadruplos();
+    }
+}
+
+void Llamada2( Token func , Token funcLlamada) :
 {}
 {
-        Parametros(func)
+        Parametros(func, funcLlamada)
+        {
+            if(TokenAsignaciones.getParamSize(funcLlamada) != TokenAsignaciones.getContParams())
+            {
+                TokenAsignaciones.resetContParams();
+                throw new ParseException("En la llamada a la funcion " + funcLlamada + " se enviaron menos parametros de los necesitados.");
+            }
+            TokenAsignaciones.resetContParams();
+        }
     |   Empty()
 }
 
@@ -1020,7 +1138,7 @@ void Estatuto(Token func) :
     |   Estatuto_De_Decision(func)Estatuto2(func) // Cuadruplos listos
     |   Condicional(func)Estatuto2(func) // Cuadruplos listos
     |   No_condicional(func)Estatuto2(func) // Cuadruplos listos
-    |   Llamada(func)<SEMICOLON>Estatuto2(func)
+    |   Llamada(func)<SEMICOLON>Estatuto2(func) // Cuadruplos listos (Checar el tipo)
 }
 
 

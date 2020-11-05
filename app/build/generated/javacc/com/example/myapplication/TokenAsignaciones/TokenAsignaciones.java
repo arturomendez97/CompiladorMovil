@@ -25,6 +25,8 @@ class Tipo_Dir{
 class CustomHash {
     int tipo;
     Hashtable<String, Tipo_Dir> tablaV = new Hashtable();
+    int cuadruploInicial;
+    ArrayList<Integer> parametros = new ArrayList<Integer>();
     public static void main(String[] args) {
         CustomHash myObj = new CustomHash();
     }
@@ -76,6 +78,8 @@ public class TokenAsignaciones {
     private static int contCF = 12000;
     private static int contCC = 13000;
 
+
+    private static int contParametros = 0;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////        CUBO SEMANTICO
 
@@ -357,6 +361,81 @@ public class TokenAsignaciones {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////        TABLAS
 
+    public static int getContParams()
+    {
+        return contParametros;
+    }
+
+    public static void resetContParams()
+    {
+        contParametros = 0;
+    }
+
+    public static ArrayList getParams(Token func)
+    {
+        CustomHash tabla;
+        tabla = tablaFunc.get(func.image);
+        return tabla.parametros;
+
+    }
+
+    public static int getInitialAddress(Token func)
+    {
+        CustomHash tabla;
+        tabla = tablaFunc.get(func.image);
+        return tabla.cuadruploInicial;
+    }
+
+    public static int getParamSize(Token func)
+    {
+        CustomHash tabla;
+        tabla = tablaFunc.get(func.image);
+        return tabla.parametros.size();
+    }
+
+    public static Boolean checaTipoParams(int td, Token func)
+    {
+        CustomHash tabla;
+        tabla = tablaFunc.get(func.image);
+
+        try
+        {
+            if (tabla.parametros.get(contParametros) == td)
+            {
+                contParametros++;
+                return true;
+            }
+            else
+            {
+                contParametros++;
+                return false;
+            }
+        }
+        catch(Exception e)
+        {
+            return false;
+        }
+    }
+
+    public static String InsertarParametrosFunc( int td, Token func)
+    {
+        CustomHash tabla;
+        tabla = tablaFunc.get(func.image);
+
+        switch (td)
+        {
+            case 4:
+                tabla.parametros.add(4);
+                return " ";
+            case 5:
+                tabla.parametros.add(5);
+                return " ";
+            case 6:
+                tabla.parametros.add(6);
+                return " ";
+            default: return "El tipo :" + td + " no es válido.";
+        }
+    }
 
     public static String InsertarConstante( String constante, int direccion )
     {
@@ -465,12 +544,13 @@ public class TokenAsignaciones {
     }
 
 
-    public static String InsertarFuncion(Token nombreFuncion, int tipo)
+    public static String InsertarFuncion(Token nombreFuncion, int tipo, int contCuadruplos)
     {
         try
         {
             CustomHash tabla = new CustomHash();
             tabla.tipo=tipo;
+            tabla.cuadruploInicial = contCuadruplos;
             tablaFunc.put(nombreFuncion.image,tabla);
             return " ";
         }

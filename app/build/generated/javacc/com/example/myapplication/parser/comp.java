@@ -15,12 +15,15 @@ public class comp implements compConstants {
   static final public void Programa() throws ParseException {//TokenAsignaciones.SetTables();
         ///cuboSemantico.constructor();
         Token var;
+//Crea goto a main
+        creaCuadruploGoto();
     jj_consume_token(PROGRAMA);
     jj_consume_token(ID);
     jj_consume_token(SEMICOLON);
     Mis_Vars_Global();
     Mis_Func();
     Main();
+    creaCuadruploEnd();
     jj_consume_token(0);
 TokenAsignaciones.printCuadruplos();
         System.out.println("Pila Saltos: " + TokenAsignaciones.returnPilaSaltos());
@@ -35,6 +38,12 @@ TokenAsignaciones.printCuadruplos();
         TokenAsignaciones.resetContsConstantes();
         TokenAsignaciones.emptyPilaSaltos();
         TokenAsignaciones.resetContCuadruplos();
+  }
+
+  static final public void creaCuadruploEnd() throws ParseException {
+Quadruple quad = new Quadruple("END", null, null, null);
+         TokenAsignaciones.meterCuadruplo(quad);
+         TokenAsignaciones.subeContCuadruplos();
   }
 
 //////////////MIS_VARS_GLOBAL/////////////////
@@ -237,7 +246,7 @@ TokenAsignaciones.InsertarSimbolo(var, td, func);
     jj_consume_token(MODULE);
     td = Func1();
     func = jj_consume_token(ID);
-res = TokenAsignaciones.InsertarFuncion(func, td);
+res = TokenAsignaciones.InsertarFuncion(func, td, TokenAsignaciones.getContCuadruplos());
 
                 if(res != " ")
                 {
@@ -253,7 +262,14 @@ res = TokenAsignaciones.InsertarFuncion(func, td);
 //RESETEAR LOS CONTS
         TokenAsignaciones.resetContsLocal();
         TokenAsignaciones.resetContsTemporal();
+        creaCuadruploEndFunc();
     Mas_F();
+  }
+
+  static final public void creaCuadruploEndFunc() throws ParseException {
+Quadruple quad = new Quadruple("ENDFUNC", null, null, null );
+        TokenAsignaciones.meterCuadruplo(quad);
+        TokenAsignaciones.subeContCuadruplos();
   }
 
   static final public int Func1() throws ParseException {int td;
@@ -345,6 +361,7 @@ res = TokenAsignaciones.InsertarFuncion(func, td);
 
 //////////////MAIN/////////////////
   static final public void Main() throws ParseException {Token func;
+rellenaCuadruploGoto();
     func = jj_consume_token(MAIN);
 TokenAsignaciones.InsertarMain(func);
     jj_consume_token(PARENIZQ);
@@ -377,6 +394,7 @@ TokenAsignaciones.InsertarMain(func);
   static final public 
 void Parametros_Func(Token func) throws ParseException {int td;
     Token var;
+    String res;
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case INT:
     case FLOAT:
@@ -384,6 +402,11 @@ void Parametros_Func(Token func) throws ParseException {int td;
       td = Tipo();
       var = jj_consume_token(ID);
 TokenAsignaciones.InsertarSimbolo(var, td, func);
+            res = TokenAsignaciones.InsertarParametrosFunc(td, func);
+            if (res != " ")
+            {
+                {if (true) throw new ParseException(res);}
+            }
       Dim_Expresion(func);
       Params_Func(func);
       break;
@@ -409,7 +432,7 @@ TokenAsignaciones.InsertarSimbolo(var, td, func);
 
 //////////////PARAMETROS/////////////////
   static final public 
-void Parametros(Token func) throws ParseException {Token var;
+void Parametros(Token func, Token funcLlamada) throws ParseException {Token var;
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case CALL:
     case PARENIZQ:
@@ -418,7 +441,9 @@ void Parametros(Token func) throws ParseException {Token var;
     case ID:
     case CTEC:{
       Expresion(func);
-      Params(func);
+      creaCuadruploParametro(func, funcLlamada);
+System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" + TokenAsignaciones.getParams(funcLlamada));
+      Params(func, funcLlamada);
       break;
       }
     default:
@@ -427,11 +452,50 @@ void Parametros(Token func) throws ParseException {Token var;
     }
   }
 
-  static final public void Params(Token func) throws ParseException {
+  static final public void creaCuadruploParametro(Token func, Token funcLlamada) throws ParseException {Token arg1;
+     Token par = new Token();
+     int aux;
+     int contParams;
+arg1 = TokenAsignaciones.popPilaVP();
+         contParams = TokenAsignaciones.getContParams();
+         par.image = "par" + Integer.toString(contParams);
+
+
+         //El if es para cuando es un temporal o una constante
+         if ( arg1.kind == 4 | arg1.kind == 5 | arg1.kind == 6 | arg1.kind == 47 | arg1.kind == 38 | arg1.kind == 39 | arg1.kind == 41)
+         {
+             aux = arg1.kind;
+         }
+         else
+         {
+             aux = TokenAsignaciones.getType(arg1, func);
+         }
+
+
+         arg1.image = tokenToDir(arg1, func);
+
+         //System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" + TokenAsignaciones.getContParams());
+
+         if (!TokenAsignaciones.checaTipoParams(aux, funcLlamada))
+         {
+             TokenAsignaciones.resetContParams();
+            {if (true) throw new ParseException("El parametro enviado no es del mismo tipo que el declarado o es un parametro extra");}
+         }
+
+
+         Quadruple quad = new Quadruple("PARAM", arg1, null, par);
+         TokenAsignaciones.meterCuadruplo(quad);
+         TokenAsignaciones.subeContCuadruplos();
+
+             //quad.print();
+
+  }
+
+  static final public void Params(Token func, Token funcLlamada) throws ParseException {
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case COMMA:{
       jj_consume_token(COMMA);
-      Parametros(func);
+      Parametros(func, funcLlamada);
       break;
       }
     default:
@@ -636,7 +700,7 @@ arg1 = TokenAsignaciones.popPilaVP();
 
   }
 
-  static final public void creaCuadruploGoto(Token func) throws ParseException {int aux;
+  static final public void creaCuadruploGoto() throws ParseException {int aux;
 Quadruple quad = new Quadruple("GOTO", null, null, null );
          TokenAsignaciones.meterCuadruplo(quad);
          TokenAsignaciones.pushPilaSaltos(TokenAsignaciones.getContCuadruplos());
@@ -654,13 +718,13 @@ Quadruple quad = new Quadruple("GOTO", null, null, null );
     case CALL:
     case ID:{
       Estatuto(func);
-creaCuadruploGoto(func);
+creaCuadruploGoto();
       break;
       }
     default:
       jj_la1[23] = jj_gen;
       Empty();
-creaCuadruploGoto(func);
+creaCuadruploGoto();
     }
   }
 
@@ -953,27 +1017,48 @@ aux.image = "1";
   }
 
 //////////////Llamada/////////////////
-  static final public Token Llamada(Token func) throws ParseException {Token var;
+  static final public Token Llamada(Token func) throws ParseException {Token funcLlamada;
     String res;
         boolean imp = false;
     jj_consume_token(CALL);
-    var = jj_consume_token(ID);
-res = TokenAsignaciones.checkFuncion(var);
+    funcLlamada = jj_consume_token(ID);
+res = TokenAsignaciones.checkFuncion(funcLlamada);
 
         if(res != " ")
         {
             {if (true) throw new ParseException(res);}
             imp = true;
         }
+        creaCuadruploEra(funcLlamada);
     jj_consume_token(PARENIZQ);
-    Llamada2(func);
+    Llamada2(func, funcLlamada);
     jj_consume_token(PARENDER);
-{if ("" != null) return var;}
+    creaCuadruploGoSub(funcLlamada);
+{if ("" != null) return funcLlamada;}
     throw new Error("Missing return statement in function");
   }
 
-  static final public void Llamada2(Token func) throws ParseException {
-    Parametros(func);
+  static final public void creaCuadruploGoSub(Token funcLlamada) throws ParseException {Token aux = new Token();
+aux.image = Integer.toString(TokenAsignaciones.getInitialAddress(funcLlamada));
+         Quadruple quad = new Quadruple("GOSUB", funcLlamada, null, aux );
+         TokenAsignaciones.meterCuadruplo(quad);
+         TokenAsignaciones.subeContCuadruplos();
+  }
+
+  static final public void creaCuadruploEra(Token var) throws ParseException {int aux;
+Quadruple quad = new Quadruple("ERA", null, null, var );
+         TokenAsignaciones.meterCuadruplo(quad);
+         TokenAsignaciones.subeContCuadruplos();
+  }
+
+  static final public void Llamada2(Token func , Token funcLlamada) throws ParseException {
+    Parametros(func, funcLlamada);
+if(TokenAsignaciones.getParamSize(funcLlamada) != TokenAsignaciones.getContParams())
+            {
+                TokenAsignaciones.resetContParams();
+                {if (true) throw new ParseException("En la llamada a la funcion " + funcLlamada + " se enviaron menos parametros de los necesitados.");}
+            }
+            TokenAsignaciones.resetContParams();
   }
 
 //////////////ESTATUTO/////////////////
