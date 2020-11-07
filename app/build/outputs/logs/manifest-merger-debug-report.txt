@@ -1,9 +1,9 @@
 -- Merging decision tree log ---
 manifest
-ADDED from D:\Documents\Carrera ITC\Semestre 11\Compiladores\Compilador Android\MyApplication2\app\src\main\AndroidManifest.xml:2:1-21:12
-INJECTED from D:\Documents\Carrera ITC\Semestre 11\Compiladores\Compilador Android\MyApplication2\app\src\main\AndroidManifest.xml:2:1-21:12
-INJECTED from D:\Documents\Carrera ITC\Semestre 11\Compiladores\Compilador Android\MyApplication2\app\src\main\AndroidManifest.xml:2:1-21:12
-INJECTED from D:\Documents\Carrera ITC\Semestre 11\Compiladores\Compilador Android\MyApplication2\app\src\main\AndroidManifest.xml:2:1-21:12
+ADDED from D:\Documents\Carrera ITC\Semestre 11\Compiladores\Compilador Android\MyApplication2\app\src\main\AndroidManifest.xml:2:1-24:12
+INJECTED from D:\Documents\Carrera ITC\Semestre 11\Compiladores\Compilador Android\MyApplication2\app\src\main\AndroidManifest.xml:2:1-24:12
+INJECTED from D:\Documents\Carrera ITC\Semestre 11\Compiladores\Compilador Android\MyApplication2\app\src\main\AndroidManifest.xml:2:1-24:12
+INJECTED from D:\Documents\Carrera ITC\Semestre 11\Compiladores\Compilador Android\MyApplication2\app\src\main\AndroidManifest.xml:2:1-24:12
 MERGED from [androidx.constraintlayout:constraintlayout:2.0.1] C:\Users\Arturo\.gradle\caches\transforms-2\files-2.1\879bd1bfe317e9b580efe4c17e01776d\constraintlayout-2.0.1\AndroidManifest.xml:2:1-11:12
 MERGED from [com.google.android.material:material:1.2.1] C:\Users\Arturo\.gradle\caches\transforms-2\files-2.1\b1b1de999e7e9158fbf1f4bcd0ff9a4d\material-1.2.1\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.appcompat:appcompat:1.2.0] C:\Users\Arturo\.gradle\caches\transforms-2\files-2.1\1379d6bd907c7ea28282d5dc24fefbbb\appcompat-1.2.0\AndroidManifest.xml:17:1-24:12
@@ -32,25 +32,33 @@ MERGED from [androidx.lifecycle:lifecycle-livedata:2.0.0] C:\Users\Arturo\.gradl
 MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.0.0] C:\Users\Arturo\.gradle\caches\transforms-2\files-2.1\f6a06838faedb082b37239b86f3966b0\lifecycle-livedata-core-2.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.arch.core:core-runtime:2.0.0] C:\Users\Arturo\.gradle\caches\transforms-2\files-2.1\ebe65e5a6d39c95928b72f3fec8e251e\core-runtime-2.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.annotation:annotation-experimental:1.0.0] C:\Users\Arturo\.gradle\caches\transforms-2\files-2.1\2ad9224b89d130fa726ee58a8b579d2d\jetified-annotation-experimental-1.0.0\AndroidManifest.xml:17:1-24:12
-INJECTED from D:\Documents\Carrera ITC\Semestre 11\Compiladores\Compilador Android\MyApplication2\app\src\main\AndroidManifest.xml:2:1-21:12
-INJECTED from D:\Documents\Carrera ITC\Semestre 11\Compiladores\Compilador Android\MyApplication2\app\src\main\AndroidManifest.xml:2:1-21:12
-INJECTED from D:\Documents\Carrera ITC\Semestre 11\Compiladores\Compilador Android\MyApplication2\app\src\main\AndroidManifest.xml:2:1-21:12
+INJECTED from D:\Documents\Carrera ITC\Semestre 11\Compiladores\Compilador Android\MyApplication2\app\src\main\AndroidManifest.xml:2:1-24:12
+INJECTED from D:\Documents\Carrera ITC\Semestre 11\Compiladores\Compilador Android\MyApplication2\app\src\main\AndroidManifest.xml:2:1-24:12
+INJECTED from D:\Documents\Carrera ITC\Semestre 11\Compiladores\Compilador Android\MyApplication2\app\src\main\AndroidManifest.xml:2:1-24:12
 	package
 		ADDED from D:\Documents\Carrera ITC\Semestre 11\Compiladores\Compilador Android\MyApplication2\app\src\main\AndroidManifest.xml:3:5-40
 		INJECTED from D:\Documents\Carrera ITC\Semestre 11\Compiladores\Compilador Android\MyApplication2\app\src\main\AndroidManifest.xml
 		INJECTED from D:\Documents\Carrera ITC\Semestre 11\Compiladores\Compilador Android\MyApplication2\app\src\main\AndroidManifest.xml
 	android:versionName
 		INJECTED from D:\Documents\Carrera ITC\Semestre 11\Compiladores\Compilador Android\MyApplication2\app\src\main\AndroidManifest.xml
-		ADDED from D:\Documents\Carrera ITC\Semestre 11\Compiladores\Compilador Android\MyApplication2\app\src\main\AndroidManifest.xml:2:1-21:12
+		ADDED from D:\Documents\Carrera ITC\Semestre 11\Compiladores\Compilador Android\MyApplication2\app\src\main\AndroidManifest.xml:2:1-24:12
 		INJECTED from D:\Documents\Carrera ITC\Semestre 11\Compiladores\Compilador Android\MyApplication2\app\src\main\AndroidManifest.xml
 	android:versionCode
 		INJECTED from D:\Documents\Carrera ITC\Semestre 11\Compiladores\Compilador Android\MyApplication2\app\src\main\AndroidManifest.xml
-		ADDED from D:\Documents\Carrera ITC\Semestre 11\Compiladores\Compilador Android\MyApplication2\app\src\main\AndroidManifest.xml:2:1-21:12
+		ADDED from D:\Documents\Carrera ITC\Semestre 11\Compiladores\Compilador Android\MyApplication2\app\src\main\AndroidManifest.xml:2:1-24:12
 		INJECTED from D:\Documents\Carrera ITC\Semestre 11\Compiladores\Compilador Android\MyApplication2\app\src\main\AndroidManifest.xml
 	xmlns:android
 		ADDED from D:\Documents\Carrera ITC\Semestre 11\Compiladores\Compilador Android\MyApplication2\app\src\main\AndroidManifest.xml:2:11-69
+uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
+ADDED from D:\Documents\Carrera ITC\Semestre 11\Compiladores\Compilador Android\MyApplication2\app\src\main\AndroidManifest.xml:4:5-81
+	android:name
+		ADDED from D:\Documents\Carrera ITC\Semestre 11\Compiladores\Compilador Android\MyApplication2\app\src\main\AndroidManifest.xml:4:22-78
+uses-permission#android.permission.READ_EXTERNAL_STORAGE
+ADDED from D:\Documents\Carrera ITC\Semestre 11\Compiladores\Compilador Android\MyApplication2\app\src\main\AndroidManifest.xml:5:5-80
+	android:name
+		ADDED from D:\Documents\Carrera ITC\Semestre 11\Compiladores\Compilador Android\MyApplication2\app\src\main\AndroidManifest.xml:5:22-77
 application
-ADDED from D:\Documents\Carrera ITC\Semestre 11\Compiladores\Compilador Android\MyApplication2\app\src\main\AndroidManifest.xml:5:5-19:19
+ADDED from D:\Documents\Carrera ITC\Semestre 11\Compiladores\Compilador Android\MyApplication2\app\src\main\AndroidManifest.xml:7:5-22:19
 MERGED from [androidx.constraintlayout:constraintlayout:2.0.1] C:\Users\Arturo\.gradle\caches\transforms-2\files-2.1\879bd1bfe317e9b580efe4c17e01776d\constraintlayout-2.0.1\AndroidManifest.xml:9:5-20
 MERGED from [androidx.constraintlayout:constraintlayout:2.0.1] C:\Users\Arturo\.gradle\caches\transforms-2\files-2.1\879bd1bfe317e9b580efe4c17e01776d\constraintlayout-2.0.1\AndroidManifest.xml:9:5-20
 MERGED from [com.google.android.material:material:1.2.1] C:\Users\Arturo\.gradle\caches\transforms-2\files-2.1\b1b1de999e7e9158fbf1f4bcd0ff9a4d\material-1.2.1\AndroidManifest.xml:22:5-20
@@ -59,34 +67,36 @@ MERGED from [androidx.core:core:1.3.1] C:\Users\Arturo\.gradle\caches\transforms
 MERGED from [androidx.core:core:1.3.1] C:\Users\Arturo\.gradle\caches\transforms-2\files-2.1\999c04bfe6b531160fbfe8b6cd16334d\core-1.3.1\AndroidManifest.xml:24:5-89
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.0] C:\Users\Arturo\.gradle\caches\transforms-2\files-2.1\41ecbfe9e8fc24776183df2fa926b1c4\versionedparcelable-1.1.0\AndroidManifest.xml:24:5-25:19
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.0] C:\Users\Arturo\.gradle\caches\transforms-2\files-2.1\41ecbfe9e8fc24776183df2fa926b1c4\versionedparcelable-1.1.0\AndroidManifest.xml:24:5-25:19
+	android:requestLegacyExternalStorage
+		ADDED from D:\Documents\Carrera ITC\Semestre 11\Compiladores\Compilador Android\MyApplication2\app\src\main\AndroidManifest.xml:8:9-52
 	android:appComponentFactory
 		ADDED from [androidx.core:core:1.3.1] C:\Users\Arturo\.gradle\caches\transforms-2\files-2.1\999c04bfe6b531160fbfe8b6cd16334d\core-1.3.1\AndroidManifest.xml:24:18-86
 	android:supportsRtl
-		ADDED from D:\Documents\Carrera ITC\Semestre 11\Compiladores\Compilador Android\MyApplication2\app\src\main\AndroidManifest.xml:10:9-35
+		ADDED from D:\Documents\Carrera ITC\Semestre 11\Compiladores\Compilador Android\MyApplication2\app\src\main\AndroidManifest.xml:13:9-35
 	android:label
-		ADDED from D:\Documents\Carrera ITC\Semestre 11\Compiladores\Compilador Android\MyApplication2\app\src\main\AndroidManifest.xml:8:9-41
+		ADDED from D:\Documents\Carrera ITC\Semestre 11\Compiladores\Compilador Android\MyApplication2\app\src\main\AndroidManifest.xml:11:9-41
 	android:roundIcon
-		ADDED from D:\Documents\Carrera ITC\Semestre 11\Compiladores\Compilador Android\MyApplication2\app\src\main\AndroidManifest.xml:9:9-54
+		ADDED from D:\Documents\Carrera ITC\Semestre 11\Compiladores\Compilador Android\MyApplication2\app\src\main\AndroidManifest.xml:12:9-54
 	android:icon
-		ADDED from D:\Documents\Carrera ITC\Semestre 11\Compiladores\Compilador Android\MyApplication2\app\src\main\AndroidManifest.xml:7:9-43
+		ADDED from D:\Documents\Carrera ITC\Semestre 11\Compiladores\Compilador Android\MyApplication2\app\src\main\AndroidManifest.xml:10:9-43
 	android:allowBackup
-		ADDED from D:\Documents\Carrera ITC\Semestre 11\Compiladores\Compilador Android\MyApplication2\app\src\main\AndroidManifest.xml:6:9-35
+		ADDED from D:\Documents\Carrera ITC\Semestre 11\Compiladores\Compilador Android\MyApplication2\app\src\main\AndroidManifest.xml:9:9-35
 	android:theme
-		ADDED from D:\Documents\Carrera ITC\Semestre 11\Compiladores\Compilador Android\MyApplication2\app\src\main\AndroidManifest.xml:11:9-40
+		ADDED from D:\Documents\Carrera ITC\Semestre 11\Compiladores\Compilador Android\MyApplication2\app\src\main\AndroidManifest.xml:14:9-40
 activity#com.example.myapplication.MainActivity
-ADDED from D:\Documents\Carrera ITC\Semestre 11\Compiladores\Compilador Android\MyApplication2\app\src\main\AndroidManifest.xml:12:9-18:20
+ADDED from D:\Documents\Carrera ITC\Semestre 11\Compiladores\Compilador Android\MyApplication2\app\src\main\AndroidManifest.xml:15:9-21:20
 	android:name
-		ADDED from D:\Documents\Carrera ITC\Semestre 11\Compiladores\Compilador Android\MyApplication2\app\src\main\AndroidManifest.xml:12:19-47
+		ADDED from D:\Documents\Carrera ITC\Semestre 11\Compiladores\Compilador Android\MyApplication2\app\src\main\AndroidManifest.xml:15:19-47
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
-ADDED from D:\Documents\Carrera ITC\Semestre 11\Compiladores\Compilador Android\MyApplication2\app\src\main\AndroidManifest.xml:13:13-17:29
+ADDED from D:\Documents\Carrera ITC\Semestre 11\Compiladores\Compilador Android\MyApplication2\app\src\main\AndroidManifest.xml:16:13-20:29
 action#android.intent.action.MAIN
-ADDED from D:\Documents\Carrera ITC\Semestre 11\Compiladores\Compilador Android\MyApplication2\app\src\main\AndroidManifest.xml:14:17-69
+ADDED from D:\Documents\Carrera ITC\Semestre 11\Compiladores\Compilador Android\MyApplication2\app\src\main\AndroidManifest.xml:17:17-69
 	android:name
-		ADDED from D:\Documents\Carrera ITC\Semestre 11\Compiladores\Compilador Android\MyApplication2\app\src\main\AndroidManifest.xml:14:25-66
+		ADDED from D:\Documents\Carrera ITC\Semestre 11\Compiladores\Compilador Android\MyApplication2\app\src\main\AndroidManifest.xml:17:25-66
 category#android.intent.category.LAUNCHER
-ADDED from D:\Documents\Carrera ITC\Semestre 11\Compiladores\Compilador Android\MyApplication2\app\src\main\AndroidManifest.xml:16:17-77
+ADDED from D:\Documents\Carrera ITC\Semestre 11\Compiladores\Compilador Android\MyApplication2\app\src\main\AndroidManifest.xml:19:17-77
 	android:name
-		ADDED from D:\Documents\Carrera ITC\Semestre 11\Compiladores\Compilador Android\MyApplication2\app\src\main\AndroidManifest.xml:16:27-74
+		ADDED from D:\Documents\Carrera ITC\Semestre 11\Compiladores\Compilador Android\MyApplication2\app\src\main\AndroidManifest.xml:19:27-74
 uses-sdk
 INJECTED from D:\Documents\Carrera ITC\Semestre 11\Compiladores\Compilador Android\MyApplication2\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from D:\Documents\Carrera ITC\Semestre 11\Compiladores\Compilador Android\MyApplication2\app\src\main\AndroidManifest.xml

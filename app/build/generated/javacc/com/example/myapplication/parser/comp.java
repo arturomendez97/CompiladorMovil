@@ -28,6 +28,7 @@ public class comp implements compConstants {
 TokenAsignaciones.printCuadruplos();
         System.out.println("Pila Saltos: " + TokenAsignaciones.returnPilaSaltos());
         //System.out.println("Pila VP: " + TokenAsignaciones.returnPilaVP());
+        TokenAsignaciones.guardarTodo();
         TokenAsignaciones.emptyPilaOP();
         TokenAsignaciones.emptyPilaVP();
         TokenAsignaciones.emptyCuadruplos();

@@ -1,15 +1,21 @@
 package com.example.myapplication.TokenAsignaciones;
+import android.os.Environment;
+
 import com.example.myapplication.parser.Token;
 import com.example.myapplication.TokenAsignaciones.cuboSemantico;
 import com.example.myapplication.TokenAsignaciones.Quadruple;
 
 
-
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.Hashtable;
 import java.lang.String;
 import java.util.ArrayList;
 import java.util.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.FileWriter;
 
 class Tipo_Dir{
     int tipo;
@@ -32,6 +38,9 @@ class CustomHash {
     }
 }
 public class TokenAsignaciones {
+
+
+
 
     //Variable para validar asignaciones a caracteres(ichr)
     public static int segunda = 0;
@@ -80,6 +89,77 @@ public class TokenAsignaciones {
 
 
     private static int contParametros = 0;
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////        GUARDA EN ARCHIVO
+
+    public static void guardarTodo()
+    {
+        int cont = 0;
+        //Path donde se guardará el archivo
+        String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/aaTutorial";
+        File dir = new File(path);
+        dir.mkdirs();
+
+        File file = new File (path + "/savedFile.txt");
+        String saveText[];    //declaring array
+        saveText = new String[100];
+
+        saveText[0] = "cuadruplos:";
+
+        Quadruple aux;
+        for (int j = 1; j < cuadruplos.size(); j++) {
+            aux = cuadruplos.get(j);
+            saveText[j] = (aux.operator + " " + aux.arg1 + " " + aux.arg2 + " " + aux.resultado);
+            System.out.println(aux.operator + " " + aux.arg1 + " " + aux.arg2 + " " + aux.resultado);
+            cont++;
+        }
+
+        saveText[cont] = "funciones:";
+
+        Tipo_Dir aux2;
+
+
+        Save(file, saveText);
+    }
+
+    public static void Save(File file, String[] data)
+    {
+
+
+        FileOutputStream fos = null;
+        try
+        {
+            fos = new FileOutputStream(file);
+        }
+        catch (FileNotFoundException e) {
+            e.printStackTrace();}
+        try
+        {
+            try
+            {
+                for (int i = 0; i<cuadruplos.size(); i++)
+                {
+                    fos.write(data[i].getBytes());
+                    if (i < data.length-1)
+                    {
+                        fos.write("\n".getBytes());
+                    }
+                }
+            }
+            catch (IOException e) {e.printStackTrace();}
+        }
+        finally
+        {
+            try
+            {
+                fos.close();
+            }
+            catch (IOException e) {e.printStackTrace();}
+        }
+    }
+
+
+
 
     ////////////////////////////////////////////////////////////////////////////////////////////////        CUBO SEMANTICO
 

@@ -15,7 +15,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import java.io.ByteArrayInputStream;
 
 import com.example.myapplication.TokenAsignaciones.TokenAsignaciones;
-
+import com.example.myapplication.TokenAsignaciones.MaquinaVirtual;
 
 public class MainActivity extends AppCompatActivity {
     TextInputLayout inputText;
@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     ae.Programa();
                     text.setText("Correcto");
+                    text.setText(MaquinaVirtual.readFile());
                 } catch (ParseException ex){
                     text.setText(ex.getMessage());
                 }catch (TokenMgrError tme){
