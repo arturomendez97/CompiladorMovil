@@ -167,7 +167,13 @@ void Programa() :
         TokenAsignaciones.printCuadruplos();
         System.out.println("Pila Saltos: " + TokenAsignaciones.returnPilaSaltos());
         //System.out.println("Pila VP: " + TokenAsignaciones.returnPilaVP());
-        TokenAsignaciones.guardarTodo();
+
+
+
+        TokenAsignaciones.comienzaMaquinaVirtual();
+
+
+
         TokenAsignaciones.emptyPilaOP();
         TokenAsignaciones.emptyPilaVP();
         TokenAsignaciones.emptyCuadruplos();
@@ -178,6 +184,8 @@ void Programa() :
         TokenAsignaciones.resetContsConstantes();
         TokenAsignaciones.emptyPilaSaltos();
         TokenAsignaciones.resetContCuadruplos();
+        //TokenAsignaciones.printNumVarsGlobal();
+        TokenAsignaciones.resetNumVarsGlobal();
     }
 }
 
@@ -212,6 +220,9 @@ void Vars2_Global() :
 }
 {
     td = Tipo()
+    {
+        TokenAsignaciones.aumentaVarFuncGlobal(td);
+    }
     var = <ID>
     {TokenAsignaciones.InsertarSimboloGlobal(var, td);}
     Dim()
@@ -227,6 +238,7 @@ void MasV_Global( int td) :
         <COMMA>
         var = <ID>
         {
+            TokenAsignaciones.aumentaVarFuncGlobal(td);
             TokenAsignaciones.InsertarSimboloGlobal(var, td);
         }
         Dim()
@@ -267,6 +279,9 @@ void Vars2(Token func) :
 }
 {
     td = Tipo()
+    {
+        TokenAsignaciones.aumentaVarFunc(td, func);
+    }
     var = <ID>
     {
 		res = TokenAsignaciones.InsertarSimbolo(var, td, func);
@@ -316,6 +331,7 @@ void MasV( int td, Token func ) :
         <COMMA>
         var = <ID>
         {
+            TokenAsignaciones.aumentaVarFunc(td, func);
             TokenAsignaciones.InsertarSimbolo(var, td, func);
         }
 
@@ -371,6 +387,7 @@ void Funcion() :
         TokenAsignaciones.resetContsLocal();
         TokenAsignaciones.resetContsTemporal();
         creaCuadruploEndFunc();
+        //TokenAsignaciones.printNumVars(func);
     }
     Mas_F()
 }
@@ -470,6 +487,9 @@ void Parametros_Func( Token func) :
 }
 {
         td = Tipo()
+        {
+            TokenAsignaciones.aumentaVarFunc(td, func);
+        }
         var = <ID>
         {
             TokenAsignaciones.InsertarSimbolo(var, td, func);
@@ -501,7 +521,7 @@ void Parametros( Token func, Token funcLlamada) :
 {
         Expresion(func)
         creaCuadruploParametro(func, funcLlamada)
-        {System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" + TokenAsignaciones.getParams(funcLlamada));}
+        //{System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" + TokenAsignaciones.getParams(funcLlamada));}
         Params(func, funcLlamada)
      |  Empty()
 }
@@ -853,9 +873,9 @@ void creaCuadruploAsignacion(Token op, Token func) :
              aux2 = TokenAsignaciones.getType(arg2, func);
          }
 
-         System.out.println("aux: " + aux);
+         //System.out.println("aux: " + aux);
 
-         System.out.println("aux2: " + aux2);
+         //System.out.println("aux2: " + aux2);
 
          if (TokenAsignaciones.getCuboType(aux2,aux,op.image) == 0)
              {
@@ -1320,14 +1340,16 @@ void creaCuadruploExp(Token func) :
 
     temporal.kind = TokenAsignaciones.getCuboType(aux, aux2, op.image);
 
+        TokenAsignaciones.aumentaVarFunc(temporal.kind, func);
+
     //System.out.println("temporal.kind: " + temporal.kind);
 
     if(temporal.kind == 0)
     {
         throw new ParseException("Los argumentos: " + arg1.image + " y " + arg2.image + " no son compatibles.");
     }
-        System.out.println("aaaaaa: " + arg1.kind);
-        System.out.println("aaaaaa: " + arg2.image);
+        //System.out.println("aaaaaa: " + arg1.kind);
+        //System.out.println("aaaaaa: " + arg2.image);
 
     ////////////////////////////////////////////////// Aquí cambia los tokens por sus direcciones antes de meterlos.
 

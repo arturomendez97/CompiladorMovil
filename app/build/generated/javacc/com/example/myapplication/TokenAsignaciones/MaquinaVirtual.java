@@ -9,9 +9,41 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Hashtable;
+
+
+class MemoriaGlobal {
+    int[] arrayInts;
+    float[] arrayFloats;
+    char[] arrayChars;
+
+    MemoriaGlobal(int numInts, int numFloats, int numChars){
+
+        arrayInts = new int[numInts];
+        arrayFloats = new float[numFloats];
+        arrayChars = new char[numChars];
+    }
+}
+
+class MemoriaLocal {
+    int[] arrayInts;
+    float[] arrayFloats;
+    char[] arrayChars;
+    boolean[] arrayBools;
+
+
+    MemoriaLocal(int numInts, int numFloats, int numChars, int numBools){
+
+        arrayInts = new int[numInts];
+        arrayFloats = new float[numFloats];
+        arrayChars = new char[numChars];
+        arrayBools = new boolean[numBools];
+    }
+}
 
 public class MaquinaVirtual {
-
+/*
 
     public static String str = "hola";
 
@@ -79,4 +111,53 @@ public class MaquinaVirtual {
         catch (IOException e) {e.printStackTrace();}
         return array;
     }
+
+ */
+
+    private static Hashtable<String, Tipo_Dir> tablaVarsGlobal = new Hashtable();
+    private static int[] varArrayGlobal = new int[]{0, 0, 0, 0};
+    //Tabla que almacenara las funciones declaradas
+    private static Hashtable<String,CustomHash> tablaFunc = new Hashtable<String,CustomHash>();
+    private static Hashtable<String, Integer> tablaConst = new Hashtable<String, Integer>();
+    private static ArrayList<Quadruple> cuadruplos = new ArrayList<Quadruple>();
+    private static int ip = 0;
+
+
+
+    public static void Comienza(Hashtable<String, Tipo_Dir> vGlobal, int[] arrGlobal, Hashtable<String, CustomHash> funcs, Hashtable<String, Integer> constantes, ArrayList<Quadruple> cuads)
+    {
+        tablaVarsGlobal = vGlobal;
+        varArrayGlobal = arrGlobal;
+        tablaFunc = funcs;
+        tablaConst = constantes;
+        cuadruplos = cuads;
+        printNumVarsGlobal();
+
+        //CREA MEMORIA GLOBAL
+        MemoriaGlobal memGlobal = new MemoriaGlobal(varArrayGlobal[0], varArrayGlobal[1], varArrayGlobal[2]);
+
+        //RECORRE CUADRUPLOS
+
+        Quadruple aux;
+        while (ip < cuadruplos.size())
+        {
+            aux = cuadruplos.get(ip);
+
+                switch (aux.operator)
+                {
+                    case "GOTO" :
+                        ip = Integer.parseInt(aux.resultado.image);
+                    case "write":
+                        break;
+                    default: break;
+                }
+        }
+
+    }
+
+    public static void printNumVarsGlobal()
+    {
+        System.out.println("MAQUINA VIRTUAL Num vars GLOBAL : " + varArrayGlobal[0] + " " + varArrayGlobal[1] + " " + varArrayGlobal[2] + " " + varArrayGlobal[3] + " ");
+    }
+
 }

@@ -28,7 +28,13 @@ public class comp implements compConstants {
 TokenAsignaciones.printCuadruplos();
         System.out.println("Pila Saltos: " + TokenAsignaciones.returnPilaSaltos());
         //System.out.println("Pila VP: " + TokenAsignaciones.returnPilaVP());
-        TokenAsignaciones.guardarTodo();
+
+
+
+        TokenAsignaciones.comienzaMaquinaVirtual();
+
+
+
         TokenAsignaciones.emptyPilaOP();
         TokenAsignaciones.emptyPilaVP();
         TokenAsignaciones.emptyCuadruplos();
@@ -39,6 +45,8 @@ TokenAsignaciones.printCuadruplos();
         TokenAsignaciones.resetContsConstantes();
         TokenAsignaciones.emptyPilaSaltos();
         TokenAsignaciones.resetContCuadruplos();
+        //TokenAsignaciones.printNumVarsGlobal();
+        TokenAsignaciones.resetNumVarsGlobal();
   }
 
   static final public void creaCuadruploEnd() throws ParseException {
@@ -68,6 +76,7 @@ Quadruple quad = new Quadruple("END", null, null, null);
   static final public void Vars2_Global() throws ParseException {int td;
         Token var;
     td = Tipo();
+TokenAsignaciones.aumentaVarFuncGlobal(td);
     var = jj_consume_token(ID);
 TokenAsignaciones.InsertarSimboloGlobal(var, td);
     Dim();
@@ -81,7 +90,8 @@ TokenAsignaciones.InsertarSimboloGlobal(var, td);
     case COMMA:{
       jj_consume_token(COMMA);
       var = jj_consume_token(ID);
-TokenAsignaciones.InsertarSimboloGlobal(var, td);
+TokenAsignaciones.aumentaVarFuncGlobal(td);
+            TokenAsignaciones.InsertarSimboloGlobal(var, td);
       Dim();
       MasV_Global(td);
       break;
@@ -128,6 +138,7 @@ TokenAsignaciones.InsertarSimboloGlobal(var, td);
         Token var;
         String res;
     td = Tipo();
+TokenAsignaciones.aumentaVarFunc(td, func);
     var = jj_consume_token(ID);
 res = TokenAsignaciones.InsertarSimbolo(var, td, func);
 
@@ -204,7 +215,8 @@ res = TokenAsignaciones.InsertarSimbolo(var, td, func);
     case COMMA:{
       jj_consume_token(COMMA);
       var = jj_consume_token(ID);
-TokenAsignaciones.InsertarSimbolo(var, td, func);
+TokenAsignaciones.aumentaVarFunc(td, func);
+            TokenAsignaciones.InsertarSimbolo(var, td, func);
       MasV(td ,func);
       break;
       }
@@ -264,6 +276,8 @@ res = TokenAsignaciones.InsertarFuncion(func, td, TokenAsignaciones.getContCuadr
         TokenAsignaciones.resetContsLocal();
         TokenAsignaciones.resetContsTemporal();
         creaCuadruploEndFunc();
+        //TokenAsignaciones.printNumVars(func);
+
     Mas_F();
   }
 
@@ -401,6 +415,7 @@ void Parametros_Func(Token func) throws ParseException {int td;
     case FLOAT:
     case CHAR:{
       td = Tipo();
+TokenAsignaciones.aumentaVarFunc(td, func);
       var = jj_consume_token(ID);
 TokenAsignaciones.InsertarSimbolo(var, td, func);
             res = TokenAsignaciones.InsertarParametrosFunc(td, func);
@@ -443,7 +458,6 @@ void Parametros(Token func, Token funcLlamada) throws ParseException {Token var;
     case CTEC:{
       Expresion(func);
       creaCuadruploParametro(func, funcLlamada);
-System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" + TokenAsignaciones.getParams(funcLlamada));
       Params(func, funcLlamada);
       break;
       }
@@ -806,9 +820,9 @@ arg1 = TokenAsignaciones.popPilaVP();
              aux2 = TokenAsignaciones.getType(arg2, func);
          }
 
-         System.out.println("aux: " + aux);
+         //System.out.println("aux: " + aux);
 
-         System.out.println("aux2: " + aux2);
+         //System.out.println("aux2: " + aux2);
 
          if (TokenAsignaciones.getCuboType(aux2,aux,op.image) == 0)
              {
@@ -1321,14 +1335,16 @@ op = TokenAsignaciones.popPilaOP();
 
     temporal.kind = TokenAsignaciones.getCuboType(aux, aux2, op.image);
 
+        TokenAsignaciones.aumentaVarFunc(temporal.kind, func);
+
     //System.out.println("temporal.kind: " + temporal.kind);
 
     if(temporal.kind == 0)
     {
         {if (true) throw new ParseException("Los argumentos: " + arg1.image + " y " + arg2.image + " no son compatibles.");}
     }
-        System.out.println("aaaaaa: " + arg1.kind);
-        System.out.println("aaaaaa: " + arg2.image);
+        //System.out.println("aaaaaa: " + arg1.kind);
+        //System.out.println("aaaaaa: " + arg2.image);
 
     ////////////////////////////////////////////////// Aquí cambia los tokens por sus direcciones antes de meterlos.
 

@@ -32,9 +32,14 @@ class CustomHash {
     int tipo;
     Hashtable<String, Tipo_Dir> tablaV = new Hashtable();
     int cuadruploInicial;
+    int[] varArray = new int[4];
     ArrayList<Integer> parametros = new ArrayList<Integer>();
     public static void main(String[] args) {
         CustomHash myObj = new CustomHash();
+    }
+    //                                 int f  c  b
+    CustomHash(){
+        varArray = new int[]{0, 0, 0, 0};
     }
 }
 public class TokenAsignaciones {
@@ -47,6 +52,7 @@ public class TokenAsignaciones {
     ///////////////////////////////////////////////////////////////////////////////////////////////         DECLARACION TABLAS
     //Tabla que almacenara los tokens declarados globalmente
     private static Hashtable<String, Tipo_Dir> tablaVarsGlobal = new Hashtable();
+    private static int[] varArrayGlobal = new int[]{0, 0, 0, 0};
     //Tabla que almacenara las funciones declaradas
     private static Hashtable<String,CustomHash> tablaFunc = new Hashtable<String,CustomHash>();
     private static Hashtable<String, Integer> tablaConst = new Hashtable<String, Integer>();
@@ -90,9 +96,14 @@ public class TokenAsignaciones {
 
     private static int contParametros = 0;
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////        GUARDA EN ARCHIVO
+    ////////////////////////////////////////////////////////////////////////////////////////////////        Comienza Maquina Virtual
 
-    public static void guardarTodo()
+    public static void comienzaMaquinaVirtual()
+    {
+        MaquinaVirtual.Comienza(tablaVarsGlobal, varArrayGlobal, tablaFunc, tablaConst, cuadruplos);
+    }
+
+    /*public static void guardarTodo()
     {
         int cont = 0;
         //Path donde se guardará el archivo
@@ -110,7 +121,7 @@ public class TokenAsignaciones {
         for (int j = 1; j < cuadruplos.size(); j++) {
             aux = cuadruplos.get(j);
             saveText[j] = (aux.operator + " " + aux.arg1 + " " + aux.arg2 + " " + aux.resultado);
-            System.out.println(aux.operator + " " + aux.arg1 + " " + aux.arg2 + " " + aux.resultado);
+            //System.out.println(aux.operator + " " + aux.arg1 + " " + aux.arg2 + " " + aux.resultado);
             cont++;
         }
 
@@ -158,7 +169,7 @@ public class TokenAsignaciones {
         }
     }
 
-
+*/
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////        CUBO SEMANTICO
@@ -440,6 +451,88 @@ public class TokenAsignaciones {
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////        TABLAS
+
+    public static void aumentaVarFunc( int td, Token func )
+    {
+        CustomHash tabla;
+        tabla = tablaFunc.get(func.image);
+        //tabla.varArray[0] += 1;
+
+        switch (td)
+        {
+            case 4:
+                tabla.varArray[0] += 1;
+                break;
+            case 5:
+                tabla.varArray[1] += 1;
+                break;
+            case 6:
+                tabla.varArray[2] += 1;
+                break;
+            case 47:
+                tabla.varArray[3] += 1;
+                break;
+            default: break;
+        }
+    }
+
+    public static void aumentaVarFuncGlobal( int td)
+    {
+
+        switch (td)
+        {
+            case 4:
+                varArrayGlobal[0] += 1;
+                break;
+            case 5:
+                varArrayGlobal[1] += 1;
+                break;
+            case 6:
+                varArrayGlobal[2] += 1;
+                break;
+            case 47:
+                varArrayGlobal[3] += 1;
+                break;
+            default: break;
+        }
+    }
+
+    public static void printNumVars(Token func)
+    {
+        CustomHash tabla;
+        tabla = tablaFunc.get(func.image);
+        System.out.println("SSSSSSSSSSSSSSSSSSS Num vars: " + tabla.varArray[0] + " " + tabla.varArray[1] + " " + tabla.varArray[2] + " " + tabla.varArray[3] + " ");
+    }
+
+    public static void resetNumVarsGlobal()
+    {
+        varArrayGlobal[0] = 0;
+        varArrayGlobal[1] = 0;
+        varArrayGlobal[2] = 0;
+        varArrayGlobal[3] = 0;
+    }
+
+    public static void printNumVarsGlobal()
+    {
+        System.out.println("SSSSSSSSSSSSSSSSSSS Num vars: " + varArrayGlobal[0] + " " + varArrayGlobal[1] + " " + varArrayGlobal[2] + " " + varArrayGlobal[3] + " ");
+    }
+
+    /*
+    public static void guardaContadores(Token func)
+    {
+        int contLocales;
+        contLocales = (contLI - 4000) + (contLF - 5000) + (contLC - 6000);
+
+        int contTemporales;
+        contTemporales = (contTI - 7000) + (contTF - 8000) + (contTC - 9000) + (contTB-10000);
+
+
+        CustomHash tabla;
+        tabla = tablaFunc.get(func.image);
+        tabla.varArray[0] = contLocales;
+        tabla.varArray[1] = contTemporales;
+
+    }*/
 
     public static int getContParams()
     {
