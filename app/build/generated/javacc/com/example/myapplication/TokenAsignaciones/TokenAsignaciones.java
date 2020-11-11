@@ -55,7 +55,7 @@ public class TokenAsignaciones {
     private static int[] varArrayGlobal = new int[]{0, 0, 0, 0};
     //Tabla que almacenara las funciones declaradas
     private static Hashtable<String,CustomHash> tablaFunc = new Hashtable<String,CustomHash>();
-    private static Hashtable<String, Integer> tablaConst = new Hashtable<String, Integer>();
+    private static Hashtable<Integer, String> tablaConst = new Hashtable<Integer, String>();
     ///////////////////////////////////////////////////////////////////////////////////////////////         DECLARACION PILAS
     private static Stack<Token> pilaOP = new Stack<Token>();
     private static Stack<Token> pilaVP = new Stack<Token>();
@@ -612,7 +612,7 @@ public class TokenAsignaciones {
 
     public static String InsertarConstante( String constante, int direccion )
     {
-        tablaConst.put(constante, direccion);
+        tablaConst.put(direccion, constante);
         return Integer.toString(direccion);
     }
 

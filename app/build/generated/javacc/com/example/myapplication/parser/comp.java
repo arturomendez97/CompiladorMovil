@@ -488,6 +488,7 @@ arg1 = TokenAsignaciones.popPilaVP();
 
 
          arg1.image = tokenToDir(arg1, func);
+         arg1.kind = aux;
 
          //System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" + TokenAsignaciones.getContParams());
 
@@ -561,6 +562,7 @@ arg1 = TokenAsignaciones.popPilaVP();
         }
 
     arg1.image = tokenToDir(arg1, func);
+    arg1.kind = aux;
 
     Quadruple quad = new Quadruple(op.image, arg1, null, null);
     TokenAsignaciones.meterCuadruplo(quad);
@@ -631,6 +633,7 @@ arg1 = TokenAsignaciones.popPilaVP();
          }
 
          arg1.image = tokenToDir(arg1, func);
+         arg1.kind = aux;
 
 
          Quadruple quad = new Quadruple(op.image, null, null, arg1);
@@ -698,6 +701,7 @@ arg1 = TokenAsignaciones.popPilaVP();
          }
 
          arg1.image = tokenToDir(arg1, func);
+         arg1.kind = aux;
 
          if ( aux != 47)
          {
@@ -830,7 +834,9 @@ arg1 = TokenAsignaciones.popPilaVP();
              }
 
          arg1.image = tokenToDir(arg1, func);
+         arg1.kind = aux;
          arg2.image = tokenToDir(arg2, func);
+         arg2.kind = aux;
 
 
          Quadruple quad = new Quadruple(op.image, arg1, null, arg2);
@@ -911,6 +917,7 @@ arg1 = TokenAsignaciones.popPilaVP();
          }
 
          arg1.image = tokenToDir(arg1, func);
+         arg1.kind = aux;
 
 
          Quadruple quad = new Quadruple(op.image, null, null, arg1);
@@ -1349,7 +1356,9 @@ op = TokenAsignaciones.popPilaOP();
     ////////////////////////////////////////////////// Aquí cambia los tokens por sus direcciones antes de meterlos.
 
     arg1.image = tokenToDir(arg1, func);
+    arg1.kind = aux;
     arg2.image = tokenToDir(arg2, func);
+    arg2.kind = aux;
 
 
     temporal.image = String.valueOf(TokenAsignaciones.getContTemporal(temporal.kind));

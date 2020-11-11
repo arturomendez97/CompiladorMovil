@@ -552,6 +552,7 @@ void creaCuadruploParametro(Token func, Token funcLlamada) :
 
 
          arg1.image = tokenToDir(arg1, func);
+         arg1.kind = aux;
 
          //System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" + TokenAsignaciones.getContParams());
 
@@ -623,6 +624,7 @@ void creaCuadruploLectura(Token op, Token func) :
         }
 
     arg1.image = tokenToDir(arg1, func);
+    arg1.kind = aux;
 
     Quadruple quad = new Quadruple(op.image, arg1, null, null);
     TokenAsignaciones.meterCuadruplo(quad);
@@ -687,6 +689,7 @@ void creaCuadruploEscritura(Token op, Token func) :
          }
 
          arg1.image = tokenToDir(arg1, func);
+         arg1.kind = aux;
 
 
          Quadruple quad = new Quadruple(op.image, null, null, arg1);
@@ -766,6 +769,7 @@ void creaCuadruploGotoF(Token func) :
          }
 
          arg1.image = tokenToDir(arg1, func);
+         arg1.kind = aux;
 
          if ( aux != 47)
          {
@@ -883,7 +887,9 @@ void creaCuadruploAsignacion(Token op, Token func) :
              }
 
          arg1.image = tokenToDir(arg1, func);
+         arg1.kind = aux;
          arg2.image = tokenToDir(arg2, func);
+         arg2.kind = aux;
 
 
          Quadruple quad = new Quadruple(op.image, arg1, null, arg2);
@@ -959,6 +965,7 @@ void creaCuadruploRetorno(Token op, Token func) :
          }
 
          arg1.image = tokenToDir(arg1, func);
+         arg1.kind = aux;
 
 
          Quadruple quad = new Quadruple(op.image, null, null, arg1);
@@ -1354,7 +1361,9 @@ void creaCuadruploExp(Token func) :
     ////////////////////////////////////////////////// Aquí cambia los tokens por sus direcciones antes de meterlos.
 
     arg1.image = tokenToDir(arg1, func);
+    arg1.kind = aux;
     arg2.image = tokenToDir(arg2, func);
+    arg2.kind = aux;
 
 
     temporal.image = String.valueOf(TokenAsignaciones.getContTemporal(temporal.kind));

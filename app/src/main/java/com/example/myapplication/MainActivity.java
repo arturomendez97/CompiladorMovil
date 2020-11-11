@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
                 try {
                     ae.Programa();
-                    text.setText(Integer.toString(TokenAsignaciones.getContCuadruplos()));
+                    text.setText(MaquinaVirtual.getText());
                 } catch (ParseException ex){
                     text.setText(ex.getMessage());
                 }catch (TokenMgrError tme){

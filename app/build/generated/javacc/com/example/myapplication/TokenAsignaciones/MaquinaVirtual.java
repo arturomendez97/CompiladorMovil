@@ -118,14 +118,17 @@ public class MaquinaVirtual {
     private static int[] varArrayGlobal = new int[]{0, 0, 0, 0};
     //Tabla que almacenara las funciones declaradas
     private static Hashtable<String,CustomHash> tablaFunc = new Hashtable<String,CustomHash>();
-    private static Hashtable<String, Integer> tablaConst = new Hashtable<String, Integer>();
+    private static Hashtable<Integer, String> tablaConst = new Hashtable<Integer, String>();
     private static ArrayList<Quadruple> cuadruplos = new ArrayList<Quadruple>();
     private static int ip = 0;
+    private static String text = "";
 
 
 
-    public static void Comienza(Hashtable<String, Tipo_Dir> vGlobal, int[] arrGlobal, Hashtable<String, CustomHash> funcs, Hashtable<String, Integer> constantes, ArrayList<Quadruple> cuads)
+    public static void Comienza(Hashtable<String, Tipo_Dir> vGlobal, int[] arrGlobal, Hashtable<String, CustomHash> funcs, Hashtable<Integer, String> constantes, ArrayList<Quadruple> cuads)
     {
+        ip = 0;
+        text = "";
         tablaVarsGlobal = vGlobal;
         varArrayGlobal = arrGlobal;
         tablaFunc = funcs;
@@ -139,6 +142,21 @@ public class MaquinaVirtual {
         //RECORRE CUADRUPLOS
 
         Quadruple aux;
+        int constInt;
+        float constFloat;
+        char constChar;
+        boolean constBool;
+        String auxString;
+
+
+        int dirResultado;
+        int dirArg1;
+
+        int intValue;
+        float floatValue;
+        char charValue;
+        boolean boolValue;
+
         while (ip < cuadruplos.size())
         {
             aux = cuadruplos.get(ip);
@@ -147,12 +165,84 @@ public class MaquinaVirtual {
                 {
                     case "GOTO" :
                         ip = Integer.parseInt(aux.resultado.image);
-                    case "write":
                         break;
-                    default: break;
+                    case "write":
+                        dirResultado = Integer.parseInt(aux.resultado.image);
+
+                        if (dirResultado >= 1000 && dirResultado < 2000)
+                        {
+                            intValue = memGlobal.arrayInts[dirResultado-1000];
+                            text += Integer.toString(intValue);
+                        }
+                        else if (dirResultado >= 2000 && dirResultado < 3000)
+                        {
+                            floatValue = memGlobal.arrayFloats[dirResultado-2000];
+                            text += Float.toString(floatValue);
+                        }
+                        else if (dirResultado >= 3000 && dirResultado < 4000)
+                        {
+                            charValue = memGlobal.arrayChars[dirResultado-3000];
+                            text += charValue;
+                        }
+                        else if (dirResultado >= 13000)
+                        {
+                            auxString = tablaConst.get(dirResultado);
+                            constChar = auxString.charAt(1);
+                            text += constChar;
+                        }
+                        text += "\r\n";
+                        ip++;
+
+                        break;
+                    case "=":
+                        dirResultado = Integer.parseInt(aux.resultado.image);
+                        dirArg1 = Integer.parseInt(aux.arg1.image);
+                        if (Integer.parseInt(aux.arg1.image) >= 11000)
+                        {
+
+
+                            switch (aux.resultado.kind)
+                            {
+                                case 4:  constInt = Integer.parseInt(tablaConst.get(dirArg1));
+                                    memGlobal.arrayInts[dirResultado-1000] = constInt;
+                                    break;
+                                case 5:  constFloat = Float.parseFloat(tablaConst.get(dirArg1));
+                                    memGlobal.arrayFloats[dirResultado-2000] = constFloat;
+                                    break;
+                                case 6:  auxString = tablaConst.get(dirArg1);
+                                    constChar = auxString.charAt(0);
+                                    memGlobal.arrayFloats[dirResultado-3000] = constChar;
+                                    break;
+
+                                case 38: constInt = Integer.parseInt(tablaConst.get(dirArg1));
+                                    memGlobal.arrayInts[dirResultado-1000] = constInt;
+                                    break;
+                                case 39: constFloat = Float.parseFloat(tablaConst.get(dirArg1));
+                                    memGlobal.arrayFloats[dirResultado-2000] = constFloat;
+
+                                    break;
+                                case 41: auxString = tablaConst.get(dirArg1);
+                                    constChar = auxString.charAt(1);
+                                    memGlobal.arrayChars[dirResultado-3000] = constChar;
+                                    break;
+                                default:  System.out.println("ALgo salio mal " + aux.resultado.kind);
+                                    break;
+                            }
+
+                        }
+                        ip++;
+                        break;
+                    default:
+                        ip++;
+                        break;
                 }
         }
 
+    }
+
+    public static String getText()
+    {
+        return text;
     }
 
     public static void printNumVarsGlobal()
