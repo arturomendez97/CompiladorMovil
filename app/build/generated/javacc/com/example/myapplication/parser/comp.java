@@ -1316,6 +1316,30 @@ if (TokenAsignaciones.checkPilaOP("*") | TokenAsignaciones.checkPilaOP("/"))
      int aux;
      int aux2;
 op = TokenAsignaciones.popPilaOP();
+
+    /*
+    try
+    {
+        op2 = TokenAsignaciones.popPilaOP();
+
+        if (op == "+" && op2 == "-")
+        {
+            TokenAsignaciones.pushPilaOP(op);
+            op = op2;
+        }
+        if (op == "-" && op2 == "+")
+        {
+            TokenAsignaciones.pushPilaOP(op);
+            op = op2;
+        }
+        if (op == "+" && op2 == "-")
+        {
+            TokenAsignaciones.pushPilaOP(op);
+            op = op2;
+        }
+    }*/
+
+
     arg1 = TokenAsignaciones.popPilaVP();
     arg2 = TokenAsignaciones.popPilaVP();
     temporal = op.newToken(op.kind);
@@ -1342,7 +1366,7 @@ op = TokenAsignaciones.popPilaOP();
 
     temporal.kind = TokenAsignaciones.getCuboType(aux, aux2, op.image);
 
-        TokenAsignaciones.aumentaVarFunc(temporal.kind, func);
+        TokenAsignaciones.aumentaVarFuncTemporal(temporal.kind, func);
 
     //System.out.println("temporal.kind: " + temporal.kind);
 

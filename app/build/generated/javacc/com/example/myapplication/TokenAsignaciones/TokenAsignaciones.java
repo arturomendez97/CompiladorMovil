@@ -32,14 +32,14 @@ class CustomHash {
     int tipo;
     Hashtable<String, Tipo_Dir> tablaV = new Hashtable();
     int cuadruploInicial;
-    int[] varArray = new int[4];
+    int[] varArray = new int[8];
     ArrayList<Integer> parametros = new ArrayList<Integer>();
     public static void main(String[] args) {
         CustomHash myObj = new CustomHash();
     }
-    //                                 int f  c  b
+    //                                 int f  c  b ti tf  tc tb
     CustomHash(){
-        varArray = new int[]{0, 0, 0, 0};
+        varArray = new int[]{0, 0, 0, 0, 0, 0, 0, 0};
     }
 }
 public class TokenAsignaciones {
@@ -451,6 +451,32 @@ public class TokenAsignaciones {
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////        TABLAS
+
+    public static void aumentaVarFuncTemporal( int td, Token func)
+    {
+        CustomHash tabla;
+        tabla = tablaFunc.get(func.image);
+        //tabla.varArray[0] += 1;
+
+        switch (td)
+        {
+            case 4:
+                tabla.varArray[4] += 1;
+                break;
+            case 5:
+                tabla.varArray[5] += 1;
+                break;
+            case 6:
+                tabla.varArray[6] += 1;
+                break;
+            case 47:
+                tabla.varArray[7] += 1;
+                break;
+            default: break;
+        }
+
+        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA " + tabla.varArray[0] + tabla.varArray[1] + tabla.varArray[2] + tabla.varArray[3] + tabla.varArray[4] + tabla.varArray[5] + tabla.varArray[6] + tabla.varArray[7]);
+    }
 
     public static void aumentaVarFunc( int td, Token func )
     {
