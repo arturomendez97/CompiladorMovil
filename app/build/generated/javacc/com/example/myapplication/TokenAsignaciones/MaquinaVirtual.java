@@ -195,7 +195,7 @@ public class MaquinaVirtual {
         while (ip < cuadruplos.size())
         {
             //System.out.println("PRINT EN EL WHILE +: " + memLocal.arrayIntsTemporales[0]);
-            //System.out.println("PRINT IP : " + ip);
+            System.out.println("PRINT IP : " + ip);
 
             aux = cuadruplos.get(ip);
 
@@ -225,53 +225,32 @@ public class MaquinaVirtual {
                     case "GOTO" :
                         ip = Integer.parseInt(aux.resultado.image);
                         break;
+                    case "GOTOV" :
+                        dirArg1 = Integer.parseInt(aux.arg1.image);
+                        dirResultado = Integer.parseInt(aux.resultado.image);
+                        if (memLocal.arrayBoolsTemporales[dirArg1-10000]) { ip = dirResultado; }
+                        else {ip++;}
+                        break;
+                    case "GOTOF" :
+                        dirArg1 = Integer.parseInt(aux.arg1.image);
+                        dirResultado = Integer.parseInt(aux.resultado.image);
+                        if (!memLocal.arrayBoolsTemporales[dirArg1-10000]) { ip = dirResultado; }
+                        else {ip++;}
+                        break;
                     case "write":
                         dirResultado = Integer.parseInt(aux.resultado.image);
-
                         // GLOBALES
-                        if (dirResultado >= 1000 && dirResultado < 2000)
-                        {
-                            intValue = memGlobal.arrayInts[dirResultado-1000];
-                            text += Integer.toString(intValue);
-                        }
-                        else if (dirResultado >= 2000 && dirResultado < 3000)
-                        {
-                            floatValue = memGlobal.arrayFloats[dirResultado-2000];
-                            text += Float.toString(floatValue);
-                        }
-                        else if (dirResultado >= 3000 && dirResultado < 4000)
-                        {
-                            charValue = memGlobal.arrayChars[dirResultado-3000];
-                            text += charValue;
-                        }
-
+                        if (dirResultado >= 1000 && dirResultado < 2000) { intValue = memGlobal.arrayInts[dirResultado-1000]; text += Integer.toString(intValue); }
+                        else if (dirResultado >= 2000 && dirResultado < 3000) { floatValue = memGlobal.arrayFloats[dirResultado-2000]; text += Float.toString(floatValue); }
+                        else if (dirResultado >= 3000 && dirResultado < 4000) { charValue = memGlobal.arrayChars[dirResultado-3000]; text += charValue; }
                         //LOCALES
-                        if (dirResultado >= 4000 && dirResultado < 5000)
-                        {
-                            intValue = memLocal.arrayInts[dirResultado-4000];
-                            text += Integer.toString(intValue);
-                        }
-                        else if (dirResultado >= 5000 && dirResultado < 6000)
-                        {
-                            floatValue = memLocal.arrayFloats[dirResultado-5000];
-                            text += Float.toString(floatValue);
-                        }
-                        else if (dirResultado >= 6000 && dirResultado < 7000)
-                        {
-                            charValue = memLocal.arrayChars[dirResultado-6000];
-                            text += charValue;
-                        }
-
+                        if (dirResultado >= 4000 && dirResultado < 5000) { intValue = memLocal.arrayInts[dirResultado-4000]; text += Integer.toString(intValue); }
+                        else if (dirResultado >= 5000 && dirResultado < 6000) { floatValue = memLocal.arrayFloats[dirResultado-5000]; text += Float.toString(floatValue); }
+                        else if (dirResultado >= 6000 && dirResultado < 7000) { charValue = memLocal.arrayChars[dirResultado-6000]; text += charValue; }
                         // CONSTANTES
-                        else if (dirResultado >= 13000)
-                        {
-                            auxString = tablaConst.get(dirResultado);
-                            constChar = auxString.charAt(1);
-                            text += constChar;
-                        }
+                        else if (dirResultado >= 13000) { auxString = tablaConst.get(dirResultado); constChar = auxString.charAt(1); text += constChar; }
                         text += "\r\n";
                         ip++;
-
                         break;
                     /////////////////////////////////////////////////////////////////////////////////////////////
                     /////////////////////////////////////////////////////////////////////////////////////////////
@@ -507,53 +486,306 @@ public class MaquinaVirtual {
                         else if (dirArg2 >= 12000 && dirArg2 < 13000) { auxF2 = Float.parseFloat(tablaConst.get(dirArg2)); arg2Float = true;}
 
                         ///////////////////////////////////////////////////////////////////////////////////////////// RESULTADO
-                        if (arg1Int && arg2Int)
-                        {
-                            if (auxI2 < auxI1)
-                            {
-                                memLocal.arrayBoolsTemporales[dirResultado-10000] = true; System.out.println( "RESPUESTA < : " + memLocal.arrayBoolsTemporales[dirResultado-10000]);
-                            }
-                            else
-                            {
-                                memLocal.arrayBoolsTemporales[dirResultado-10000] = false; System.out.println( "RESPUESTA < : " + memLocal.arrayBoolsTemporales[dirResultado-10000]);
-                            }
-
-                        }
-                        else if (arg1Int && arg2Float)
-                        {
-                            if (auxF2 < auxI1)
-                            {
-                                memLocal.arrayBoolsTemporales[dirResultado-10000] = true; System.out.println( "RESPUESTA < : " + memLocal.arrayBoolsTemporales[dirResultado-10000]);
-                            }
-                            else
-                            {
-                                memLocal.arrayBoolsTemporales[dirResultado-10000] = false; System.out.println( "RESPUESTA < : " + memLocal.arrayBoolsTemporales[dirResultado-10000]);
-                            }
-                        }
-                        else if (arg1Float && arg2Int)
-                        {
-                            if (auxI2 < auxF1)
-                            {
-                                memLocal.arrayBoolsTemporales[dirResultado-10000] = true; System.out.println( "RESPUESTA < : " + memLocal.arrayBoolsTemporales[dirResultado-10000]);
-                            }
-                            else
-                            {
-                                memLocal.arrayBoolsTemporales[dirResultado-10000] = false; System.out.println( "RESPUESTA < : " + memLocal.arrayBoolsTemporales[dirResultado-10000]);
-                            }
-                        }
-                        else if (arg1Float && arg2Float)
-                        {
-                            if (auxF2 < auxF1)
-                            {
-                                memLocal.arrayBoolsTemporales[dirResultado-10000] = true; System.out.println( "RESPUESTA < : " + memLocal.arrayBoolsTemporales[dirResultado-10000]);
-                            }
-                            else
-                            {
-                                memLocal.arrayBoolsTemporales[dirResultado-10000] = false; System.out.println( "RESPUESTA < : " + memLocal.arrayBoolsTemporales[dirResultado-10000]);
-                            }
-                        }
+                        if (arg1Int && arg2Int) {
+                            if (auxI2 < auxI1) { memLocal.arrayBoolsTemporales[dirResultado-10000] = true; System.out.println( "RESPUESTA < : " + memLocal.arrayBoolsTemporales[dirResultado-10000]); }
+                            else { memLocal.arrayBoolsTemporales[dirResultado-10000] = false; System.out.println( "RESPUESTA < : " + memLocal.arrayBoolsTemporales[dirResultado-10000]); } }
+                        else if (arg1Int && arg2Float) {
+                            if (auxF2 < auxI1) { memLocal.arrayBoolsTemporales[dirResultado-10000] = true; System.out.println( "RESPUESTA < : " + memLocal.arrayBoolsTemporales[dirResultado-10000]); }
+                            else { memLocal.arrayBoolsTemporales[dirResultado-10000] = false; System.out.println( "RESPUESTA < : " + memLocal.arrayBoolsTemporales[dirResultado-10000]); } }
+                        else if (arg1Float && arg2Int) {
+                            if (auxI2 < auxF1) { memLocal.arrayBoolsTemporales[dirResultado-10000] = true; System.out.println( "RESPUESTA < : " + memLocal.arrayBoolsTemporales[dirResultado-10000]); }
+                            else { memLocal.arrayBoolsTemporales[dirResultado-10000] = false; System.out.println( "RESPUESTA < : " + memLocal.arrayBoolsTemporales[dirResultado-10000]); } }
+                        else if (arg1Float && arg2Float) {
+                            if (auxF2 < auxF1) { memLocal.arrayBoolsTemporales[dirResultado-10000] = true; System.out.println( "RESPUESTA < : " + memLocal.arrayBoolsTemporales[dirResultado-10000]); }
+                            else { memLocal.arrayBoolsTemporales[dirResultado-10000] = false; System.out.println( "RESPUESTA < : " + memLocal.arrayBoolsTemporales[dirResultado-10000]); } }
                         ip++;
                         break;
+
+                    /////////////////////////////////////////////////////////////////////////////////////////////
+                    /////////////////////////////////////////////////////////////////////////////////////////////
+                    /////////////////////////////////////////////////////////////////////////////////////////////       Caso ">"
+                    /////////////////////////////////////////////////////////////////////////////////////////////
+                    /////////////////////////////////////////////////////////////////////////////////////////////
+
+                    case ">" :
+                        dirArg1 = Integer.parseInt(aux.arg1.image);
+                        dirArg2 = Integer.parseInt(aux.arg2.image);
+                        dirResultado = Integer.parseInt(aux.resultado.image);
+                        auxI1 = 0; auxI2 = 0; auxF1 = 0; auxF2 = 0;
+                        arg1Int = false; arg1Float = false; arg2Int = false; arg2Float = false;
+
+                        ///////////////////////////////////////////////////////////////////////////////////////////// ARG 1
+                        //GLOBALES
+                        if (dirArg1 >= 1000 && dirArg1 < 2000) { auxI1 = memGlobal.arrayInts[dirArg1-1000]; arg1Int = true;}
+                        else if (dirArg1 >= 2000 && dirArg1 < 3000) { auxF1 = memGlobal.arrayFloats[dirArg1-2000]; arg1Float = true;}
+                        //LOCALES
+                        else if (dirArg1 >= 4000 && dirArg1 < 5000) { auxI1 = memLocal.arrayInts[dirArg1-4000]; arg1Int = true;}
+                        else if (dirArg1 >= 5000 && dirArg1 < 6000) { auxF1 = memLocal.arrayFloats[dirArg1-5000]; arg1Float = true;}
+                        //TEMPORALES
+                        else if (dirArg1 >= 7000 && dirArg1 < 8000) { auxI1 = memLocal.arrayIntsTemporales[dirArg1-7000]; arg1Int = true;}
+                        else if (dirArg1 >= 8000 && dirArg1 < 9000) { auxF1 = memLocal.arrayFloatsTemporales[dirArg1-8000]; arg1Float = true;}
+                        //CONSTANTES
+                        else if (dirArg1 >= 11000 && dirArg1 < 12000) { auxI1 = Integer.parseInt(tablaConst.get(dirArg1)); arg1Int = true;}
+                        else if (dirArg1 >= 12000 && dirArg1 < 13000) { auxF1 = Float.parseFloat(tablaConst.get(dirArg1)); arg1Float = true;}
+
+                        ///////////////////////////////////////////////////////////////////////////////////////////// ARG 2
+                        //GLOBALES
+                        if (dirArg2 >= 1000 && dirArg2 < 2000) { auxI2 = memGlobal.arrayInts[dirArg2-1000]; arg2Int = true;}
+                        else if (dirArg2 >= 2000 && dirArg2 < 3000) { auxF2 = memGlobal.arrayFloats[dirArg2-2000]; arg2Float = true;}
+                        //LOCALES
+                        else if (dirArg2 >= 4000 && dirArg2 < 5000) { auxI2 = memLocal.arrayInts[dirArg2-4000]; arg2Int = true;}
+                        else if (dirArg2 >= 5000 && dirArg2 < 6000) { auxF2 = memLocal.arrayFloats[dirArg2-5000]; arg2Float = true;}
+                        //TEMPORALES
+                        else if (dirArg2 >= 7000 && dirArg2 < 8000) { auxI2 = memLocal.arrayIntsTemporales[dirArg2-7000]; arg2Int = true;}
+                        else if (dirArg2 >= 8000 && dirArg2 < 9000) { auxF2 = memLocal.arrayFloatsTemporales[dirArg2-8000]; arg2Float = true;}
+                        //CONSTANTES
+                        else if (dirArg2 >= 11000 && dirArg2 < 12000) { auxI2 = Integer.parseInt(tablaConst.get(dirArg2)); arg2Int = true;}
+                        else if (dirArg2 >= 12000 && dirArg2 < 13000) { auxF2 = Float.parseFloat(tablaConst.get(dirArg2)); arg2Float = true;}
+
+                        ///////////////////////////////////////////////////////////////////////////////////////////// RESULTADO
+                        if (arg1Int && arg2Int) {
+                            if (auxI2 > auxI1) { memLocal.arrayBoolsTemporales[dirResultado-10000] = true; System.out.println( "RESPUESTA < : " + memLocal.arrayBoolsTemporales[dirResultado-10000]); }
+                            else { memLocal.arrayBoolsTemporales[dirResultado-10000] = false; System.out.println( "RESPUESTA > : " + memLocal.arrayBoolsTemporales[dirResultado-10000]); } }
+                        else if (arg1Int && arg2Float) {
+                            if (auxF2 > auxI1) { memLocal.arrayBoolsTemporales[dirResultado-10000] = true; System.out.println( "RESPUESTA < : " + memLocal.arrayBoolsTemporales[dirResultado-10000]); }
+                            else { memLocal.arrayBoolsTemporales[dirResultado-10000] = false; System.out.println( "RESPUESTA > : " + memLocal.arrayBoolsTemporales[dirResultado-10000]); } }
+                        else if (arg1Float && arg2Int) {
+                            if (auxI2 > auxF1) { memLocal.arrayBoolsTemporales[dirResultado-10000] = true; System.out.println( "RESPUESTA < : " + memLocal.arrayBoolsTemporales[dirResultado-10000]); }
+                            else { memLocal.arrayBoolsTemporales[dirResultado-10000] = false; System.out.println( "RESPUESTA > : " + memLocal.arrayBoolsTemporales[dirResultado-10000]); } }
+                        else if (arg1Float && arg2Float) {
+                            if (auxF2 > auxF1) { memLocal.arrayBoolsTemporales[dirResultado-10000] = true; System.out.println( "RESPUESTA < : " + memLocal.arrayBoolsTemporales[dirResultado-10000]); }
+                            else { memLocal.arrayBoolsTemporales[dirResultado-10000] = false; System.out.println( "RESPUESTA > : " + memLocal.arrayBoolsTemporales[dirResultado-10000]); } }
+                        ip++;
+                        break;
+
+                    /////////////////////////////////////////////////////////////////////////////////////////////
+                    /////////////////////////////////////////////////////////////////////////////////////////////
+                    /////////////////////////////////////////////////////////////////////////////////////////////       Caso "<="
+                    /////////////////////////////////////////////////////////////////////////////////////////////
+                    /////////////////////////////////////////////////////////////////////////////////////////////
+
+                    case "<=" :
+                        dirArg1 = Integer.parseInt(aux.arg1.image);
+                        dirArg2 = Integer.parseInt(aux.arg2.image);
+                        dirResultado = Integer.parseInt(aux.resultado.image);
+                        auxI1 = 0; auxI2 = 0; auxF1 = 0; auxF2 = 0;
+                        arg1Int = false; arg1Float = false; arg2Int = false; arg2Float = false;
+
+                        ///////////////////////////////////////////////////////////////////////////////////////////// ARG 1
+                        //GLOBALES
+                        if (dirArg1 >= 1000 && dirArg1 < 2000) { auxI1 = memGlobal.arrayInts[dirArg1-1000]; arg1Int = true;}
+                        else if (dirArg1 >= 2000 && dirArg1 < 3000) { auxF1 = memGlobal.arrayFloats[dirArg1-2000]; arg1Float = true;}
+                        //LOCALES
+                        else if (dirArg1 >= 4000 && dirArg1 < 5000) { auxI1 = memLocal.arrayInts[dirArg1-4000]; arg1Int = true;}
+                        else if (dirArg1 >= 5000 && dirArg1 < 6000) { auxF1 = memLocal.arrayFloats[dirArg1-5000]; arg1Float = true;}
+                        //TEMPORALES
+                        else if (dirArg1 >= 7000 && dirArg1 < 8000) { auxI1 = memLocal.arrayIntsTemporales[dirArg1-7000]; arg1Int = true;}
+                        else if (dirArg1 >= 8000 && dirArg1 < 9000) { auxF1 = memLocal.arrayFloatsTemporales[dirArg1-8000]; arg1Float = true;}
+                        //CONSTANTES
+                        else if (dirArg1 >= 11000 && dirArg1 < 12000) { auxI1 = Integer.parseInt(tablaConst.get(dirArg1)); arg1Int = true;}
+                        else if (dirArg1 >= 12000 && dirArg1 < 13000) { auxF1 = Float.parseFloat(tablaConst.get(dirArg1)); arg1Float = true;}
+
+                        ///////////////////////////////////////////////////////////////////////////////////////////// ARG 2
+                        //GLOBALES
+                        if (dirArg2 >= 1000 && dirArg2 < 2000) { auxI2 = memGlobal.arrayInts[dirArg2-1000]; arg2Int = true;}
+                        else if (dirArg2 >= 2000 && dirArg2 < 3000) { auxF2 = memGlobal.arrayFloats[dirArg2-2000]; arg2Float = true;}
+                        //LOCALES
+                        else if (dirArg2 >= 4000 && dirArg2 < 5000) { auxI2 = memLocal.arrayInts[dirArg2-4000]; arg2Int = true;}
+                        else if (dirArg2 >= 5000 && dirArg2 < 6000) { auxF2 = memLocal.arrayFloats[dirArg2-5000]; arg2Float = true;}
+                        //TEMPORALES
+                        else if (dirArg2 >= 7000 && dirArg2 < 8000) { auxI2 = memLocal.arrayIntsTemporales[dirArg2-7000]; arg2Int = true;}
+                        else if (dirArg2 >= 8000 && dirArg2 < 9000) { auxF2 = memLocal.arrayFloatsTemporales[dirArg2-8000]; arg2Float = true;}
+                        //CONSTANTES
+                        else if (dirArg2 >= 11000 && dirArg2 < 12000) { auxI2 = Integer.parseInt(tablaConst.get(dirArg2)); arg2Int = true;}
+                        else if (dirArg2 >= 12000 && dirArg2 < 13000) { auxF2 = Float.parseFloat(tablaConst.get(dirArg2)); arg2Float = true;}
+
+                        ///////////////////////////////////////////////////////////////////////////////////////////// RESULTADO
+                        if (arg1Int && arg2Int) {
+                            if (auxI2 <= auxI1) { memLocal.arrayBoolsTemporales[dirResultado-10000] = true; System.out.println( "RESPUESTA < : " + memLocal.arrayBoolsTemporales[dirResultado-10000]); }
+                            else { memLocal.arrayBoolsTemporales[dirResultado-10000] = false; System.out.println( "RESPUESTA <= : " + memLocal.arrayBoolsTemporales[dirResultado-10000]); } }
+                        else if (arg1Int && arg2Float) {
+                            if (auxF2 <= auxI1) { memLocal.arrayBoolsTemporales[dirResultado-10000] = true; System.out.println( "RESPUESTA < : " + memLocal.arrayBoolsTemporales[dirResultado-10000]); }
+                            else { memLocal.arrayBoolsTemporales[dirResultado-10000] = false; System.out.println( "RESPUESTA <= : " + memLocal.arrayBoolsTemporales[dirResultado-10000]); } }
+                        else if (arg1Float && arg2Int) {
+                            if (auxI2 <= auxF1) { memLocal.arrayBoolsTemporales[dirResultado-10000] = true; System.out.println( "RESPUESTA < : " + memLocal.arrayBoolsTemporales[dirResultado-10000]); }
+                            else { memLocal.arrayBoolsTemporales[dirResultado-10000] = false; System.out.println( "RESPUESTA <= : " + memLocal.arrayBoolsTemporales[dirResultado-10000]); } }
+                        else if (arg1Float && arg2Float) {
+                            if (auxF2 <= auxF1) { memLocal.arrayBoolsTemporales[dirResultado-10000] = true; System.out.println( "RESPUESTA < : " + memLocal.arrayBoolsTemporales[dirResultado-10000]); }
+                            else { memLocal.arrayBoolsTemporales[dirResultado-10000] = false; System.out.println( "RESPUESTA <= : " + memLocal.arrayBoolsTemporales[dirResultado-10000]); } }
+                        ip++;
+                        break;
+
+                    /////////////////////////////////////////////////////////////////////////////////////////////
+                    /////////////////////////////////////////////////////////////////////////////////////////////
+                    /////////////////////////////////////////////////////////////////////////////////////////////       Caso ">="
+                    /////////////////////////////////////////////////////////////////////////////////////////////
+                    /////////////////////////////////////////////////////////////////////////////////////////////
+
+                    case ">=" :
+                        dirArg1 = Integer.parseInt(aux.arg1.image);
+                        dirArg2 = Integer.parseInt(aux.arg2.image);
+                        dirResultado = Integer.parseInt(aux.resultado.image);
+                        auxI1 = 0; auxI2 = 0; auxF1 = 0; auxF2 = 0;
+                        arg1Int = false; arg1Float = false; arg2Int = false; arg2Float = false;
+
+                        ///////////////////////////////////////////////////////////////////////////////////////////// ARG 1
+                        //GLOBALES
+                        if (dirArg1 >= 1000 && dirArg1 < 2000) { auxI1 = memGlobal.arrayInts[dirArg1-1000]; arg1Int = true;}
+                        else if (dirArg1 >= 2000 && dirArg1 < 3000) { auxF1 = memGlobal.arrayFloats[dirArg1-2000]; arg1Float = true;}
+                        //LOCALES
+                        else if (dirArg1 >= 4000 && dirArg1 < 5000) { auxI1 = memLocal.arrayInts[dirArg1-4000]; arg1Int = true;}
+                        else if (dirArg1 >= 5000 && dirArg1 < 6000) { auxF1 = memLocal.arrayFloats[dirArg1-5000]; arg1Float = true;}
+                        //TEMPORALES
+                        else if (dirArg1 >= 7000 && dirArg1 < 8000) { auxI1 = memLocal.arrayIntsTemporales[dirArg1-7000]; arg1Int = true;}
+                        else if (dirArg1 >= 8000 && dirArg1 < 9000) { auxF1 = memLocal.arrayFloatsTemporales[dirArg1-8000]; arg1Float = true;}
+                        //CONSTANTES
+                        else if (dirArg1 >= 11000 && dirArg1 < 12000) { auxI1 = Integer.parseInt(tablaConst.get(dirArg1)); arg1Int = true;}
+                        else if (dirArg1 >= 12000 && dirArg1 < 13000) { auxF1 = Float.parseFloat(tablaConst.get(dirArg1)); arg1Float = true;}
+
+                        ///////////////////////////////////////////////////////////////////////////////////////////// ARG 2
+                        //GLOBALES
+                        if (dirArg2 >= 1000 && dirArg2 < 2000) { auxI2 = memGlobal.arrayInts[dirArg2-1000]; arg2Int = true;}
+                        else if (dirArg2 >= 2000 && dirArg2 < 3000) { auxF2 = memGlobal.arrayFloats[dirArg2-2000]; arg2Float = true;}
+                        //LOCALES
+                        else if (dirArg2 >= 4000 && dirArg2 < 5000) { auxI2 = memLocal.arrayInts[dirArg2-4000]; arg2Int = true;}
+                        else if (dirArg2 >= 5000 && dirArg2 < 6000) { auxF2 = memLocal.arrayFloats[dirArg2-5000]; arg2Float = true;}
+                        //TEMPORALES
+                        else if (dirArg2 >= 7000 && dirArg2 < 8000) { auxI2 = memLocal.arrayIntsTemporales[dirArg2-7000]; arg2Int = true;}
+                        else if (dirArg2 >= 8000 && dirArg2 < 9000) { auxF2 = memLocal.arrayFloatsTemporales[dirArg2-8000]; arg2Float = true;}
+                        //CONSTANTES
+                        else if (dirArg2 >= 11000 && dirArg2 < 12000) { auxI2 = Integer.parseInt(tablaConst.get(dirArg2)); arg2Int = true;}
+                        else if (dirArg2 >= 12000 && dirArg2 < 13000) { auxF2 = Float.parseFloat(tablaConst.get(dirArg2)); arg2Float = true;}
+
+                        ///////////////////////////////////////////////////////////////////////////////////////////// RESULTADO
+                        if (arg1Int && arg2Int) {
+                            if (auxI2 >= auxI1) { memLocal.arrayBoolsTemporales[dirResultado-10000] = true; System.out.println( "RESPUESTA < : " + memLocal.arrayBoolsTemporales[dirResultado-10000]); }
+                            else { memLocal.arrayBoolsTemporales[dirResultado-10000] = false; System.out.println( "RESPUESTA >= : " + memLocal.arrayBoolsTemporales[dirResultado-10000]); } }
+                        else if (arg1Int && arg2Float) {
+                            if (auxF2 >= auxI1) { memLocal.arrayBoolsTemporales[dirResultado-10000] = true; System.out.println( "RESPUESTA < : " + memLocal.arrayBoolsTemporales[dirResultado-10000]); }
+                            else { memLocal.arrayBoolsTemporales[dirResultado-10000] = false; System.out.println( "RESPUESTA >= : " + memLocal.arrayBoolsTemporales[dirResultado-10000]); } }
+                        else if (arg1Float && arg2Int) {
+                            if (auxI2 >= auxF1) { memLocal.arrayBoolsTemporales[dirResultado-10000] = true; System.out.println( "RESPUESTA < : " + memLocal.arrayBoolsTemporales[dirResultado-10000]); }
+                            else { memLocal.arrayBoolsTemporales[dirResultado-10000] = false; System.out.println( "RESPUESTA >= : " + memLocal.arrayBoolsTemporales[dirResultado-10000]); } }
+                        else if (arg1Float && arg2Float) {
+                            if (auxF2 >= auxF1) { memLocal.arrayBoolsTemporales[dirResultado-10000] = true; System.out.println( "RESPUESTA < : " + memLocal.arrayBoolsTemporales[dirResultado-10000]); }
+                            else { memLocal.arrayBoolsTemporales[dirResultado-10000] = false; System.out.println( "RESPUESTA >= : " + memLocal.arrayBoolsTemporales[dirResultado-10000]); } }
+                        ip++;
+                        break;
+
+                    /////////////////////////////////////////////////////////////////////////////////////////////
+                    /////////////////////////////////////////////////////////////////////////////////////////////
+                    /////////////////////////////////////////////////////////////////////////////////////////////       Caso "=="
+                    /////////////////////////////////////////////////////////////////////////////////////////////
+                    /////////////////////////////////////////////////////////////////////////////////////////////
+
+                    case "==" :
+                        dirArg1 = Integer.parseInt(aux.arg1.image);
+                        dirArg2 = Integer.parseInt(aux.arg2.image);
+                        dirResultado = Integer.parseInt(aux.resultado.image);
+                        auxI1 = 0; auxI2 = 0; auxF1 = 0; auxF2 = 0;
+                        arg1Int = false; arg1Float = false; arg2Int = false; arg2Float = false;
+
+                        ///////////////////////////////////////////////////////////////////////////////////////////// ARG 1
+                        //GLOBALES
+                        if (dirArg1 >= 1000 && dirArg1 < 2000) { auxI1 = memGlobal.arrayInts[dirArg1-1000]; arg1Int = true;}
+                        else if (dirArg1 >= 2000 && dirArg1 < 3000) { auxF1 = memGlobal.arrayFloats[dirArg1-2000]; arg1Float = true;}
+                        //LOCALES
+                        else if (dirArg1 >= 4000 && dirArg1 < 5000) { auxI1 = memLocal.arrayInts[dirArg1-4000]; arg1Int = true;}
+                        else if (dirArg1 >= 5000 && dirArg1 < 6000) { auxF1 = memLocal.arrayFloats[dirArg1-5000]; arg1Float = true;}
+                        //TEMPORALES
+                        else if (dirArg1 >= 7000 && dirArg1 < 8000) { auxI1 = memLocal.arrayIntsTemporales[dirArg1-7000]; arg1Int = true;}
+                        else if (dirArg1 >= 8000 && dirArg1 < 9000) { auxF1 = memLocal.arrayFloatsTemporales[dirArg1-8000]; arg1Float = true;}
+                        //CONSTANTES
+                        else if (dirArg1 >= 11000 && dirArg1 < 12000) { auxI1 = Integer.parseInt(tablaConst.get(dirArg1)); arg1Int = true;}
+                        else if (dirArg1 >= 12000 && dirArg1 < 13000) { auxF1 = Float.parseFloat(tablaConst.get(dirArg1)); arg1Float = true;}
+
+                        ///////////////////////////////////////////////////////////////////////////////////////////// ARG 2
+                        //GLOBALES
+                        if (dirArg2 >= 1000 && dirArg2 < 2000) { auxI2 = memGlobal.arrayInts[dirArg2-1000]; arg2Int = true;}
+                        else if (dirArg2 >= 2000 && dirArg2 < 3000) { auxF2 = memGlobal.arrayFloats[dirArg2-2000]; arg2Float = true;}
+                        //LOCALES
+                        else if (dirArg2 >= 4000 && dirArg2 < 5000) { auxI2 = memLocal.arrayInts[dirArg2-4000]; arg2Int = true;}
+                        else if (dirArg2 >= 5000 && dirArg2 < 6000) { auxF2 = memLocal.arrayFloats[dirArg2-5000]; arg2Float = true;}
+                        //TEMPORALES
+                        else if (dirArg2 >= 7000 && dirArg2 < 8000) { auxI2 = memLocal.arrayIntsTemporales[dirArg2-7000]; arg2Int = true;}
+                        else if (dirArg2 >= 8000 && dirArg2 < 9000) { auxF2 = memLocal.arrayFloatsTemporales[dirArg2-8000]; arg2Float = true;}
+                        //CONSTANTES
+                        else if (dirArg2 >= 11000 && dirArg2 < 12000) { auxI2 = Integer.parseInt(tablaConst.get(dirArg2)); arg2Int = true;}
+                        else if (dirArg2 >= 12000 && dirArg2 < 13000) { auxF2 = Float.parseFloat(tablaConst.get(dirArg2)); arg2Float = true;}
+
+                        ///////////////////////////////////////////////////////////////////////////////////////////// RESULTADO
+                        if (arg1Int && arg2Int) {
+                            if (auxI2 == auxI1) { memLocal.arrayBoolsTemporales[dirResultado-10000] = true; System.out.println( "RESPUESTA == : " + memLocal.arrayBoolsTemporales[dirResultado-10000]); }
+                            else { memLocal.arrayBoolsTemporales[dirResultado-10000] = false; System.out.println( "RESPUESTA == : " + memLocal.arrayBoolsTemporales[dirResultado-10000]); } }
+                        else if (arg1Int && arg2Float) {
+                            if (auxF2 == auxI1) { memLocal.arrayBoolsTemporales[dirResultado-10000] = true; System.out.println( "RESPUESTA < : " + memLocal.arrayBoolsTemporales[dirResultado-10000]); }
+                            else { memLocal.arrayBoolsTemporales[dirResultado-10000] = false; System.out.println( "RESPUESTA == : " + memLocal.arrayBoolsTemporales[dirResultado-10000]); } }
+                        else if (arg1Float && arg2Int) {
+                            if (auxI2 == auxF1) { memLocal.arrayBoolsTemporales[dirResultado-10000] = true; System.out.println( "RESPUESTA < : " + memLocal.arrayBoolsTemporales[dirResultado-10000]); }
+                            else { memLocal.arrayBoolsTemporales[dirResultado-10000] = false; System.out.println( "RESPUESTA == : " + memLocal.arrayBoolsTemporales[dirResultado-10000]); } }
+                        else if (arg1Float && arg2Float) {
+                            if (auxF2 == auxF1) { memLocal.arrayBoolsTemporales[dirResultado-10000] = true; System.out.println( "RESPUESTA < : " + memLocal.arrayBoolsTemporales[dirResultado-10000]); }
+                            else { memLocal.arrayBoolsTemporales[dirResultado-10000] = false; System.out.println( "RESPUESTA == : " + memLocal.arrayBoolsTemporales[dirResultado-10000]); } }
+                        ip++;
+                        break;
+
+                    /////////////////////////////////////////////////////////////////////////////////////////////
+                    /////////////////////////////////////////////////////////////////////////////////////////////
+                    /////////////////////////////////////////////////////////////////////////////////////////////       Caso "!="
+                    /////////////////////////////////////////////////////////////////////////////////////////////
+                    /////////////////////////////////////////////////////////////////////////////////////////////
+
+                    case "!=" :
+                        dirArg1 = Integer.parseInt(aux.arg1.image);
+                        dirArg2 = Integer.parseInt(aux.arg2.image);
+                        dirResultado = Integer.parseInt(aux.resultado.image);
+                        auxI1 = 0; auxI2 = 0; auxF1 = 0; auxF2 = 0;
+                        arg1Int = false; arg1Float = false; arg2Int = false; arg2Float = false;
+
+                        ///////////////////////////////////////////////////////////////////////////////////////////// ARG 1
+                        //GLOBALES
+                        if (dirArg1 >= 1000 && dirArg1 < 2000) { auxI1 = memGlobal.arrayInts[dirArg1-1000]; arg1Int = true;}
+                        else if (dirArg1 >= 2000 && dirArg1 < 3000) { auxF1 = memGlobal.arrayFloats[dirArg1-2000]; arg1Float = true;}
+                        //LOCALES
+                        else if (dirArg1 >= 4000 && dirArg1 < 5000) { auxI1 = memLocal.arrayInts[dirArg1-4000]; arg1Int = true;}
+                        else if (dirArg1 >= 5000 && dirArg1 < 6000) { auxF1 = memLocal.arrayFloats[dirArg1-5000]; arg1Float = true;}
+                        //TEMPORALES
+                        else if (dirArg1 >= 7000 && dirArg1 < 8000) { auxI1 = memLocal.arrayIntsTemporales[dirArg1-7000]; arg1Int = true;}
+                        else if (dirArg1 >= 8000 && dirArg1 < 9000) { auxF1 = memLocal.arrayFloatsTemporales[dirArg1-8000]; arg1Float = true;}
+                        //CONSTANTES
+                        else if (dirArg1 >= 11000 && dirArg1 < 12000) { auxI1 = Integer.parseInt(tablaConst.get(dirArg1)); arg1Int = true;}
+                        else if (dirArg1 >= 12000 && dirArg1 < 13000) { auxF1 = Float.parseFloat(tablaConst.get(dirArg1)); arg1Float = true;}
+
+                        ///////////////////////////////////////////////////////////////////////////////////////////// ARG 2
+                        //GLOBALES
+                        if (dirArg2 >= 1000 && dirArg2 < 2000) { auxI2 = memGlobal.arrayInts[dirArg2-1000]; arg2Int = true;}
+                        else if (dirArg2 >= 2000 && dirArg2 < 3000) { auxF2 = memGlobal.arrayFloats[dirArg2-2000]; arg2Float = true;}
+                        //LOCALES
+                        else if (dirArg2 >= 4000 && dirArg2 < 5000) { auxI2 = memLocal.arrayInts[dirArg2-4000]; arg2Int = true;}
+                        else if (dirArg2 >= 5000 && dirArg2 < 6000) { auxF2 = memLocal.arrayFloats[dirArg2-5000]; arg2Float = true;}
+                        //TEMPORALES
+                        else if (dirArg2 >= 7000 && dirArg2 < 8000) { auxI2 = memLocal.arrayIntsTemporales[dirArg2-7000]; arg2Int = true;}
+                        else if (dirArg2 >= 8000 && dirArg2 < 9000) { auxF2 = memLocal.arrayFloatsTemporales[dirArg2-8000]; arg2Float = true;}
+                        //CONSTANTES
+                        else if (dirArg2 >= 11000 && dirArg2 < 12000) { auxI2 = Integer.parseInt(tablaConst.get(dirArg2)); arg2Int = true;}
+                        else if (dirArg2 >= 12000 && dirArg2 < 13000) { auxF2 = Float.parseFloat(tablaConst.get(dirArg2)); arg2Float = true;}
+
+                        ///////////////////////////////////////////////////////////////////////////////////////////// RESULTADO
+                        if (arg1Int && arg2Int) {
+                            if (auxI2 != auxI1) { memLocal.arrayBoolsTemporales[dirResultado-10000] = true; System.out.println( "RESPUESTA != : " + memLocal.arrayBoolsTemporales[dirResultado-10000]); }
+                            else { memLocal.arrayBoolsTemporales[dirResultado-10000] = false; System.out.println( "RESPUESTA != : " + memLocal.arrayBoolsTemporales[dirResultado-10000]); } }
+                        else if (arg1Int && arg2Float) {
+                            if (auxF2 != auxI1) { memLocal.arrayBoolsTemporales[dirResultado-10000] = true; System.out.println( "RESPUESTA < : " + memLocal.arrayBoolsTemporales[dirResultado-10000]); }
+                            else { memLocal.arrayBoolsTemporales[dirResultado-10000] = false; System.out.println( "RESPUESTA != : " + memLocal.arrayBoolsTemporales[dirResultado-10000]); } }
+                        else if (arg1Float && arg2Int) {
+                            if (auxI2 != auxF1) { memLocal.arrayBoolsTemporales[dirResultado-10000] = true; System.out.println( "RESPUESTA < : " + memLocal.arrayBoolsTemporales[dirResultado-10000]); }
+                            else { memLocal.arrayBoolsTemporales[dirResultado-10000] = false; System.out.println( "RESPUESTA != : " + memLocal.arrayBoolsTemporales[dirResultado-10000]); } }
+                        else if (arg1Float && arg2Float) {
+                            if (auxF2 != auxF1) { memLocal.arrayBoolsTemporales[dirResultado-10000] = true; System.out.println( "RESPUESTA < : " + memLocal.arrayBoolsTemporales[dirResultado-10000]); }
+                            else { memLocal.arrayBoolsTemporales[dirResultado-10000] = false; System.out.println( "RESPUESTA != : " + memLocal.arrayBoolsTemporales[dirResultado-10000]); } }
+                        ip++;
+                        break;
+
 
                     case "=":
                         dirArg1 = Integer.parseInt(aux.arg1.image);
