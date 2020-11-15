@@ -713,6 +713,9 @@ void Estatuto_De_Decision(Token func) :
 {}
 {
     <IF><PARENIZQ>Expresion(func)
+    {
+        System.out.println("VECTOR POLACO DESPUES DE LA EXP: " + TokenAsignaciones.returnPilaVP());
+    }
     creaCuadruploGotoF(func) <PARENDER><THEN><CURLYIZQ>EDD2(func)<CURLYDER>
     rellenaCuadruploGotoF()
     EDD3(func)
@@ -773,7 +776,7 @@ void creaCuadruploGotoF(Token func) :
 
          if ( aux != 47)
          {
-             throw new ParseException("La expresion dentro del if tiene que ser bool");
+             throw new ParseException("La expresion dentro del if tiene que ser bool, recibio un tipo:  " + aux);
          }
 
 
@@ -1258,12 +1261,12 @@ void G_Exp2(Token func) :
     Token var;
 }
 {
-        var = <MENOSQUE> {TokenAsignaciones.pushPilaOP(var); System.out.println(TokenAsignaciones.returnPilaOP());} M_Exp(func)
-    |   var = <MASQUE> {TokenAsignaciones.pushPilaOP(var); System.out.println(TokenAsignaciones.returnPilaOP());} M_Exp(func)
-    |   var = <IGUAL> {TokenAsignaciones.pushPilaOP(var); System.out.println(TokenAsignaciones.returnPilaOP());} M_Exp(func)
-    |   var = <NOIGUAL> {TokenAsignaciones.pushPilaOP(var); System.out.println(TokenAsignaciones.returnPilaOP());} M_Exp(func)
-    |   var = <MAYORIGUAL> {TokenAsignaciones.pushPilaOP(var); System.out.println(TokenAsignaciones.returnPilaOP());} M_Exp(func)
-    |   var = <MENORIGUAL> {TokenAsignaciones.pushPilaOP(var); System.out.println(TokenAsignaciones.returnPilaOP());} M_Exp(func)
+        var = <MENOSQUE> {TokenAsignaciones.pushPilaOP(var); System.out.println(TokenAsignaciones.returnPilaOP());} G_Exp(func)
+    |   var = <MASQUE> {TokenAsignaciones.pushPilaOP(var); System.out.println(TokenAsignaciones.returnPilaOP());} G_Exp(func)
+    |   var = <IGUAL> {TokenAsignaciones.pushPilaOP(var); System.out.println(TokenAsignaciones.returnPilaOP());} G_Exp(func)
+    |   var = <NOIGUAL> {TokenAsignaciones.pushPilaOP(var); System.out.println(TokenAsignaciones.returnPilaOP());} G_Exp(func)
+    |   var = <MAYORIGUAL> {TokenAsignaciones.pushPilaOP(var); System.out.println(TokenAsignaciones.returnPilaOP());} G_Exp(func)
+    |   var = <MENORIGUAL> {TokenAsignaciones.pushPilaOP(var); System.out.println(TokenAsignaciones.returnPilaOP());} G_Exp(func)
     |   Empty()
 }
 
@@ -1330,35 +1333,11 @@ void creaCuadruploExp(Token func) :
 {
     {
     op = TokenAsignaciones.popPilaOP();
-
-    /*
-    try
-    {
-        op2 = TokenAsignaciones.popPilaOP();
-
-        if (op == "+" && op2 == "-")
-        {
-            TokenAsignaciones.pushPilaOP(op);
-            op = op2;
-        }
-        if (op == "-" && op2 == "+")
-        {
-            TokenAsignaciones.pushPilaOP(op);
-            op = op2;
-        }
-        if (op == "+" && op2 == "-")
-        {
-            TokenAsignaciones.pushPilaOP(op);
-            op = op2;
-        }
-    }*/
-
-
     arg1 = TokenAsignaciones.popPilaVP();
     arg2 = TokenAsignaciones.popPilaVP();
     temporal = op.newToken(op.kind);
-    //System.out.println("image: " + arg1 + " type: " + TokenAsignaciones.getTypeGlobal(arg1));
-    //System.out.println("image: " + arg2 + " type: " + TokenAsignaciones.getTypeGlobal(arg2));
+    //System.out.println("image: " + arg1 + " type: " + arg1.kind);
+    //System.out.println("image: " + arg2 + " type: " + arg2.kind);
 
     //Entra qui si el argumento es un temporal, porque su tipo
     if ( arg1.kind == 4 | arg1.kind == 5 | arg1.kind == 6 | arg1.kind == 47 | arg1.kind == 38 | arg1.kind == 39 | arg1.kind == 41)

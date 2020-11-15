@@ -657,6 +657,7 @@ void Letrero() :
     jj_consume_token(IF);
     jj_consume_token(PARENIZQ);
     Expresion(func);
+System.out.println("VECTOR POLACO DESPUES DE LA EXP: " + TokenAsignaciones.returnPilaVP());
     creaCuadruploGotoF(func);
     jj_consume_token(PARENDER);
     jj_consume_token(THEN);
@@ -705,7 +706,7 @@ arg1 = TokenAsignaciones.popPilaVP();
 
          if ( aux != 47)
          {
-             {if (true) throw new ParseException("La expresion dentro del if tiene que ser bool");}
+             {if (true) throw new ParseException("La expresion dentro del if tiene que ser bool, recibio un tipo:  " + aux);}
          }
 
 
@@ -1223,37 +1224,37 @@ if (TokenAsignaciones.checkPilaOP("<") | TokenAsignaciones.checkPilaOP(">") | To
     case MENOSQUE:{
       var = jj_consume_token(MENOSQUE);
 TokenAsignaciones.pushPilaOP(var); System.out.println(TokenAsignaciones.returnPilaOP());
-      M_Exp(func);
+      G_Exp(func);
       break;
       }
     case MASQUE:{
       var = jj_consume_token(MASQUE);
 TokenAsignaciones.pushPilaOP(var); System.out.println(TokenAsignaciones.returnPilaOP());
-      M_Exp(func);
+      G_Exp(func);
       break;
       }
     case IGUAL:{
       var = jj_consume_token(IGUAL);
 TokenAsignaciones.pushPilaOP(var); System.out.println(TokenAsignaciones.returnPilaOP());
-      M_Exp(func);
+      G_Exp(func);
       break;
       }
     case NOIGUAL:{
       var = jj_consume_token(NOIGUAL);
 TokenAsignaciones.pushPilaOP(var); System.out.println(TokenAsignaciones.returnPilaOP());
-      M_Exp(func);
+      G_Exp(func);
       break;
       }
     case MAYORIGUAL:{
       var = jj_consume_token(MAYORIGUAL);
 TokenAsignaciones.pushPilaOP(var); System.out.println(TokenAsignaciones.returnPilaOP());
-      M_Exp(func);
+      G_Exp(func);
       break;
       }
     case MENORIGUAL:{
       var = jj_consume_token(MENORIGUAL);
 TokenAsignaciones.pushPilaOP(var); System.out.println(TokenAsignaciones.returnPilaOP());
-      M_Exp(func);
+      G_Exp(func);
       break;
       }
     default:
@@ -1315,35 +1316,11 @@ if (TokenAsignaciones.checkPilaOP("*") | TokenAsignaciones.checkPilaOP("/"))
      int aux;
      int aux2;
 op = TokenAsignaciones.popPilaOP();
-
-    /*
-    try
-    {
-        op2 = TokenAsignaciones.popPilaOP();
-
-        if (op == "+" && op2 == "-")
-        {
-            TokenAsignaciones.pushPilaOP(op);
-            op = op2;
-        }
-        if (op == "-" && op2 == "+")
-        {
-            TokenAsignaciones.pushPilaOP(op);
-            op = op2;
-        }
-        if (op == "+" && op2 == "-")
-        {
-            TokenAsignaciones.pushPilaOP(op);
-            op = op2;
-        }
-    }*/
-
-
     arg1 = TokenAsignaciones.popPilaVP();
     arg2 = TokenAsignaciones.popPilaVP();
     temporal = op.newToken(op.kind);
-    //System.out.println("image: " + arg1 + " type: " + TokenAsignaciones.getTypeGlobal(arg1));
-    //System.out.println("image: " + arg2 + " type: " + TokenAsignaciones.getTypeGlobal(arg2));
+    //System.out.println("image: " + arg1 + " type: " + arg1.kind);
+    //System.out.println("image: " + arg2 + " type: " + arg2.kind);
 
     //Entra qui si el argumento es un temporal, porque su tipo
     if ( arg1.kind == 4 | arg1.kind == 5 | arg1.kind == 6 | arg1.kind == 47 | arg1.kind == 38 | arg1.kind == 39 | arg1.kind == 41)
