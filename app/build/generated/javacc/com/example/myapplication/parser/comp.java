@@ -28,25 +28,23 @@ public class comp implements compConstants {
 TokenAsignaciones.printCuadruplos();
         System.out.println("Pila Saltos: " + TokenAsignaciones.returnPilaSaltos());
         System.out.println("Pila VP: " + TokenAsignaciones.returnPilaVP());
-
-
-
         TokenAsignaciones.comienzaMaquinaVirtual();
+        reiniciaTodo();
+  }
 
-
-
-        TokenAsignaciones.emptyPilaOP();
-        TokenAsignaciones.emptyPilaVP();
-        TokenAsignaciones.emptyCuadruplos();
-        // RESETEAR TODOS LOS CONTADORES
-        TokenAsignaciones.resetContsGlobal();
-        TokenAsignaciones.resetContsLocal();
-        TokenAsignaciones.resetContsTemporal();
-        TokenAsignaciones.resetContsConstantes();
-        TokenAsignaciones.emptyPilaSaltos();
-        TokenAsignaciones.resetContCuadruplos();
-        //TokenAsignaciones.printNumVarsGlobal();
-        TokenAsignaciones.resetNumVarsGlobal();
+  static final public void reiniciaTodo() throws ParseException {
+TokenAsignaciones.emptyPilaOP();
+         TokenAsignaciones.emptyPilaVP();
+         TokenAsignaciones.emptyCuadruplos();
+         // RESETEAR TODOS LOS CONTADORES
+         TokenAsignaciones.resetContsGlobal();
+         TokenAsignaciones.resetContsLocal();
+         TokenAsignaciones.resetContsTemporal();
+         TokenAsignaciones.resetContsConstantes();
+         TokenAsignaciones.emptyPilaSaltos();
+         TokenAsignaciones.resetContCuadruplos();
+         //TokenAsignaciones.printNumVarsGlobal();
+         TokenAsignaciones.resetNumVarsGlobal();
   }
 
   static final public void creaCuadruploEnd() throws ParseException {
@@ -144,6 +142,7 @@ res = TokenAsignaciones.InsertarSimbolo(var, td, func);
 
                 if(res != " ")
                 {
+                    reiniciaTodo();
                     {if (true) throw new ParseException(res);}
                 }
     Dim();
@@ -264,6 +263,7 @@ res = TokenAsignaciones.InsertarFuncion(func, td, TokenAsignaciones.getContCuadr
         TokenAsignaciones.aumentaVarFuncGlobal(td);
                 if(res != " ")
                 {
+                    reiniciaTodo();
                     {if (true) throw new ParseException(res);}
                 }
     jj_consume_token(PARENIZQ);
@@ -422,6 +422,7 @@ TokenAsignaciones.InsertarSimbolo(var, td, func);
             res = TokenAsignaciones.InsertarParametrosFunc(td, func);
             if (res != " ")
             {
+                reiniciaTodo();
                 {if (true) throw new ParseException(res);}
             }
       Dim_Expresion(func);
@@ -495,8 +496,8 @@ arg1 = TokenAsignaciones.popPilaVP();
 
          if (!TokenAsignaciones.checaTipoParams(aux, funcLlamada))
          {
-             TokenAsignaciones.resetContParams();
-            {if (true) throw new ParseException("El parametro enviado no es del mismo tipo que el declarado o es un parametro extra");}
+            reiniciaTodo();
+            {if (true) throw new ParseException("El parametro enviado a la funcion " + funcLlamada + " no es del mismo tipo que el declarado o es un parametro extra");}
          }
 
 
@@ -707,6 +708,7 @@ arg1 = TokenAsignaciones.popPilaVP();
 
          if ( aux != 47)
          {
+             reiniciaTodo();
              {if (true) throw new ParseException("La expresion dentro del if tiene que ser bool, recibio un tipo:  " + aux);}
          }
 
@@ -806,8 +808,16 @@ void creaCuadruploAsignacion(Token op, Token func) throws ParseException {Token 
      Token tAux2;
      int aux;
      int aux2;
-tAux = TokenAsignaciones.popPilaVP();
-         tAux2 = TokenAsignaciones.popPilaVP();
+try {
+            tAux = TokenAsignaciones.popPilaVP();
+            tAux2 = TokenAsignaciones.popPilaVP();
+         }
+     catch (Exception e)
+     {
+         reiniciaTodo();
+                          {if (true) throw new ParseException("Se est\u00c3\u00a1 intentando llamar a una funcion void en una asignacion");}
+     }
+
 
          arg1.image = tAux.image;
          arg1.kind = tAux.kind;
@@ -847,6 +857,7 @@ tAux = TokenAsignaciones.popPilaVP();
 
          if (TokenAsignaciones.getCuboType(aux2,aux,op.image) == 0)
              {
+                 reiniciaTodo();
                  {if (true) throw new ParseException("Los argumentos: " + arg1.image + " y " + arg2.image + " no son compatibles.");}
              }
 
@@ -870,6 +881,7 @@ res = TokenAsignaciones.checkVariable(var, func);
 
         if(res != " ")
         {
+            reiniciaTodo();
             {if (true) throw new ParseException(res);}
             imp = true;
         }
@@ -922,6 +934,7 @@ res = TokenAsignaciones.checkVariable(var, func);
   static final public void validaReturn(Token func) throws ParseException {
 if(!TokenAsignaciones.getTypeFunc(func))
         {
+            reiniciaTodo();
             {if (true) throw new ParseException("La funcion " + func.image + " es de tipo void, asi que no puede tener un return");}
         }
   }
@@ -943,6 +956,7 @@ arg1 = TokenAsignaciones.popPilaVP();
 
          if (TokenAsignaciones.getfunctipo(func) != aux)
          {
+             reiniciaTodo();
              {if (true) throw new ParseException("Lo que se regresa en la funci\u00c3\u00b3n " + func + " debe de ser del mismo tipo que la funci\u00c3\u00b3n");}
          }
 
@@ -1075,6 +1089,7 @@ res = TokenAsignaciones.checkFuncion(funcLlamada);
 
         if(res != " ")
         {
+            reiniciaTodo();
             {if (true) throw new ParseException(res);}
             imp = true;
         }
@@ -1083,7 +1098,19 @@ res = TokenAsignaciones.checkFuncion(funcLlamada);
     Llamada2(func, funcLlamada);
     jj_consume_token(PARENDER);
     creaCuadruploGoSub(funcLlamada);
-TokenAsignaciones.pushPilaVP(funcLlamada);
+//Checa si la función no es void.
+        if (TokenAsignaciones.getTypeFunc(funcLlamada))
+        {
+            TokenAsignaciones.pushPilaVP(funcLlamada);
+        }
+        else {
+            //Si es void, checa que no se le esté asignando a nada.
+                    if (TokenAsignaciones.peekPilaOP() != null)
+                    {
+                        reiniciaTodo();
+                        {if (true) throw new ParseException("La funcion " + funcLlamada + " es void. No se puede utilizar en una asignacion o expresion porque no regresa nada.");}
+                    }
+            }
 {if ("" != null) return funcLlamada;}
     throw new Error("Missing return statement in function");
   }
@@ -1162,9 +1189,10 @@ Quadruple quad = new Quadruple("ERA", null, null, var);
 
   static final public void Llamada2(Token func , Token funcLlamada) throws ParseException {
     Parametros(func, funcLlamada);
-if(TokenAsignaciones.getParamSize(funcLlamada) != TokenAsignaciones.getContParams())
+System.out.println("PARAM SIZE: " + TokenAsignaciones.getParamSize(funcLlamada) + " CONTPARAMS : " + TokenAsignaciones.getContParams());
+            if(TokenAsignaciones.getParamSize(funcLlamada) != TokenAsignaciones.getContParams())
             {
-                TokenAsignaciones.resetContParams();
+                reiniciaTodo();
                 {if (true) throw new ParseException("En la llamada a la funcion " + funcLlamada + " se enviaron menos parametros de los necesitados.");}
             }
             TokenAsignaciones.resetContParams();
@@ -1442,6 +1470,7 @@ op = TokenAsignaciones.popPilaOP();
 
     if(temporal.kind == 0)
     {
+        reiniciaTodo();
         {if (true) throw new ParseException("Los argumentos: " + arg1.image + " y " + arg2.image + " no son compatibles.");}
     }
         System.out.println("aaaaaa: " + arg1.image);

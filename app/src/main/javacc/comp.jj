@@ -167,27 +167,33 @@ void Programa() :
         TokenAsignaciones.printCuadruplos();
         System.out.println("Pila Saltos: " + TokenAsignaciones.returnPilaSaltos());
         System.out.println("Pila VP: " + TokenAsignaciones.returnPilaVP());
-
-
-
         TokenAsignaciones.comienzaMaquinaVirtual();
+        reiniciaTodo();
 
 
 
-        TokenAsignaciones.emptyPilaOP();
-        TokenAsignaciones.emptyPilaVP();
-        TokenAsignaciones.emptyCuadruplos();
-        // RESETEAR TODOS LOS CONTADORES
-        TokenAsignaciones.resetContsGlobal();
-        TokenAsignaciones.resetContsLocal();
-        TokenAsignaciones.resetContsTemporal();
-        TokenAsignaciones.resetContsConstantes();
-        TokenAsignaciones.emptyPilaSaltos();
-        TokenAsignaciones.resetContCuadruplos();
-        //TokenAsignaciones.printNumVarsGlobal();
-        TokenAsignaciones.resetNumVarsGlobal();
+
     }
 }
+
+void reiniciaTodo() :
+{}
+{
+    {
+         TokenAsignaciones.emptyPilaOP();
+         TokenAsignaciones.emptyPilaVP();
+         TokenAsignaciones.emptyCuadruplos();
+         // RESETEAR TODOS LOS CONTADORES
+         TokenAsignaciones.resetContsGlobal();
+         TokenAsignaciones.resetContsLocal();
+         TokenAsignaciones.resetContsTemporal();
+         TokenAsignaciones.resetContsConstantes();
+         TokenAsignaciones.emptyPilaSaltos();
+         TokenAsignaciones.resetContCuadruplos();
+         //TokenAsignaciones.printNumVarsGlobal();
+         TokenAsignaciones.resetNumVarsGlobal();
+    }
+ }
 
 void creaCuadruploEnd() :
 {}
@@ -288,6 +294,7 @@ void Vars2(Token func) :
 
 		if(res != " ")
 		{
+		    reiniciaTodo();
 		    throw new ParseException(res);
 		}
 	}
@@ -373,6 +380,7 @@ void Funcion() :
         TokenAsignaciones.aumentaVarFuncGlobal(td);
 		if(res != " ")
                 {
+                    reiniciaTodo();
                     throw new ParseException(res);
                 }
 	}
@@ -497,6 +505,7 @@ void Parametros_Func( Token func) :
             res = TokenAsignaciones.InsertarParametrosFunc(td, func);
             if (res != " ")
             {
+                reiniciaTodo();
                 throw new ParseException(res);
             }
 
@@ -559,8 +568,8 @@ void creaCuadruploParametro(Token func, Token funcLlamada) :
 
          if (!TokenAsignaciones.checaTipoParams(aux, funcLlamada))
          {
-             TokenAsignaciones.resetContParams();
-            throw new ParseException("El parametro enviado no es del mismo tipo que el declarado o es un parametro extra");
+            reiniciaTodo();
+            throw new ParseException("El parametro enviado a la funcion " + funcLlamada + " no es del mismo tipo que el declarado o es un parametro extra");
          }
 
 
@@ -777,6 +786,7 @@ void creaCuadruploGotoF(Token func) :
 
          if ( aux != 47)
          {
+             reiniciaTodo();
              throw new ParseException("La expresion dentro del if tiene que ser bool, recibio un tipo:  " + aux);
          }
 
@@ -861,8 +871,16 @@ void creaCuadruploAsignacion(Token op, Token func) :
 }
 {
     {
-         tAux = TokenAsignaciones.popPilaVP();
-         tAux2 = TokenAsignaciones.popPilaVP();
+     try {
+            tAux = TokenAsignaciones.popPilaVP();
+            tAux2 = TokenAsignaciones.popPilaVP();
+         }
+     catch (Exception e)
+     {
+         reiniciaTodo();
+                          throw new ParseException("Se está intentando llamar a una funcion void en una asignacion");
+     }
+
 
          arg1.image = tAux.image;
          arg1.kind = tAux.kind;
@@ -902,6 +920,7 @@ void creaCuadruploAsignacion(Token op, Token func) :
 
          if (TokenAsignaciones.getCuboType(aux2,aux,op.image) == 0)
              {
+                 reiniciaTodo();
                  throw new ParseException("Los argumentos: " + arg1.image + " y " + arg2.image + " no son compatibles.");
              }
 
@@ -931,6 +950,7 @@ Token Variable(Token func) :
 
         if(res != " ")
         {
+            reiniciaTodo();
             throw new ParseException(res);
             imp = true;
         }
@@ -971,6 +991,7 @@ void validaReturn(Token func) :
     {
         if(!TokenAsignaciones.getTypeFunc(func))
         {
+            reiniciaTodo();
             throw new ParseException("La funcion " + func.image + " es de tipo void, asi que no puede tener un return");
         }
     }
@@ -998,6 +1019,7 @@ void creaCuadruploRetorno(Token op, Token func) :
 
          if (TokenAsignaciones.getfunctipo(func) != aux)
          {
+             reiniciaTodo();
              throw new ParseException("Lo que se regresa en la función " + func + " debe de ser del mismo tipo que la función");
          }
 
@@ -1138,6 +1160,7 @@ Token Llamada( Token func ) :
 
         if(res != " ")
         {
+            reiniciaTodo();
             throw new ParseException(res);
             imp = true;
         }
@@ -1145,7 +1168,22 @@ Token Llamada( Token func ) :
     }
     <PARENIZQ>Llamada2(func, funcLlamada)<PARENDER>
     creaCuadruploGoSub(funcLlamada)
-    {TokenAsignaciones.pushPilaVP(funcLlamada);}
+    {
+        //Checa si la función no es void.
+        if (TokenAsignaciones.getTypeFunc(funcLlamada))
+        {
+            TokenAsignaciones.pushPilaVP(funcLlamada);
+        }
+        else {
+            //Si es void, checa que no se le esté asignando a nada.
+                    if (TokenAsignaciones.peekPilaOP() != null)
+                    {
+                        reiniciaTodo();
+                        throw new ParseException("La funcion " + funcLlamada + " es void. No se puede utilizar en una asignacion o expresion porque no regresa nada.");
+                    }
+            }
+
+    }
     //creaCuadruploRecibirValor(funcLlamada, func)
     {return funcLlamada;}
 }
@@ -1238,9 +1276,10 @@ void Llamada2( Token func , Token funcLlamada) :
 {
         Parametros(func, funcLlamada)
         {
+            System.out.println("PARAM SIZE: " + TokenAsignaciones.getParamSize(funcLlamada) + " CONTPARAMS : " + TokenAsignaciones.getContParams());
             if(TokenAsignaciones.getParamSize(funcLlamada) != TokenAsignaciones.getContParams())
             {
-                TokenAsignaciones.resetContParams();
+                reiniciaTodo();
                 throw new ParseException("En la llamada a la funcion " + funcLlamada + " se enviaron menos parametros de los necesitados.");
             }
             TokenAsignaciones.resetContParams();
@@ -1463,6 +1502,7 @@ void creaCuadruploExp(Token func) :
 
     if(temporal.kind == 0)
     {
+        reiniciaTodo();
         throw new ParseException("Los argumentos: " + arg1.image + " y " + arg2.image + " no son compatibles.");
     }
         System.out.println("aaaaaa: " + arg1.image);

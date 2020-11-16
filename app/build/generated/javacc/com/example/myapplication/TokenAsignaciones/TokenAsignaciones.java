@@ -389,6 +389,16 @@ public class TokenAsignaciones {
         return pilaOP;
     }
 
+    public static Token peekPilaOP()
+    {
+        try{
+            return pilaOP.peek();
+        }
+        catch (Exception e){
+            return null;
+        }
+    }
+
     public static Boolean checkPilaOP(String token)
     {
         try
@@ -436,7 +446,12 @@ public class TokenAsignaciones {
 
     public static Token peekPilaVP()
     {
-        return pilaVP.peek();
+        try{
+            return pilaVP.peek();
+        }
+        catch (Exception e){
+            return null;
+        }
     }
 
     public static void emptyPilaVP()
