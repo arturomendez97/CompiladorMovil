@@ -369,7 +369,8 @@ void Funcion() :
     func = <ID>
     {
 		res = TokenAsignaciones.InsertarFuncion(func, td, TokenAsignaciones.getContCuadruplos());
-
+        TokenAsignaciones.InsertarVarReturnFuncion(func, td);
+        TokenAsignaciones.aumentaVarFuncGlobal(td);
 		if(res != " ")
                 {
                     throw new ParseException(res);
@@ -839,6 +840,7 @@ Token Asignacion( Token func) :
     op = <ASIGNACION>
     Expresion(func)
     creaCuadruploAsignacion(op, func)
+    {         TokenAsignaciones.printCuadruplos();}
     <SEMICOLON>
     {
         return var;
@@ -850,15 +852,28 @@ Token Asignacion( Token func) :
 
 void creaCuadruploAsignacion(Token op, Token func) :
 {
-     Token arg1;
-     Token arg2;
+     Token arg1  = new Token();
+     Token arg2  = new Token();
+     Token tAux;
+     Token tAux2;
      int aux;
      int aux2;
 }
 {
     {
-         arg1 = TokenAsignaciones.popPilaVP();
-         arg2 = TokenAsignaciones.popPilaVP();
+         tAux = TokenAsignaciones.popPilaVP();
+         tAux2 = TokenAsignaciones.popPilaVP();
+
+         arg1.image = tAux.image;
+         arg1.kind = tAux.kind;
+
+         arg2.image = tAux2.image;
+         arg2.kind = tAux2.kind;
+
+         System.out.println("arg1 image: " + arg1.image);
+
+         System.out.println("arg1 kind: " + arg1.kind);
+
 
 
 
@@ -880,9 +895,10 @@ void creaCuadruploAsignacion(Token op, Token func) :
              aux2 = TokenAsignaciones.getType(arg2, func);
          }
 
-         //System.out.println("aux: " + aux);
+         System.out.println("aux: " + aux);
 
          //System.out.println("aux2: " + aux2);
+
 
          if (TokenAsignaciones.getCuboType(aux2,aux,op.image) == 0)
              {
@@ -897,9 +913,7 @@ void creaCuadruploAsignacion(Token op, Token func) :
 
          Quadruple quad = new Quadruple(op.image, arg1, null, arg2);
          TokenAsignaciones.meterCuadruplo(quad);
-             TokenAsignaciones.subeContCuadruplos();
-
-             //quad.print();
+         TokenAsignaciones.subeContCuadruplos();
     }
 }
 
@@ -947,7 +961,19 @@ void Retorno(Token func) :
 {
     op=<RETURN>
     <PARENIZQ>Expresion(func)<PARENDER><SEMICOLON>
+    validaReturn(func)
     creaCuadruploRetorno(op, func)
+}
+
+void validaReturn(Token func) :
+{}
+{
+    {
+        if(!TokenAsignaciones.getTypeFunc(func))
+        {
+            throw new ParseException("La funcion " + func.image + " es de tipo void, asi que no puede tener un return");
+        }
+    }
 }
 
 void creaCuadruploRetorno(Token op, Token func) :
@@ -970,10 +996,15 @@ void creaCuadruploRetorno(Token op, Token func) :
          arg1.image = tokenToDir(arg1, func);
          arg1.kind = aux;
 
+         if (TokenAsignaciones.getfunctipo(func) != aux)
+         {
+             throw new ParseException("Lo que se regresa en la función " + func + " debe de ser del mismo tipo que la función");
+         }
 
-         Quadruple quad = new Quadruple(op.image, null, null, arg1);
+
+         Quadruple quad = new Quadruple(op.image, arg1, null, func);
          TokenAsignaciones.meterCuadruplo(quad);
-             TokenAsignaciones.subeContCuadruplos();
+         TokenAsignaciones.subeContCuadruplos();
 
              //quad.print();
     }
@@ -1114,9 +1145,68 @@ Token Llamada( Token func ) :
     }
     <PARENIZQ>Llamada2(func, funcLlamada)<PARENDER>
     creaCuadruploGoSub(funcLlamada)
+    {TokenAsignaciones.pushPilaVP(funcLlamada);}
+    //creaCuadruploRecibirValor(funcLlamada, func)
     {return funcLlamada;}
 }
+/*
+void creaCuadruploRecibirValor( Token funcLlamada, Token func) :
+{
+     Token arg1;
+     Token arg2;
+     Token op  = new Token();
+     int aux;
+     int aux2;
+}
+{
+    {
+         arg1 = TokenAsignaciones.popPilaVP();
+         arg2 = funcLlamada;
+        op.image = "=";
 
+
+         //El if es para cuando es un temporal o una constante
+         if ( arg1.kind == 4 | arg1.kind == 5 | arg1.kind == 6 | arg1.kind == 47 | arg1.kind == 38 | arg1.kind == 39 | arg1.kind == 41)
+         {
+             aux = arg1.kind;
+         }
+         else
+         {
+             aux = TokenAsignaciones.getType(arg1, func);
+         }
+
+         if ( arg2.kind == 4 | arg2.kind == 5 | arg2.kind == 6 | arg2.kind == 47 | arg2.kind == 38 | arg2.kind == 39 | arg2.kind == 41)
+         {
+             aux2 = arg2.kind;
+         }
+         else{
+             aux2 = TokenAsignaciones.getType(arg2, func);
+         }
+
+         //System.out.println("aux: " + aux);
+
+         //System.out.println("aux2: " + aux2);
+
+         if (TokenAsignaciones.getCuboType(aux2,aux,op.image) == 0)
+             {
+                 throw new ParseException("Los argumentos: " + arg1.image + " y " + arg2.image + " no son compatibles.");
+             }
+
+         arg1.image = tokenToDir(arg1, func);
+         arg1.kind = aux;
+         arg2.image = tokenToDir(arg2, func);
+         arg2.kind = aux;
+
+
+         Quadruple quad = new Quadruple(op.image, arg1, null, arg2);
+         TokenAsignaciones.meterCuadruplo(quad);
+             TokenAsignaciones.subeContCuadruplos();
+
+             //quad.print();
+    }
+}
+
+*/
 void creaCuadruploGoSub(Token funcLlamada) :
 {
      Token aux = new Token();
@@ -1136,9 +1226,9 @@ void creaCuadruploEra(Token var) :
 }
 {
     {
-
-         Quadruple quad = new Quadruple("ERA", null, null, var );
+         Quadruple quad = new Quadruple("ERA", null, null, var);
          TokenAsignaciones.meterCuadruplo(quad);
+         //System.out.print("EL CUADRUPLO DEL ERA: "  + TokenAsignaciones.getContCuadruplos());
          TokenAsignaciones.subeContCuadruplos();
     }
 }
@@ -1324,17 +1414,25 @@ Token T(Token func) :
 void creaCuadruploExp(Token func) :
 {
      Token op;
-     Token arg1;
-     Token arg2;
-     Token temporal;
+     Token arg1  = new Token();
+     Token arg2  = new Token();
+     Token tAux;
+     Token tAux2;
      int aux;
      int aux2;
+     Token temporal;
 }
 {
     {
     op = TokenAsignaciones.popPilaOP();
-    arg1 = TokenAsignaciones.popPilaVP();
-    arg2 = TokenAsignaciones.popPilaVP();
+    tAux = TokenAsignaciones.popPilaVP();
+    tAux2 = TokenAsignaciones.popPilaVP();
+
+    arg1.image = tAux.image;
+    arg1.kind = tAux.kind;
+
+    arg2.image = tAux2.image;
+    arg2.kind = tAux2.kind;
     temporal = op.newToken(op.kind);
     //System.out.println("image: " + arg1 + " type: " + arg1.kind);
     //System.out.println("image: " + arg2 + " type: " + arg2.kind);
@@ -1433,7 +1531,8 @@ Token F(Token func) :
         {return var;}
     |   var = Variable(func)
         {return var;}
-    |   var = Llamada(func)
+    |   //{System.out.println("LA PILA ANTES DE ENTRAR A LA LLAMADAAAAAAAAAAAAAAAAAAAAAAA: " + TokenAsignaciones.returnPilaVP());}
+        var = Llamada(func)
         {return var;}
     |   var = F2()
         {return var;}

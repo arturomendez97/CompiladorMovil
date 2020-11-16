@@ -705,6 +705,34 @@ public class TokenAsignaciones {
 
     }
 
+    //Metes la función como una variable global, para ahí guardar el valor del return
+    public static void InsertarVarReturnFuncion(Token nombreFuncion, int tipo)
+    {
+        Tipo_Dir objeto = new Tipo_Dir(tipo, getContGlobal(tipo));
+        System.out.println("EL QUE METES: " + nombreFuncion);
+        tablaVarsGlobal.put(nombreFuncion.image, objeto);
+    }
+
+    public static int getfunctipo(Token nombreFuncion)
+    {
+        CustomHash tabla = tablaFunc.get(nombreFuncion.image);
+        return tabla.tipo;
+    }
+
+    //Sirve para ver si es void o no
+    public static boolean getTypeFunc(Token nombreFuncion)
+    {
+        CustomHash tabla = tablaFunc.get(nombreFuncion.image);
+        if(tabla.tipo == 7)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
 
     //Este metodo regresa el tipo int del token solicitado.
     public static int getType(Token checkTok, Token nombreFuncion)
@@ -820,16 +848,7 @@ public class TokenAsignaciones {
             //Si TokenIzq.image no se encuentra en la tabla en la cual se agregan los tokens, el token no ha sido declarado, y se manda un error
             return "Error: La funcion " + nombreFuncion.image + " No ha sido declarada \r\nLinea: ";
         }
-
-        /*try
-        {
-            CustomHash tabla = tablaFunc.get(nombreFuncion.image);
-            return " ";
-        }
-        catch(Exception e)
-        {
-            //Si TokenIzq.image no se encuentra en la tabla en la cual se agregan los tokens, el token no ha sido declarado, y se manda un error
-            return "Error: La funcion " + nombreFuncion.image + " No ha sido declarada \r\nLinea: ";
-        }*/
     }
+
+
 }

@@ -201,6 +201,70 @@ public class MaquinaVirtual {
 
                 switch (aux.operator)
                 {
+                    case "return":
+                        dirArg1 = Integer.parseInt(aux.arg1.image);
+                        auxString = aux.resultado.image;
+                        auxI1 = 0; auxF1 = 0; auxC1 = 'a';
+                        arg1Int = false; arg1Float = false; arg1Char = false;
+
+                        //CONSTANTES
+                        if (dirArg1 >= 11000)
+                        {
+                            switch (aux.resultado.kind)
+                            {
+                                case 4:  auxI1 = Integer.parseInt(tablaConst.get(dirArg1)); arg1Int = true;
+                                    break;
+                                case 5:  auxF1 = Float.parseFloat(tablaConst.get(dirArg1)); arg1Float = true;
+                                    break;
+                                case 6:  auxString = tablaConst.get(dirArg1);
+                                    res = auxString.charAt(0);
+                                    arg1Char = true;
+
+                                    break;
+
+                                case 38: auxI1 = Integer.parseInt(tablaConst.get(dirArg1)); arg1Int = true;
+                                    break;
+                                case 39: auxF1 = Float.parseFloat(tablaConst.get(dirArg1)); arg1Float = true;
+                                    break;
+                                case 41: auxString = tablaConst.get(dirArg1);
+                                    auxC1 = auxString.charAt(1);
+                                    arg1Char = true;
+                                    break;
+                                default:  System.out.println("ALgo salio mal " + aux.resultado.kind);
+                                    break;
+                            }
+                        }
+
+                        //ARG1 GLOBALES
+                        if (dirArg1 >= 1000 && dirArg1 < 2000) { auxI1 = memGlobal.arrayInts[dirArg1-1000]; arg1Int = true; }
+                        if (dirArg1 >= 2000 && dirArg1 < 3000) { auxF1 = memGlobal.arrayFloats[dirArg1-2000]; arg1Float = true; }
+                        if (dirArg1 >= 3000 && dirArg1 < 4000) { auxC1 = memGlobal.arrayChars[dirArg1-3000]; arg1Char = true; }
+
+                        //ARG1 LOCALES
+                        if (dirArg1 >= 4000 && dirArg1 < 5000) { auxI1 = memLocal.arrayInts[dirArg1-4000]; arg1Int = true; }
+                        if (dirArg1 >= 5000 && dirArg1 < 6000) { auxF1 = memLocal.arrayFloats[dirArg1-5000]; arg1Float = true; }
+                        if (dirArg1 >= 6000 && dirArg1 < 7000) { auxC1 = memLocal.arrayChars[dirArg1-6000]; arg1Char = true; }
+
+                        //TEMPORALES
+                        if (dirArg1 >= 7000 && dirArg1 < 8000) { auxI1 = memLocal.arrayIntsTemporales[dirArg1-7000]; arg1Int = true; }
+                        if (dirArg1 >= 8000 && dirArg1 < 9000) { auxF1 = memLocal.arrayFloatsTemporales[dirArg1-8000]; arg1Float = true; }
+                        if (dirArg1 >= 9000 && dirArg1 < 10000) { auxC1 = memLocal.arrayCharsTemporales[dirArg1-9000]; arg1Char = true; }
+
+                        //////////////////////////////////////////////////////////////////////////// RESULTADO
+                        Tipo_Dir dir;
+                        dir = tablaVarsGlobal.get(auxString);
+                        dirResultado = dir.dir;
+                        System.out.println("AYUDAAAAAAAAAAAAAAAAAAAAAA: " + auxI1 + " " + dirResultado);
+
+                        //ARG1 GLOBALES
+                        if (dirResultado >= 1000 && dirResultado < 2000) { memGlobal.arrayInts[dirResultado-1000] = auxI1; }
+                        if (dirResultado >= 2000 && dirResultado < 3000) {
+                            if (arg1Int) { memGlobal.arrayFloats[dirResultado-2000] = auxI1; }
+                            else if(arg1Float) { memGlobal.arrayFloats[dirResultado-2000] = auxF1; } }
+                        if (dirResultado >= 3000 && dirResultado < 4000) { memGlobal.arrayChars[dirResultado-3000] = auxC1; }
+
+                        ip++;
+                        break;
                     case "GOSUB" :
                         contCuadruplo = ip;
                         dirResultado = Integer.parseInt(aux.resultado.image);

@@ -1,4 +1,4 @@
-#Sat Nov 14 21:51:26 CST 2020
+#Sun Nov 15 21:48:21 CST 2020
 base.0=D\:\\Documents\\Carrera ITC\\Semestre 11\\Compiladores\\Compilador Android\\MyApplication2\\app\\build\\intermediates\\dex\\debug\\mergeDexDebug\\classes.dex
 path.0=classes.dex
 renamed.0=classes.dex
