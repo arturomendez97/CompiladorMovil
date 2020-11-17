@@ -850,7 +850,6 @@ Token Asignacion( Token func) :
     op = <ASIGNACION>
     Expresion(func)
     creaCuadruploAsignacion(op, func)
-    {         TokenAsignaciones.printCuadruplos();}
     <SEMICOLON>
     {
         return var;

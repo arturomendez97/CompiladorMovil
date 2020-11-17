@@ -95,6 +95,24 @@ public class TokenAsignaciones {
 
 
     private static int contParametros = 0;
+    ////////////////////////////////////////////////////////////////////////////////////////////////       TODO
+
+
+    public static void reiniciaTodo()
+        {
+            emptyPilaOP();
+            emptyPilaVP();
+            emptyCuadruplos();
+            // RESETEAR TODOS LOS CONTADORES
+            resetContsGlobal();
+            resetContsLocal();
+            resetContsTemporal();
+            resetContsConstantes();
+            emptyPilaSaltos();
+            resetContCuadruplos();
+            //TokenAsignaciones.printNumVarsGlobal();
+            resetNumVarsGlobal();
+        }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////        Comienza Maquina Virtual
 

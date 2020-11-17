@@ -136,6 +136,8 @@ public class MaquinaVirtual {
     private static String text = "";
 
     private static Stack<MemoriaLocal> pilaMemorias = new Stack<MemoriaLocal>();
+    private static Stack<Integer> contCuadruplo = new Stack<Integer>();
+
 
 
 
@@ -163,7 +165,6 @@ public class MaquinaVirtual {
 
         //RECORRE CUADRUPLOS
 
-        int contCuadruplo = 0;
 
         Quadruple aux;
         int constInt;
@@ -266,7 +267,7 @@ public class MaquinaVirtual {
                         ip++;
                         break;
                     case "GOSUB" :
-                        contCuadruplo = ip;
+                        contCuadruplo.push(ip);
                         dirResultado = Integer.parseInt(aux.resultado.image);
                         ip = dirResultado;
                         break;
@@ -274,7 +275,7 @@ public class MaquinaVirtual {
                     case "ENDFUNC" :
                         //Rregresar a la memoria anterior
                         memLocal = pilaMemorias.pop();
-                        ip = contCuadruplo+1;
+                        ip = contCuadruplo.pop()+1;
                         break;
                     case "ERA" :
                         // Guardar memoria local actual en el stack y crear una nueva
@@ -357,7 +358,7 @@ public class MaquinaVirtual {
                         else if (dirArg2 >= 12000 && dirArg2 < 13000) { auxF2 = Float.parseFloat(tablaConst.get(dirArg2)); arg2Float = true;}
 
                         ///////////////////////////////////////////////////////////////////////////////////////////// RESULTADO
-0                        if (arg1Int && arg2Int) { memLocal.arrayIntsTemporales[dirResultado-7000] = auxI2+auxI1; System.out.println( "RESPUESTA + : " + memLocal.arrayIntsTemporales[dirResultado-7000]);}
+                        if (arg1Int && arg2Int) { memLocal.arrayIntsTemporales[dirResultado-7000] = auxI2+auxI1; System.out.println( "RESPUESTA + : " + memLocal.arrayIntsTemporales[dirResultado-7000]);}
                         else if (arg1Int && arg2Float) { memLocal.arrayFloatsTemporales[dirResultado-8000] = auxF2+auxI1; System.out.println( "RESPUESTA + : " + memLocal.arrayFloatsTemporales[dirResultado-8000]);}
                         else if (arg1Float && arg2Int) { memLocal.arrayFloatsTemporales[dirResultado-8000] = auxI2+auxF1; System.out.println( "RESPUESTA + : " + memLocal.arrayFloatsTemporales[dirResultado-8000]);}
                         else if (arg1Float && arg2Float) { memLocal.arrayFloatsTemporales[dirResultado-8000] = auxF2+auxF1; System.out.println( "RESPUESTA + : " + memLocal.arrayFloatsTemporales[dirResultado-8000]);}

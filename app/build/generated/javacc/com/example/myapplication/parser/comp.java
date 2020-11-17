@@ -793,7 +793,6 @@ Token Asignacion(Token func) throws ParseException {Token op;
     op = jj_consume_token(ASIGNACION);
     Expresion(func);
     creaCuadruploAsignacion(op, func);
-TokenAsignaciones.printCuadruplos();
     jj_consume_token(SEMICOLON);
 {if ("" != null) return var;}
     throw new Error("Missing return statement in function");

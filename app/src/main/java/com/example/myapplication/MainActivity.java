@@ -45,10 +45,13 @@ public class MainActivity extends AppCompatActivity {
 
                 try {
                     ae.Programa();
+                    TokenAsignaciones.reiniciaTodo();
                     text.setText(MaquinaVirtual.getText());
                 } catch (ParseException ex){
+                    TokenAsignaciones.reiniciaTodo();
                     text.setText(ex.getMessage());
                 }catch (TokenMgrError tme){
+                    TokenAsignaciones.reiniciaTodo();
                     text.setText(tme.getMessage());
                 }
 
