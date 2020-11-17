@@ -190,8 +190,11 @@ public class MaquinaVirtual {
         int auxI1 = 0,auxI2 = 0;
         float auxF1 = 0, auxF2 = 0;
         char auxC1 = 'a', auxC2 = 'a';
+        boolean auxB1 = false, auxB2 = false;
 
         boolean arg1Int = false, arg1Float = false, arg2Int = false, arg2Float = false, arg1Char = false, arg2Char = false;
+
+        int contParamsInt = 0, contParamsFloat = 0, contParamsChar = 0;
 
         while (ip < cuadruplos.size())
         {
@@ -285,6 +288,62 @@ public class MaquinaVirtual {
                         MemoriaLocal memLocal2 = new MemoriaLocal(tablaAux.varArray[0], tablaAux.varArray[1], tablaAux.varArray[2], tablaAux.varArray[3], tablaAux.varArray[4], tablaAux.varArray[5], tablaAux.varArray[6], tablaAux.varArray[7]);
                         pilaMemorias.push(memLocal);
                         memLocal = memLocal2;
+                        ip++;
+                        break;
+                    case "PARAM" :
+                        dirArg1 = Integer.parseInt(aux.arg1.image);
+                        auxI1 = 0; auxF1 = 0; auxC1 = 'a';
+                        arg1Int = false; arg1Float = false; arg1Char = false;
+
+                        //CONSTANTES
+                        if (dirArg1 >= 11000)
+                        {
+                            switch (aux.resultado.kind)
+                            {
+                                case 4:  auxI1 = Integer.parseInt(tablaConst.get(dirArg1)); arg1Int = true;
+                                    break;
+                                case 5:  auxF1 = Float.parseFloat(tablaConst.get(dirArg1)); arg1Float = true;
+                                    break;
+                                case 6:  auxString = tablaConst.get(dirArg1);
+                                    res = auxString.charAt(0);
+                                    arg1Char = true;
+
+                                    break;
+
+                                case 38: auxI1 = Integer.parseInt(tablaConst.get(dirArg1)); arg1Int = true;
+                                    break;
+                                case 39: auxF1 = Float.parseFloat(tablaConst.get(dirArg1)); arg1Float = true;
+                                    break;
+                                case 41: auxString = tablaConst.get(dirArg1);
+                                    auxC1 = auxString.charAt(1);
+                                    arg1Char = true;
+                                    break;
+                                default:  System.out.println("ALgo salio mal " + aux.resultado.kind);
+                                    break;
+                            }
+                        }
+
+                        //ARG1 GLOBALES
+                        if (dirArg1 >= 1000 && dirArg1 < 2000) { auxI1 = memGlobal.arrayInts[dirArg1-1000]; arg1Int = true; }
+                        if (dirArg1 >= 2000 && dirArg1 < 3000) { auxF1 = memGlobal.arrayFloats[dirArg1-2000]; arg1Float = true; }
+                        if (dirArg1 >= 3000 && dirArg1 < 4000) { auxC1 = memGlobal.arrayChars[dirArg1-3000]; arg1Char = true; }
+
+                        //ARG1 LOCALES
+                        if (dirArg1 >= 4000 && dirArg1 < 5000) { auxI1 = memLocal.arrayInts[dirArg1-4000]; arg1Int = true; }
+                        if (dirArg1 >= 5000 && dirArg1 < 6000) { auxF1 = memLocal.arrayFloats[dirArg1-5000]; arg1Float = true; }
+                        if (dirArg1 >= 6000 && dirArg1 < 7000) { auxC1 = memLocal.arrayChars[dirArg1-6000]; arg1Char = true; }
+
+                        //TEMPORALES
+                        if (dirArg1 >= 7000 && dirArg1 < 8000) { auxI1 = memLocal.arrayIntsTemporales[dirArg1-7000]; arg1Int = true; }
+                        if (dirArg1 >= 8000 && dirArg1 < 9000) { auxF1 = memLocal.arrayFloatsTemporales[dirArg1-8000]; arg1Float = true; }
+                        if (dirArg1 >= 9000 && dirArg1 < 10000) { auxC1 = memLocal.arrayCharsTemporales[dirArg1-9000]; arg1Char = true; }
+
+                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Resultado
+                        //ARG1 LOCALES
+                        if (arg1Int == true) { memLocal.arrayInts[contParamsInt] = auxI1; contParamsInt++;}
+                        if (arg1Float == true) { memLocal.arrayInts[contParamsFloat] = auxI1; contParamsFloat++;}
+                        if (arg1Char == true) { memLocal.arrayChars[contParamsChar] = auxC1; contParamsChar++;}
+
                         ip++;
                         break;
                     case "GOTO" :
@@ -848,6 +907,52 @@ public class MaquinaVirtual {
                         else if (arg1Float && arg2Float) {
                             if (auxF2 != auxF1) { memLocal.arrayBoolsTemporales[dirResultado-10000] = true; System.out.println( "RESPUESTA < : " + memLocal.arrayBoolsTemporales[dirResultado-10000]); }
                             else { memLocal.arrayBoolsTemporales[dirResultado-10000] = false; System.out.println( "RESPUESTA != : " + memLocal.arrayBoolsTemporales[dirResultado-10000]); } }
+                        ip++;
+                        break;
+
+                    /////////////////////////////////////////////////////////////////////////////////////////////
+                    /////////////////////////////////////////////////////////////////////////////////////////////
+                    /////////////////////////////////////////////////////////////////////////////////////////////       Caso "&"
+                    /////////////////////////////////////////////////////////////////////////////////////////////
+                    /////////////////////////////////////////////////////////////////////////////////////////////
+
+                    case "&" :
+                        dirArg1 = Integer.parseInt(aux.arg1.image);
+                        dirArg2 = Integer.parseInt(aux.arg2.image);
+                        dirResultado = Integer.parseInt(aux.resultado.image);
+                        auxI1 = 0; auxI2 = 0; auxF1 = 0; auxF2 = 0;
+                        arg1Int = false; arg1Float = false; arg2Int = false; arg2Float = false;
+                        auxB1 = false; auxB2 = false;
+                        ///////////////////////////////////////////////////////////////////////////////////////////// ARG 1
+                        auxB1 = memLocal.arrayBoolsTemporales[dirArg1-10000];
+                        ///////////////////////////////////////////////////////////////////////////////////////////// ARG 2
+                        auxB2 = memLocal.arrayBoolsTemporales[dirArg2-10000];
+                        ///////////////////////////////////////////////////////////////////////////////////////////// RESULTADO
+                        if(auxB1 && auxB2) { memLocal.arrayBoolsTemporales[dirResultado-10000] = true; }
+                        else{ memLocal.arrayBoolsTemporales[dirResultado-10000] = false; }
+                        ip++;
+                        break;
+
+                    /////////////////////////////////////////////////////////////////////////////////////////////
+                    /////////////////////////////////////////////////////////////////////////////////////////////
+                    /////////////////////////////////////////////////////////////////////////////////////////////       Caso "|"
+                    /////////////////////////////////////////////////////////////////////////////////////////////
+                    /////////////////////////////////////////////////////////////////////////////////////////////
+
+                    case "|" :
+                        dirArg1 = Integer.parseInt(aux.arg1.image);
+                        dirArg2 = Integer.parseInt(aux.arg2.image);
+                        dirResultado = Integer.parseInt(aux.resultado.image);
+                        auxI1 = 0; auxI2 = 0; auxF1 = 0; auxF2 = 0;
+                        arg1Int = false; arg1Float = false; arg2Int = false; arg2Float = false;
+                        auxB1 = false; auxB2 = false;
+                        ///////////////////////////////////////////////////////////////////////////////////////////// ARG 1
+                        auxB1 = memLocal.arrayBoolsTemporales[dirArg1-10000];
+                        ///////////////////////////////////////////////////////////////////////////////////////////// ARG 2
+                        auxB2 = memLocal.arrayBoolsTemporales[dirArg2-10000];
+                        ///////////////////////////////////////////////////////////////////////////////////////////// RESULTADO
+                        if (!auxB1 && !auxB2){ memLocal.arrayBoolsTemporales[dirResultado-10000] = false; }
+                        else { memLocal.arrayBoolsTemporales[dirResultado-10000] = true; }
                         ip++;
                         break;
 

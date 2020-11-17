@@ -451,6 +451,7 @@ TokenAsignaciones.InsertarSimbolo(var, td, func);
 //////////////PARAMETROS/////////////////
   static final public 
 void Parametros(Token func, Token funcLlamada) throws ParseException {Token var;
+    Token parentesis = new Token();
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case CALL:
     case PARENIZQ:
@@ -458,7 +459,11 @@ void Parametros(Token func, Token funcLlamada) throws ParseException {Token var;
     case CTEF:
     case ID:
     case CTEC:{
+parentesis.image = "(";
+            parentesis.kind = 20;
+            TokenAsignaciones.pushPilaOP(parentesis);
       Expresion(func);
+TokenAsignaciones.popPilaOP();
       creaCuadruploParametro(func, funcLlamada);
       Params(func, funcLlamada);
       break;
@@ -1267,12 +1272,85 @@ System.out.println("PARAM SIZE: " + TokenAsignaciones.getParamSize(funcLlamada) 
     }
   }
 
+// un temporal del tipo correspondiente. Crea el cuadruplo con esos 4 elementos, y guarda el temporal en la pila del vector polaco.
+  static final public void creaCuadruploExpBool(Token func) throws ParseException {Token op;
+     Token arg1  = new Token();
+     Token arg2  = new Token();
+     Token tAux;
+     Token tAux2;
+     int aux;
+     int aux2;
+     Token temporal;
+op = TokenAsignaciones.popPilaOP();
+    tAux = TokenAsignaciones.popPilaVP();
+    tAux2 = TokenAsignaciones.popPilaVP();
+
+    arg1.image = tAux.image;
+    arg1.kind = tAux.kind;
+
+    arg2.image = tAux2.image;
+    arg2.kind = tAux2.kind;
+    temporal = op.newToken(op.kind);
+    System.out.println("image: " + arg1 + " type: " + arg1.kind);
+    System.out.println("image: " + arg2 + " type: " + arg2.kind);
+
+    //Entra qui si el argumento es un temporal, porque su tipo
+    if ( arg1.kind == 4 | arg1.kind == 5 | arg1.kind == 6 | arg1.kind == 47 | arg1.kind == 38 | arg1.kind == 39 | arg1.kind == 41)
+    {
+        aux = arg1.kind;
+    }
+    else{
+        aux = TokenAsignaciones.getType(arg1, func);
+        }
+
+
+    if (  arg2.kind == 4 | arg2.kind == 5 | arg2.kind == 6 | arg2.kind == 47 | arg2.kind == 38 | arg2.kind == 39 | arg2.kind == 41 )
+        {
+            aux2 = arg2.kind;
+        }
+        else{
+            aux2 = TokenAsignaciones.getType(arg2, func);
+            }
+
+        if (aux == 47 & aux2 == 47)
+            {
+                temporal.kind = 47;
+            }
+        else
+            {
+                reiniciaTodo();
+                {if (true) throw new ParseException("Los argumentos: " + arg1.image + " y " + arg2.image + " tienen que ser booleanos.");}
+            }
+        TokenAsignaciones.aumentaVarFuncTemporal(temporal.kind, func);
+
+
+        System.out.println("aaaaaa: " + arg1.image);
+        System.out.println("aaaaaa: " + arg2.image);
+
+    ////////////////////////////////////////////////// Aquí cambia los tokens por sus direcciones antes de meterlos.
+
+    arg1.image = tokenToDir(arg1, func);
+    arg1.kind = aux;
+    arg2.image = tokenToDir(arg2, func);
+    arg2.kind = aux;
+
+
+    temporal.image = String.valueOf(TokenAsignaciones.getContTemporal(temporal.kind));
+    TokenAsignaciones.pushPilaVP(temporal);
+    Quadruple quad = new Quadruple(op.image, arg1, arg2, temporal);
+    TokenAsignaciones.meterCuadruplo(quad);
+        TokenAsignaciones.subeContCuadruplos();
+
+    //quad.print();
+
+  }
+
 //////////////EXPRESION/////////////////
   static final public Token Expresion(Token func) throws ParseException {Token var;
     var = T_Exp(func);
 if (TokenAsignaciones.checkPilaOP("|"))
             {
-                creaCuadruploExp(func);
+                creaCuadruploExpBool(func);
             }
     Expresion2(func);
 {if ("" != null) return var;}
@@ -1299,7 +1377,7 @@ TokenAsignaciones.pushPilaOP(var); System.out.println(TokenAsignaciones.returnPi
 if (TokenAsignaciones.checkPilaOP("&"))
                 {
 
-                    creaCuadruploExp(func);
+                    creaCuadruploExpBool(func);
                 }
     T_Exp2(func);
 {if ("" != null) return var;}
@@ -1440,8 +1518,8 @@ op = TokenAsignaciones.popPilaOP();
     arg2.image = tAux2.image;
     arg2.kind = tAux2.kind;
     temporal = op.newToken(op.kind);
-    //System.out.println("image: " + arg1 + " type: " + arg1.kind);
-    //System.out.println("image: " + arg2 + " type: " + arg2.kind);
+    System.out.println("image: " + arg1 + " type: " + arg1.kind);
+    System.out.println("image: " + arg2 + " type: " + arg2.kind);
 
     //Entra qui si el argumento es un temporal, porque su tipo
     if ( arg1.kind == 4 | arg1.kind == 5 | arg1.kind == 6 | arg1.kind == 47 | arg1.kind == 38 | arg1.kind == 39 | arg1.kind == 41)
