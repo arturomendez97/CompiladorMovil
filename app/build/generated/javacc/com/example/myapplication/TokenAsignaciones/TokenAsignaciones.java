@@ -507,8 +507,6 @@ public class TokenAsignaciones {
                 break;
             default: break;
         }
-
-        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA " + tabla.varArray[0] + tabla.varArray[1] + tabla.varArray[2] + tabla.varArray[3] + tabla.varArray[4] + tabla.varArray[5] + tabla.varArray[6] + tabla.varArray[7]);
     }
 
     public static void aumentaVarFunc( int td, Token func )

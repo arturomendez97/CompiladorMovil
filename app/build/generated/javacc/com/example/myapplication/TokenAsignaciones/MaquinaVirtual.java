@@ -52,6 +52,18 @@ class MemoriaLocal {
         arrayCharsTemporales = new char[numCharsTemporales];
         arrayBoolsTemporales = new boolean[numBoolsTemporales];
     }
+
+    MemoriaLocal(){
+        arrayInts = new int[0];
+        arrayFloats = new float[0];
+        arrayChars = new char[0];
+        arrayBools = new boolean[0];
+
+        arrayIntsTemporales = new int[0];
+        arrayFloatsTemporales = new float[0];
+        arrayCharsTemporales = new char[0];
+        arrayBoolsTemporales = new boolean[0];
+    }
 }
 
 public class MaquinaVirtual {
@@ -137,6 +149,7 @@ public class MaquinaVirtual {
 
     private static Stack<MemoriaLocal> pilaMemorias = new Stack<MemoriaLocal>();
     private static Stack<Integer> contCuadruplo = new Stack<Integer>();
+    private static MemoriaLocal memLocal2 = new MemoriaLocal();
 
 
 
@@ -270,7 +283,12 @@ public class MaquinaVirtual {
                         ip++;
                         break;
                     case "GOSUB" :
+                        //Guardar memoria actual en el stack
+                        pilaMemorias.push(memLocal);
+                        memLocal = memLocal2;
+                        //Guardar posición actual en el stack
                         contCuadruplo.push(ip);
+                        //Cambiar de posición
                         dirResultado = Integer.parseInt(aux.resultado.image);
                         ip = dirResultado;
                         break;
@@ -281,13 +299,11 @@ public class MaquinaVirtual {
                         ip = contCuadruplo.pop()+1;
                         break;
                     case "ERA" :
-                        // Guardar memoria local actual en el stack y crear una nueva
+                        // Crear nueva memoria local
                         auxString = aux.resultado.image;
                         CustomHash tablaAux;
                         tablaAux = tablaFunc.get(auxString);
-                        MemoriaLocal memLocal2 = new MemoriaLocal(tablaAux.varArray[0], tablaAux.varArray[1], tablaAux.varArray[2], tablaAux.varArray[3], tablaAux.varArray[4], tablaAux.varArray[5], tablaAux.varArray[6], tablaAux.varArray[7]);
-                        pilaMemorias.push(memLocal);
-                        memLocal = memLocal2;
+                        memLocal2 = new MemoriaLocal(tablaAux.varArray[0], tablaAux.varArray[1], tablaAux.varArray[2], tablaAux.varArray[3], tablaAux.varArray[4], tablaAux.varArray[5], tablaAux.varArray[6], tablaAux.varArray[7]);
                         ip++;
                         break;
                     case "PARAM" :
@@ -340,9 +356,9 @@ public class MaquinaVirtual {
 
                         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Resultado
                         //ARG1 LOCALES
-                        if (arg1Int == true) { memLocal.arrayInts[contParamsInt] = auxI1; contParamsInt++;}
-                        if (arg1Float == true) { memLocal.arrayInts[contParamsFloat] = auxI1; contParamsFloat++;}
-                        if (arg1Char == true) { memLocal.arrayChars[contParamsChar] = auxC1; contParamsChar++;}
+                        if (arg1Int == true) { memLocal2.arrayInts[contParamsInt] = auxI1; contParamsInt++;}
+                        if (arg1Float == true) { memLocal2.arrayInts[contParamsFloat] = auxI1; contParamsFloat++;}
+                        if (arg1Char == true) { memLocal2.arrayChars[contParamsChar] = auxC1; contParamsChar++;}
 
                         ip++;
                         break;
