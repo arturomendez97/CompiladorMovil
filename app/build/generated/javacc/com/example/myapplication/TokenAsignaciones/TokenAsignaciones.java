@@ -1,3 +1,13 @@
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// Proyecto de Clase de Compiladores
+// Proyecto Especial de Diseño de CompiladoresCOVID19AD20: En Pareja - Lenguaje Par++
+// Elaborado por:
+// Jorge Arturo Méndez Vargas - A01176369
+// Jorge Adrían Ramos Barrena - A01176234
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// TOKENASIGNACIONES (archivo auxiliar)
+
+// Varios imports
 package com.example.myapplication.TokenAsignaciones;
 import android.os.Environment;
 
@@ -17,6 +27,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.FileWriter;
 
+// Clase Tipo_Dir
+// Esta clase nos permite almacenar tanto el tipo como la dirección de una variable
 class Tipo_Dir{
     int tipo;
     int dir;
@@ -28,12 +40,24 @@ class Tipo_Dir{
     }
 }
 
+// Clase CustomHash
+// Esta clase nos permite almacenar muchos elementos de una función dentro de la hashtable.
+// Sirve para almacenar el tipo de la función, la tabla de variables, el cuadruplo inicial de la función
+// los contadores para memoria y la cantidad de parametros.
 class CustomHash {
+    // Tipo de la función
     int tipo;
+    // Tabla de variables de la función
     Hashtable<String, Tipo_Dir> tablaV = new Hashtable();
+    // Cuadruplo inicial de la función
     int cuadruploInicial;
+    // Arreglo que guarda la cantidad de variables de cada tipo que se van a necesitar dentro de la función
     int[] varArray = new int[8];
+
+    // Arreglo que guarda la cantidad y tipo de parametros
     ArrayList<Integer> parametros = new ArrayList<Integer>();
+
+    //Constructor
     public static void main(String[] args) {
         CustomHash myObj = new CustomHash();
     }
@@ -42,9 +66,10 @@ class CustomHash {
         varArray = new int[]{0, 0, 0, 0, 0, 0, 0, 0};
     }
 }
+
+// Clase TokenAsignaciones
+// Aquí se hace basicamente todoo, y se guardan todas las tablas y estructuras.
 public class TokenAsignaciones {
-
-
 
 
     //Variable para validar asignaciones a caracteres(ichr)
@@ -97,7 +122,7 @@ public class TokenAsignaciones {
     private static int contParametros = 0;
     ////////////////////////////////////////////////////////////////////////////////////////////////       TODO
 
-
+    // FUnción para reiniciar todo
     public static void reiniciaTodo()
         {
             emptyPilaOP();
@@ -116,6 +141,7 @@ public class TokenAsignaciones {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////        Comienza Maquina Virtual
 
+    // Aquí termina la fase de compilación, y le pasamos toodo lo relevante a la maquina virtual para seguir con la ejecución.
     public static void comienzaMaquinaVirtual()
     {
         MaquinaVirtual.Comienza(tablaVarsGlobal, varArrayGlobal, tablaFunc, tablaConst, cuadruplos);
@@ -623,6 +649,7 @@ public class TokenAsignaciones {
         return tabla.parametros.size();
     }
 
+    // Checa si el tipo enviado es igual al del parametro quse le va a enviar
     public static Boolean checaTipoParams(int td, Token func)
     {
         CustomHash tabla;
@@ -673,6 +700,7 @@ public class TokenAsignaciones {
         return Integer.toString(direccion);
     }
 
+    // Esta función obtiene la dirección de una variable dentro de una función
     public static int getDir(Token checkTok, Token nombreFuncion)
     {
         CustomHash tabla;
@@ -708,10 +736,9 @@ public class TokenAsignaciones {
     }
 
 
-    //variable		//tipoDato
+    //En este metodo se agrega a la tabla de tokens el identificador que esta siendo declarado junto con su tipo de dato y su dirección
     public static String InsertarSimbolo(Token identificador, int tipo, Token nombreFuncion)
     {
-        //En este metodo se agrega a la tabla de tokens el identificador que esta siendo declarado junto con su tipo de dato y su dirección
         try
         {
             CustomHash tabla;
@@ -728,9 +755,9 @@ public class TokenAsignaciones {
         }
     }
 
+    //En este metodo se agrega a la tabla de tokens global el identificador que esta siendo declarado junto con su tipo de dato y direccion
     public static void InsertarSimboloGlobal(Token identificador, int tipo)
     {
-        //En este metodo se agrega a la tabla de tokens el identificador que esta siendo declarado junto con su tipo de dato y direccion
         Tipo_Dir objeto = new Tipo_Dir(tipo, getContGlobal(tipo));
         tablaVarsGlobal.put(identificador.image, objeto);
 
@@ -744,6 +771,7 @@ public class TokenAsignaciones {
         tablaVarsGlobal.put(nombreFuncion.image, objeto);
     }
 
+    // Regresa el tipo de la función
     public static int getfunctipo(Token nombreFuncion)
     {
         CustomHash tabla = tablaFunc.get(nombreFuncion.image);
@@ -802,6 +830,7 @@ public class TokenAsignaciones {
     }
 
 
+    // Inserta función a la tabla de funciones
     public static String InsertarFuncion(Token nombreFuncion, int tipo, int contCuadruplos)
     {
         try
@@ -817,6 +846,8 @@ public class TokenAsignaciones {
             return "Error: La funcion " + nombreFuncion.image + " No se pudo declarar \r\nLinea: ";
         }
     }
+
+    // Inserta el main a la tabla de funciones
     public static void InsertarMain(Token identificador)
     {
         //En este metodo se agrega a la tabla de funciones el identificador que esta siendo declarado junto con su tipo de dato
@@ -828,6 +859,7 @@ public class TokenAsignaciones {
 
     /*Metodo que verifica si un identificador ha sido declarado,
         ej cuando se declaran las asignaciones: i++, i--)*/
+    // Primero checa en la tabla de variables globales, y después en la local, con el nombre de la función
     public static String checkVariable(Token checkTok, Token nombreFuncion)
     {
         CustomHash tabla;

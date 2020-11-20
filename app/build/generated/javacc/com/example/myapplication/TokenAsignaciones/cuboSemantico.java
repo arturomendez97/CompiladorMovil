@@ -1,3 +1,12 @@
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// Proyecto de Clase de Compiladores
+// Proyecto Especial de Diseño de CompiladoresCOVID19AD20: En Pareja - Lenguaje Par++
+// Elaborado por:
+// Jorge Arturo Méndez Vargas - A01176369
+// Jorge Adrían Ramos Barrena - A01176234
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// MAQUINA VIRTUAL (Archivo eauxiliar)
+
 package com.example.myapplication.TokenAsignaciones;
 import java.lang.String;
 

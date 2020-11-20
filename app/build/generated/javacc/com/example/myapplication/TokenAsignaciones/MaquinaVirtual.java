@@ -1,26 +1,43 @@
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// Proyecto de Clase de Compiladores
+// Proyecto Especial de Diseño de CompiladoresCOVID19AD20: En Pareja - Lenguaje Par++
+// Elaborado por:
+// Jorge Arturo Méndez Vargas - A01176369
+// Jorge Adrían Ramos Barrena - A01176234
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// MAQUINA VIRTUAL  (Ejecución)
+
+
+// Se importa como paquete lo que está dentro del folder Tokenasignaciones
 package com.example.myapplication.TokenAsignaciones;
 
-
+// Import de android para acceder al path del dispositivo
 import android.os.Environment;
 
+// Import de la clase token
 import com.example.myapplication.parser.Token;
 
+// Imports para manejo de archivos
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+
+// Imports de estructuras
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Stack;
 
-
+// Clase para la memoria global.
+// Incluye arreglos de ints, floats, y chars.
 class MemoriaGlobal {
     int[] arrayInts;
     float[] arrayFloats;
     char[] arrayChars;
 
+    // El tamaño de los arreglos depende de lo que le mandemos
     MemoriaGlobal(int numInts, int numFloats, int numChars){
 
         arrayInts = new int[numInts];
@@ -29,6 +46,8 @@ class MemoriaGlobal {
     }
 }
 
+// Clase para la memoria local
+// En este caso tenemos también arreglos para bool y para temporales
 class MemoriaLocal {
     int[] arrayInts;
     float[] arrayFloats;
@@ -41,6 +60,7 @@ class MemoriaLocal {
     boolean[] arrayBoolsTemporales;
 
 
+    // el tamaño de los arreglos depende de lo que le mandemos
     MemoriaLocal(int numInts, int numFloats, int numChars, int numBools, int numIntsTemporales, int numFloatsTemporales, int numCharsTemporales, int numBoolsTemporales){
         arrayInts = new int[numInts];
         arrayFloats = new float[numFloats];
@@ -53,6 +73,7 @@ class MemoriaLocal {
         arrayBoolsTemporales = new boolean[numBoolsTemporales];
     }
 
+    // También se puede crear una vacia.
     MemoriaLocal(){
         arrayInts = new int[0];
         arrayFloats = new float[0];
@@ -66,6 +87,8 @@ class MemoriaLocal {
     }
 }
 
+// Clase maquina virtual
+// Aquí se hace toda la ejecución
 public class MaquinaVirtual {
 /*
 
@@ -138,6 +161,7 @@ public class MaquinaVirtual {
 
  */
 
+    // Se declaran todas las variables que se van a necesitar
     private static Hashtable<String, Tipo_Dir> tablaVarsGlobal = new Hashtable();
     private static int[] varArrayGlobal = new int[]{0, 0, 0, 0};
     //Tabla que almacenara las funciones declaradas
@@ -154,9 +178,10 @@ public class MaquinaVirtual {
 
 
 
-
+    //Esta es la función principal, y donde se ejecuta tdodo el programa. Recibe muchos argumentos de tokenasignaciones. Todas las tablas y cuadruplos.
     public static void Comienza(Hashtable<String, Tipo_Dir> vGlobal, int[] arrGlobal, Hashtable<String, CustomHash> funcs, Hashtable<Integer, String> constantes, ArrayList<Quadruple> cuads)
     {
+        //Se obtienen las variables necesarias.
         ip = 0;
         text = "";
         tablaVarsGlobal = vGlobal;
@@ -175,10 +200,7 @@ public class MaquinaVirtual {
         //System.out.println(tablaFunc);
         MemoriaLocal memLocal = new MemoriaLocal(tabla.varArray[0], tabla.varArray[1], tabla.varArray[2], tabla.varArray[3], tabla.varArray[4], tabla.varArray[5], tabla.varArray[6], tabla.varArray[7]);
 
-
-        //RECORRE CUADRUPLOS
-
-
+        // Variables auxiliares
         Quadruple aux;
         int constInt;
         float constFloat;
@@ -208,6 +230,8 @@ public class MaquinaVirtual {
         boolean arg1Int = false, arg1Float = false, arg2Int = false, arg2Float = false, arg1Char = false, arg2Char = false;
 
         int contParamsInt = 0, contParamsFloat = 0, contParamsChar = 0;
+
+        //RECORRE CUADRUPLOS
 
         while (ip < cuadruplos.size())
         {

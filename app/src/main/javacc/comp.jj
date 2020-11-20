@@ -1,3 +1,13 @@
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// Proyecto de Clase de Compiladores
+// Proyecto Especial de Diseño de CompiladoresCOVID19AD20: En Pareja - Lenguaje Par++
+// Elaborado por:
+// Jorge Arturo Méndez Vargas - A01176369
+// Jorge Adrían Ramos Barrena - A01176234
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// COMP (compilación)
+
+// Opciones del parser
 options {
   BUILD_PARSER = true;
   BUILD_TOKEN_MANAGER = true;
@@ -21,23 +31,18 @@ options {
   UNICODE_INPUT = false;
   IGNORE_CASE = false;
 }
-
+// Comienza el parser y se hacen algunos imports de clases y archivos
 PARSER_BEGIN(comp)
 package com.example.myapplication.parser;
 import com.example.myapplication.TokenAsignaciones.TokenAsignaciones;
 import com.example.myapplication.TokenAsignaciones.Quadruple;
 
-
+// La clase comp no contiene nada dentro, solo se declara.
 public class comp {
 
 }
 
-
-
-
-
-
-
+// Se termina el parser
 PARSER_END(comp)
 
 /**
@@ -49,7 +54,7 @@ PARSER_END(comp)
  * Matching parentheses production.
  */
 
-
+// Aquí comienza la declaración de todos los tokens
 ////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////TOKENS///////////////////////////////////////
 
@@ -123,7 +128,7 @@ TOKEN:
     | <CTEC : "'"["a"-"z","A"-"Z","0"-"9"]"'" >//41
 
 }
-/// Tokens que se olvidaron
+/// Tokens que se olvidaron y se agregaron despúes
 TOKEN:
 {
     <BRACKETIZQ: "[" > {System.out.println("BRACKETIZQ -> "+image);} //42
@@ -136,7 +141,7 @@ TOKEN:
 
 }
 
-
+// Cosas que se  ignoran. Espacios en blanco y saltos de linea.
 SKIP :
 {
     " " | "\r\n" | "\t" | "\n"
@@ -146,7 +151,7 @@ SKIP :
 ////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////Gramática////////////////////////////////////
 
-
+// Aquí es donde inicia el programa
 //////////////PROGRAMA/////////////////
 void Programa() :
 {
@@ -161,13 +166,16 @@ void Programa() :
      }
     <PROGRAMA><ID><SEMICOLON>Mis_Vars_Global()Mis_Func()Main()
     creaCuadruploEnd()
-    <EOF>//
+    <EOF>
     {
-
+        //Algunos prints para debuggear
         TokenAsignaciones.printCuadruplos();
         System.out.println("Pila Saltos: " + TokenAsignaciones.returnPilaSaltos());
         System.out.println("Pila VP: " + TokenAsignaciones.returnPilaVP());
+
+        //Acabando la gramática se pasa a la parte de ejecución en la maquina virtual
         TokenAsignaciones.comienzaMaquinaVirtual();
+        //Despúes se reinician todas las variables
         reiniciaTodo();
 
 
@@ -176,6 +184,7 @@ void Programa() :
     }
 }
 
+// Función auxiliar que reinicia todas las variables.
 void reiniciaTodo() :
 {}
 {
@@ -195,6 +204,7 @@ void reiniciaTodo() :
     }
  }
 
+// Crea el cuadruplo final
 void creaCuadruploEnd() :
 {}
 {
@@ -531,11 +541,13 @@ void Parametros( Token func, Token funcLlamada) :
 }
 {
         {
+            // Hacemos push de un paréntesis para que no se agarren operadores de expresiones anteriores, como un =
             parentesis.image = "(";
             parentesis.kind = 20;
             TokenAsignaciones.pushPilaOP(parentesis);
         }
         Expresion(func)
+        // Sacamos el paréntesis
         {TokenAsignaciones.popPilaOP();}
         creaCuadruploParametro(func, funcLlamada)
         Params(func, funcLlamada)
@@ -746,12 +758,14 @@ void rellenaCuadruploGotoF() :
 }
 {
     {
+        // Primero vemos en que cuadruplo estamos actualmente
         cuadruploActual = TokenAsignaciones.getContCuadruplos();
         //Haces pop de los últimos dos, y agarras el de mero atras
         cuadruploExtra = TokenAsignaciones.popPilaSaltos();
         cuadruploModificar = TokenAsignaciones.popPilaSaltos();
         //Regresas el otro
         TokenAsignaciones.pushPilaSaltos(cuadruploExtra);
+        // Completamos el goto llamando a la funcion y mandando el cuadruplo a modificar y el número de cuadruplo actual que es el valor que va a llenar.
         TokenAsignaciones.completaGOTO(cuadruploModificar, cuadruploActual);
     }
 }
@@ -862,9 +876,7 @@ Token Asignacion( Token func) :
     }
 }
 
-//////////////CREA CUADRUPLO GENERICO/////////////////
-
-
+//////////////CREA CUADRUPLO ASIGNACION/////////////////
 void creaCuadruploAsignacion(Token op, Token func) :
 {
      Token arg1  = new Token();
@@ -1192,64 +1204,7 @@ Token Llamada( Token func ) :
     //creaCuadruploRecibirValor(funcLlamada, func)
     {return funcLlamada;}
 }
-/*
-void creaCuadruploRecibirValor( Token funcLlamada, Token func) :
-{
-     Token arg1;
-     Token arg2;
-     Token op  = new Token();
-     int aux;
-     int aux2;
-}
-{
-    {
-         arg1 = TokenAsignaciones.popPilaVP();
-         arg2 = funcLlamada;
-        op.image = "=";
 
-
-         //El if es para cuando es un temporal o una constante
-         if ( arg1.kind == 4 | arg1.kind == 5 | arg1.kind == 6 | arg1.kind == 47 | arg1.kind == 38 | arg1.kind == 39 | arg1.kind == 41)
-         {
-             aux = arg1.kind;
-         }
-         else
-         {
-             aux = TokenAsignaciones.getType(arg1, func);
-         }
-
-         if ( arg2.kind == 4 | arg2.kind == 5 | arg2.kind == 6 | arg2.kind == 47 | arg2.kind == 38 | arg2.kind == 39 | arg2.kind == 41)
-         {
-             aux2 = arg2.kind;
-         }
-         else{
-             aux2 = TokenAsignaciones.getType(arg2, func);
-         }
-
-         //System.out.println("aux: " + aux);
-
-         //System.out.println("aux2: " + aux2);
-
-         if (TokenAsignaciones.getCuboType(aux2,aux,op.image) == 0)
-             {
-                 throw new ParseException("Los argumentos: " + arg1.image + " y " + arg2.image + " no son compatibles.");
-             }
-
-         arg1.image = tokenToDir(arg1, func);
-         arg1.kind = aux;
-         arg2.image = tokenToDir(arg2, func);
-         arg2.kind = aux;
-
-
-         Quadruple quad = new Quadruple(op.image, arg1, null, arg2);
-         TokenAsignaciones.meterCuadruplo(quad);
-             TokenAsignaciones.subeContCuadruplos();
-
-             //quad.print();
-    }
-}
-
-*/
 void creaCuadruploGoSub(Token funcLlamada) :
 {
      Token aux = new Token();
