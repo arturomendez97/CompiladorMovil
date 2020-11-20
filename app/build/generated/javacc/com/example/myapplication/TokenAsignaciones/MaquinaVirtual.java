@@ -411,7 +411,14 @@ public class MaquinaVirtual {
                         if (dirResultado >= 4000 && dirResultado < 5000) { intValue = memLocal.arrayInts[dirResultado-4000]; text += Integer.toString(intValue); }
                         else if (dirResultado >= 5000 && dirResultado < 6000) { floatValue = memLocal.arrayFloats[dirResultado-5000]; text += Float.toString(floatValue); }
                         else if (dirResultado >= 6000 && dirResultado < 7000) { charValue = memLocal.arrayChars[dirResultado-6000]; text += charValue; }
+                        //TEMPORALES
+                        if (dirResultado >= 7000 && dirResultado < 8000) { intValue = memLocal.arrayIntsTemporales[dirResultado-7000]; text += Integer.toString(intValue); }
+                        else if (dirResultado >= 8000 && dirResultado < 9000) { floatValue = memLocal.arrayFloatsTemporales[dirResultado-8000]; text += Float.toString(floatValue); }
+                        else if (dirResultado >= 9000 && dirResultado < 10000) { charValue = memLocal.arrayCharsTemporales[dirResultado-9000]; text += charValue; }
+                        else if (dirResultado >= 10000 && dirResultado < 11000) { auxString = Boolean.toString(memLocal.arrayBoolsTemporales[dirResultado-10000]); text += auxString; }
                         // CONSTANTES
+                        else if (dirResultado >= 11000 && dirResultado < 12000) { auxString = tablaConst.get(dirResultado); text += auxString; }
+                        else if (dirResultado >= 12000 && dirResultado < 13000) { auxString = tablaConst.get(dirResultado); text += auxString; }
                         else if (dirResultado >= 13000) { auxString = tablaConst.get(dirResultado); constChar = auxString.charAt(1); text += constChar; }
                         text += "\r\n";
                         ip++;

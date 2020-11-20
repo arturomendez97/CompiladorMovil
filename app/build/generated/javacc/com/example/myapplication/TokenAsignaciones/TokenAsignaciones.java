@@ -26,17 +26,38 @@ import java.util.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.FileWriter;
+import java.util.LinkedList;
+
+
+class DimType {
+    int linf;
+    int lsup;
+    int m;
+
+    public DimType()
+    {
+        linf = 0;
+        lsup = 0;
+        m = 0;
+    }
+
+
+}
 
 // Clase Tipo_Dir
 // Esta clase nos permite almacenar tanto el tipo como la dirección de una variable
 class Tipo_Dir{
     int tipo;
     int dir;
+    boolean isArray;
+    ArrayList<DimType> dim;
 
     public Tipo_Dir(int t, int d)
     {
         tipo = t;
         dir = d;
+        isArray = false;
+        dim = new ArrayList<DimType>();
     }
 }
 
@@ -91,6 +112,11 @@ public class TokenAsignaciones {
     ///////////////////////////////////////////////////////////////////////////////////////////////         DECLARACION ARRAY CUADRUPLOS
     private static ArrayList<Quadruple> cuadruplos = new ArrayList<Quadruple>();
 
+    ///////////////////////////////////////////////////////////////////////////////////////////////         DECLARACION VARIABLES ARRAYS
+    private static int dim = 0;
+    private static int r = 0;
+
+
 
     ///////////////////////////////////////////////////////////////////////////////////////////////         DECLARACION DIRECCIONES DE MEMORIA
 
@@ -137,6 +163,16 @@ public class TokenAsignaciones {
             resetContCuadruplos();
             //TokenAsignaciones.printNumVarsGlobal();
             resetNumVarsGlobal();
+            reiniciaTablas();
+            dim = 0;
+            r = 0;
+        }
+
+        public static void reiniciaTablas()
+        {
+            tablaVarsGlobal.clear();
+            tablaFunc.clear();
+            tablaConst.clear();
         }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////        Comienza Maquina Virtual
@@ -510,6 +546,203 @@ public class TokenAsignaciones {
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////        TABLAS
+
+    public static void arraySegundaPasada(Token func, Token var)
+    {
+        int offset = 0;
+        int Size = r;
+        int mDim = 0;
+
+        CustomHash tabla;
+        Tipo_Dir aux;
+        DimType aux2 = new DimType();
+
+        try
+        {
+            aux = tablaVarsGlobal.get(var.image);
+            //Obtienes el primer nodo
+            aux2 = aux.dim.get(0);
+            mDim = r/(aux2.lsup-aux2.linf+1);
+            aux2.m = mDim;
+            aux.dim.set(0, aux2);
+            r = mDim;
+            offset = offset + aux2.linf*mDim;
+            System.out.println("PRIMER NODO: " + aux2.linf + " " + aux2.lsup + " " + aux2.m);
+            System.out.println("ARRAY SIZE: " + aux.dim.size());
+
+
+            if (aux.dim.size() == 2)
+            {
+                aux2 = aux.dim.get(1);
+                mDim = r/(aux2.lsup-aux2.linf+1);
+                r = mDim;
+                offset = offset + aux2.linf*mDim;
+                aux2.m = -offset;
+                aux.dim.set(1, aux2);
+                System.out.println("SEGUNDO NODO: " + aux2.linf + " " + aux2.lsup + " " + aux2.m);
+            }
+            else{
+                aux2 = aux.dim.get(0);
+                aux2.m = 0;
+                aux.dim.set(0, aux2);
+                System.out.println("PRIMER NODO final: " + aux2.linf + " " + aux2.lsup + " " + aux2.m);
+
+            }
+
+            tablaVarsGlobal.put(var.image, aux);
+
+
+        }
+        catch (Exception e)
+        {
+            try
+            {
+                tabla = tablaFunc.get(func.image);
+                try
+                {
+                    //Intenta obtener el token a verificar(checkTok) de la tabla de los tokens
+                    aux = tabla.tablaV.get(var.image);
+                    //Obtienes el primer nodo
+                    aux2 = aux.dim.get(0);
+                    mDim = r/(aux2.lsup-aux2.linf+1);
+                    aux2.m = mDim;
+                    aux.dim.set(0, aux2);
+                    r = mDim;
+                    offset = offset + aux2.linf*mDim;
+                    System.out.println("PRIMER NODO: " + aux2.linf + " " + aux2.lsup + " " + aux2.m);
+
+                    if (aux.dim.size() == 2)
+                    {
+                        aux2 = aux.dim.get(1);
+                        mDim = r/(aux2.lsup-aux2.linf+1);
+                        r = mDim;
+                        offset = offset + aux2.linf*mDim;
+                        aux2.m = -offset;
+                        aux.dim.set(1, aux2);
+                        System.out.println("SEGUNDO NODO: " + aux2.linf + " " + aux2.lsup + " " + aux2.m);
+                    }
+                    else{
+                        aux2 = aux.dim.get(0);
+                        aux2.m = 0;
+                        aux.dim.set(0, aux2);
+                        System.out.println("PRIMER NODO final: " + aux2.linf + " " + aux2.lsup + " " + aux2.m);
+                    }
+
+                    tablaVarsGlobal.put(var.image, aux);
+
+                }
+                catch(Exception f)
+                {
+
+                }
+            }
+            catch(Exception g)
+            {
+            }
+        }
+
+
+    }
+
+    public static void aumentaDim(Token func, Token var, Token numDim)
+    {
+        dim = dim + 1;
+        CustomHash tabla;
+        Tipo_Dir aux;
+        DimType aux2 = new DimType();
+
+        try
+        {
+            aux = tablaVarsGlobal.get(var.image);
+
+            aux2.linf = 0;
+            aux2.lsup = Integer.parseInt(numDim.image);
+            aux.dim.add(aux2);
+            r = (aux2.lsup - aux2.linf + 1) * r;
+        }
+        catch (Exception e)
+        {
+            System.out.println(e);
+            try
+            {
+                tabla = tablaFunc.get(func.image);
+                try
+                {
+                    //Intenta obtener el token a verificar(checkTok) de la tabla de los tokens
+                    aux = tabla.tablaV.get(var.image);
+
+                    aux2.linf = 0;
+                    aux2.lsup = Integer.parseInt(numDim.image);
+
+                    aux.dim.add(aux2);
+
+                    r = (aux2.lsup - aux2.linf + 1) * r;
+                }
+                catch(Exception f)
+                {
+
+                }
+            }
+            catch(Exception g)
+            {
+            }
+        }
+
+    }
+
+    public static void setVarAsArray(Token func, Token var, Token numDim)
+    {
+        CustomHash tabla;
+        Tipo_Dir aux;
+        DimType aux2 = new DimType();
+
+        try
+        {
+            aux = tablaVarsGlobal.get(var.image);
+            aux.isArray = true;
+
+            aux2.linf = 0;
+            aux2.lsup = Integer.parseInt(numDim.image);
+            System.out.println("ARRAY SIZE+1: " + var);
+
+            aux.dim.add(aux2);
+
+            dim = 1;
+            r = 1;
+
+            r = (aux2.lsup - aux2.linf + 1) * r;
+        }
+        catch (Exception e)
+        {
+            try
+            {
+                tabla = tablaFunc.get(func.image);
+                try
+                {
+                    //Intenta obtener el token a verificar(checkTok) de la tabla de los tokens
+                    aux = tabla.tablaV.get(var.image);
+                    aux.isArray = true;
+                    aux2.linf = 0;
+                    aux2.lsup = Integer.parseInt(numDim.image);
+                    System.out.println("ARRAY SIZE+1: " + var);
+
+                    aux.dim.add(aux2);
+
+                    dim = 1;
+                    r = 1;
+
+                    r = (aux2.lsup - aux2.linf + 1) * r;
+                }
+                catch(Exception f)
+                {
+
+                }
+            }
+            catch(Exception g)
+            {
+            }
+        }
+    }
 
     public static void aumentaVarFuncTemporal( int td, Token func)
     {

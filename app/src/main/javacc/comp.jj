@@ -201,6 +201,7 @@ void reiniciaTodo() :
          TokenAsignaciones.resetContCuadruplos();
          //TokenAsignaciones.printNumVarsGlobal();
          TokenAsignaciones.resetNumVarsGlobal();
+         TokenAsignaciones.reiniciaTablas();
     }
  }
 
@@ -241,7 +242,7 @@ void Vars2_Global() :
     }
     var = <ID>
     {TokenAsignaciones.InsertarSimboloGlobal(var, td);}
-    Dim()
+    Dim(null, var)
     MasV_Global( td ) <SEMICOLON> MasT_Global()
 }
 
@@ -257,7 +258,7 @@ void MasV_Global( int td) :
             TokenAsignaciones.aumentaVarFuncGlobal(td);
             TokenAsignaciones.InsertarSimboloGlobal(var, td);
         }
-        Dim()
+        Dim(null, var)
         MasV_Global(td)
      | Empty()
 
@@ -308,21 +309,34 @@ void Vars2(Token func) :
 		    throw new ParseException(res);
 		}
 	}
-    Dim()
+    Dim(func, var)
     MasV( td, func ) <SEMICOLON> MasT(func)
 }
 
-void Dim() :
-{}
+void Dim(Token func, Token var) :
 {
-        <BRACKETIZQ><CTEI><BRACKETDER>MasDim()
+    Token numDim;
+}
+{
+        <BRACKETIZQ>
+        numDim = <CTEI>
+        <BRACKETDER>
+        {TokenAsignaciones.setVarAsArray(func, var, numDim);}
+        MasDim(func, var)
+        {TokenAsignaciones.arraySegundaPasada(func, var);}
       | Empty()
 }
 
-void MasDim() :
-{}
+void MasDim(Token func, Token var) :
 {
-        <BRACKETIZQ><CTEI><BRACKETDER>
+    Token numDir;
+ }
+{
+
+        <BRACKETIZQ>
+        numDir =<CTEI>
+        <BRACKETDER>
+        {TokenAsignaciones.aumentaDim(func, var, numDir);}
       | Empty()
 }
 
