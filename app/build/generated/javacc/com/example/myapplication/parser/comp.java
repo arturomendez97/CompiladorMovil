@@ -84,7 +84,7 @@ Quadruple quad = new Quadruple("END", null, null, null);
 TokenAsignaciones.aumentaVarFuncGlobal(td);
     var = jj_consume_token(ID);
 TokenAsignaciones.InsertarSimboloGlobal(var, td);
-    Dim(null, var);
+    Dim(null, var, td);
     MasV_Global(td);
     jj_consume_token(SEMICOLON);
     MasT_Global();
@@ -97,7 +97,7 @@ TokenAsignaciones.InsertarSimboloGlobal(var, td);
       var = jj_consume_token(ID);
 TokenAsignaciones.aumentaVarFuncGlobal(td);
             TokenAsignaciones.InsertarSimboloGlobal(var, td);
-      Dim(null, var);
+      Dim(null, var, td);
       MasV_Global(td);
       break;
       }
@@ -152,13 +152,13 @@ res = TokenAsignaciones.InsertarSimbolo(var, td, func);
                     reiniciaTodo();
                     {if (true) throw new ParseException(res);}
                 }
-    Dim(func, var);
+    Dim(func, var, td);
     MasV(td, func);
     jj_consume_token(SEMICOLON);
     MasT(func);
   }
 
-  static final public void Dim(Token func, Token var) throws ParseException {Token numDim;
+  static final public void Dim(Token func, Token var, int td) throws ParseException {Token numDim;
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case BRACKETIZQ:{
       jj_consume_token(BRACKETIZQ);
@@ -167,6 +167,14 @@ res = TokenAsignaciones.InsertarSimbolo(var, td, func);
 TokenAsignaciones.setVarAsArray(func, var, numDim);
       MasDim(func, var);
 TokenAsignaciones.arraySegundaPasada(func, var);
+if(func == null)
+            {
+                TokenAsignaciones.aumentaVarFuncGlobalArrays(td);
+            }
+            else{
+                TokenAsignaciones.aumentaVarFuncArrays(td, func);
+            }
+TokenAsignaciones.aumentaContVar(func, td);
       break;
       }
     default:

@@ -242,7 +242,7 @@ void Vars2_Global() :
     }
     var = <ID>
     {TokenAsignaciones.InsertarSimboloGlobal(var, td);}
-    Dim(null, var)
+    Dim(null, var, td)
     MasV_Global( td ) <SEMICOLON> MasT_Global()
 }
 
@@ -258,7 +258,7 @@ void MasV_Global( int td) :
             TokenAsignaciones.aumentaVarFuncGlobal(td);
             TokenAsignaciones.InsertarSimboloGlobal(var, td);
         }
-        Dim(null, var)
+        Dim(null, var, td)
         MasV_Global(td)
      | Empty()
 
@@ -309,11 +309,11 @@ void Vars2(Token func) :
 		    throw new ParseException(res);
 		}
 	}
-    Dim(func, var)
+    Dim(func, var, td)
     MasV( td, func ) <SEMICOLON> MasT(func)
 }
 
-void Dim(Token func, Token var) :
+void Dim(Token func, Token var, int td) :
 {
     Token numDim;
 }
@@ -324,6 +324,15 @@ void Dim(Token func, Token var) :
         {TokenAsignaciones.setVarAsArray(func, var, numDim);}
         MasDim(func, var)
         {TokenAsignaciones.arraySegundaPasada(func, var);}
+        {   if(func == null)
+            {
+                TokenAsignaciones.aumentaVarFuncGlobalArrays(td);
+            }
+            else{
+                TokenAsignaciones.aumentaVarFuncArrays(td, func);
+            }
+        }
+        {TokenAsignaciones.aumentaContVar(func, td);}
       | Empty()
 }
 

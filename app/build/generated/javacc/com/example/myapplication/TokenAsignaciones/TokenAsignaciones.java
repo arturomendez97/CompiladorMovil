@@ -114,7 +114,7 @@ public class TokenAsignaciones {
 
     ///////////////////////////////////////////////////////////////////////////////////////////////         DECLARACION VARIABLES ARRAYS
     private static int dim = 0;
-    private static int r = 0;
+    private static int r = 1;
 
 
 
@@ -165,7 +165,7 @@ public class TokenAsignaciones {
             resetNumVarsGlobal();
             reiniciaTablas();
             dim = 0;
-            r = 0;
+            r = 1;
         }
 
         public static void reiniciaTablas()
@@ -343,15 +343,15 @@ public class TokenAsignaciones {
         {
             case 4:
                 temp = contLI;
-                contLI++;
+                contLI+=1;
                 return temp;
             case 5:
                 temp = contLF;
-                contLF++;
+                contLF+=1;
                 return temp;
             case 6:
                 temp = contLC;
-                contLC++;
+                contLC+=1;
                 return temp;
             default: return -1;
         }
@@ -365,19 +365,59 @@ public class TokenAsignaciones {
         {
             case 4:
                 temp = contGI;
-                contGI++;
+                contGI+=1;
                 return temp;
             case 5:
                 temp = contGF;
-                contGF++;
+                contGF+=1;
                 return temp;
             case 6:
                 temp = contGC;
-                contGC++;
+                contGC+=1;
                 return temp;
             default: return -1;
         }
     }
+
+    public static void aumentaContVar(Token func, int td)
+    {
+
+        if(func == null)
+        {
+            switch (td)
+            {
+                case 4:
+                    contGI= contGI+(r-1);
+                    break;
+                case 5:
+                    contGF= contGF+(r-1);
+                    break;
+                case 6:
+                    contGC= contGC+(r-1);
+                    break;
+                default:         System.out.println("Error : "+td);
+
+            }
+        }
+        else {
+            int temp;
+            switch (td)
+            {
+                case 4:
+                    contLI= contLI+(r-1);
+                    break;
+                case 5:
+                    contLF= contLF+(r-1);
+                    break;
+                case 6:
+                    contLC= contLC+(r-1);
+                    break;
+                default:         System.out.println("Error : "+td);
+
+            }
+        }
+    }
+
 
     //Este se usa para guardar constantes
     public static int getContConst(int tipo)
@@ -565,7 +605,7 @@ public class TokenAsignaciones {
             mDim = r/(aux2.lsup-aux2.linf+1);
             aux2.m = mDim;
             aux.dim.set(0, aux2);
-            r = mDim;
+            //r = mDim;
             offset = offset + aux2.linf*mDim;
             System.out.println("PRIMER NODO: " + aux2.linf + " " + aux2.lsup + " " + aux2.m);
             System.out.println("ARRAY SIZE: " + aux.dim.size());
@@ -575,7 +615,7 @@ public class TokenAsignaciones {
             {
                 aux2 = aux.dim.get(1);
                 mDim = r/(aux2.lsup-aux2.linf+1);
-                r = mDim;
+                //r = mDim;
                 offset = offset + aux2.linf*mDim;
                 aux2.m = -offset;
                 aux.dim.set(1, aux2);
@@ -607,7 +647,7 @@ public class TokenAsignaciones {
                     mDim = r/(aux2.lsup-aux2.linf+1);
                     aux2.m = mDim;
                     aux.dim.set(0, aux2);
-                    r = mDim;
+                    //r = mDim;
                     offset = offset + aux2.linf*mDim;
                     System.out.println("PRIMER NODO: " + aux2.linf + " " + aux2.lsup + " " + aux2.m);
 
@@ -615,7 +655,7 @@ public class TokenAsignaciones {
                     {
                         aux2 = aux.dim.get(1);
                         mDim = r/(aux2.lsup-aux2.linf+1);
-                        r = mDim;
+                        //r = mDim;
                         offset = offset + aux2.linf*mDim;
                         aux2.m = -offset;
                         aux.dim.set(1, aux2);
@@ -641,7 +681,6 @@ public class TokenAsignaciones {
             }
         }
 
-
     }
 
     public static void aumentaDim(Token func, Token var, Token numDim)
@@ -658,6 +697,7 @@ public class TokenAsignaciones {
             aux2.linf = 0;
             aux2.lsup = Integer.parseInt(numDim.image);
             aux.dim.add(aux2);
+
             r = (aux2.lsup - aux2.linf + 1) * r;
         }
         catch (Exception e)
@@ -687,7 +727,6 @@ public class TokenAsignaciones {
             {
             }
         }
-
     }
 
     public static void setVarAsArray(Token func, Token var, Token numDim)
@@ -711,6 +750,7 @@ public class TokenAsignaciones {
             r = 1;
 
             r = (aux2.lsup - aux2.linf + 1) * r;
+
         }
         catch (Exception e)
         {
@@ -729,7 +769,7 @@ public class TokenAsignaciones {
                     aux.dim.add(aux2);
 
                     dim = 1;
-                    r = 1;
+                     r =1;
 
                     r = (aux2.lsup - aux2.linf + 1) * r;
                 }
@@ -768,6 +808,30 @@ public class TokenAsignaciones {
         }
     }
 
+    public static void aumentaVarFuncArrays( int td, Token func )
+    {
+        CustomHash tabla;
+        tabla = tablaFunc.get(func.image);
+        //tabla.varArray[0] += 1;
+
+        switch (td)
+        {
+            case 4:
+                tabla.varArray[0] += r-1;
+                break;
+            case 5:
+                tabla.varArray[1] += r-1;
+                break;
+            case 6:
+                tabla.varArray[2] += r-1;
+                break;
+            case 47:
+                tabla.varArray[3] += r-1;
+                break;
+            default: break;
+        }
+    }
+
     public static void aumentaVarFunc( int td, Token func )
     {
         CustomHash tabla;
@@ -787,6 +851,27 @@ public class TokenAsignaciones {
                 break;
             case 47:
                 tabla.varArray[3] += 1;
+                break;
+            default: break;
+        }
+    }
+
+    public static void aumentaVarFuncGlobalArrays(int td)
+    {
+
+        switch (td)
+        {
+            case 4:
+                varArrayGlobal[0] += r-1;
+                break;
+            case 5:
+                varArrayGlobal[1] += r-1;
+                break;
+            case 6:
+                varArrayGlobal[2] += r-1;
+                break;
+            case 47:
+                varArrayGlobal[3] += r-1;
                 break;
             default: break;
         }
