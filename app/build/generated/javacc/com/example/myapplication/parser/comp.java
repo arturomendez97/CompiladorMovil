@@ -198,33 +198,174 @@ TokenAsignaciones.aumentaDim(func, var, numDir);
     }
   }
 
-  static final public void Dim_Expresion(Token func) throws ParseException {
+  static final public void Dim_Expresion(Token func, Token var) throws ParseException {
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case BRACKETIZQ:{
       jj_consume_token(BRACKETIZQ);
       Expresion(func);
       jj_consume_token(BRACKETDER);
-      MasDim_Expresion(func);
+      MasDim_Expresion(func, var);
       break;
       }
     default:
       jj_la1[6] = jj_gen;
       Empty();
+TokenAsignaciones.pushPilaVP(var);
     }
   }
 
-  static final public void MasDim_Expresion(Token func) throws ParseException {
+  static final public void MasDim_Expresion(Token func, Token var) throws ParseException {
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case BRACKETIZQ:{
       jj_consume_token(BRACKETIZQ);
       Expresion(func);
       jj_consume_token(BRACKETDER);
+      arraAccess2Exps(func, var);
       break;
       }
     default:
       jj_la1[7] = jj_gen;
       Empty();
+      arrayAccess1Exp(func, var);
     }
+  }
+
+  static final public void arrayAccess1Exp(Token func, Token var) throws ParseException {Token exp2;
+     Token exp1;
+     int dim2;
+     int baseID;
+     int lSup1;
+     int lSup2;
+
+     Token suma = new Token();
+     Token multiplica = new Token();
+     Token dirBase = new Token();
+     Token dim2Token = new Token();
+
+     Token limSup1 = new Token();
+     Token limSup2 = new Token();
+     Token limInf = new Token();
+// HAcer pop de las dos expresiones más recientes
+        exp1 = TokenAsignaciones.popPilaVP();
+        //Conseguir valores del arreglo
+        baseID = TokenAsignaciones.getDir(var, func);
+        dim2 = TokenAsignaciones.getDim2(var, func, 0);
+        lSup1 = TokenAsignaciones.getLimSup(var, func, 0);
+        suma.image = "+";
+        suma.kind = 27;
+
+
+        if( dim2 == -1)
+        {
+            reiniciaTodo();
+            {if (true) throw new ParseException("La variable " + var + " no es un arreglo, y se est\u00c3\u00a1 invocando como uno.");}
+        }
+
+        // Convertir valores a tokens
+        dirBase.image = String.valueOf(baseID);
+        dirBase.kind = 38;
+        dirBase.image = TokenAsignaciones.InsertarConstante(dirBase.image, TokenAsignaciones.getContConst(dirBase.kind));
+
+
+        // Crea cuadruplos verifica
+        limSup1.image = String.valueOf(lSup1);
+        limSup1.kind = 38;
+        limSup1.image = TokenAsignaciones.InsertarConstante(limSup1.image, TokenAsignaciones.getContConst(limSup1.kind));
+
+        limInf.image = "0";
+        limInf.kind = 38;
+        limInf.image = TokenAsignaciones.InsertarConstante(limInf.image, TokenAsignaciones.getContConst(limInf.kind));
+
+        Quadruple quad = new Quadruple("Ver", exp1, limInf, limSup1 );
+        TokenAsignaciones.meterCuadruplo(quad);
+        TokenAsignaciones.subeContCuadruplos();
+
+
+        // Realiza operaciones
+        TokenAsignaciones.pushPilaVP(dirBase);
+        TokenAsignaciones.pushPilaOP(suma);
+        TokenAsignaciones.pushPilaVP(exp1);
+        creaCuadruploExp(func);
+  }
+
+  static final public void arraAccess2Exps(Token func, Token var) throws ParseException {Token exp2;
+     Token exp1;
+     int dim2;
+     int baseID;
+     int lSup1;
+     int lSup2;
+
+     Token suma = new Token();
+     Token multiplica = new Token();
+     Token dirBase = new Token();
+     Token dim2Token = new Token();
+
+     Token limSup1 = new Token();
+     Token limSup2 = new Token();
+     Token limInf = new Token();
+// HAcer pop de las dos expresiones más recientes
+        exp2 = TokenAsignaciones.popPilaVP();
+        exp1 = TokenAsignaciones.popPilaVP();
+        //Conseguir valores del arreglo
+        baseID = TokenAsignaciones.getDir(var, func);
+        dim2 = TokenAsignaciones.getDim2(var, func, 1);
+        lSup1 = TokenAsignaciones.getLimSup(var, func, 0);
+        lSup2 = TokenAsignaciones.getLimSup(var, func, 1);
+        suma.image = "+";
+        suma.kind = 27;
+
+        multiplica.image = "*";
+        multiplica.kind = 29;
+
+        if( dim2 == -1)
+        {
+            reiniciaTodo();
+            {if (true) throw new ParseException("La variable " + var + " no es un arreglo, y se est\u00c3\u00a1 invocando como uno.");}
+        }
+
+        // Convertir valores a tokens
+        dirBase.image = String.valueOf(baseID);
+        dirBase.kind = 38;
+        dirBase.image = TokenAsignaciones.InsertarConstante(dirBase.image, TokenAsignaciones.getContConst(dirBase.kind));
+
+
+        dim2Token.image = String.valueOf(dim2);
+        dim2Token.kind = 38;
+        dim2Token.image = TokenAsignaciones.InsertarConstante(dim2Token.image, TokenAsignaciones.getContConst(dim2Token.kind));
+
+        // Crea cuadruplos verifica
+        limSup1.image = String.valueOf(lSup1);
+        limSup1.kind = 38;
+        limSup1.image = TokenAsignaciones.InsertarConstante(limSup1.image, TokenAsignaciones.getContConst(limSup1.kind));
+
+        limSup2.image = String.valueOf(lSup2);
+        limSup2.kind = 38;
+        limSup2.image = TokenAsignaciones.InsertarConstante(limSup2.image, TokenAsignaciones.getContConst(limSup2.kind));
+
+        limInf.image = "0";
+        limInf.kind = 38;
+        limInf.image = TokenAsignaciones.InsertarConstante(limInf.image, TokenAsignaciones.getContConst(limInf.kind));
+
+        Quadruple quad = new Quadruple("Ver", exp1, limInf, limSup1 );
+        TokenAsignaciones.meterCuadruplo(quad);
+        TokenAsignaciones.subeContCuadruplos();
+
+        Quadruple quad2 = new Quadruple("Ver", exp2, limInf, limSup2 );
+        TokenAsignaciones.meterCuadruplo(quad2);
+        TokenAsignaciones.subeContCuadruplos();
+
+
+        // Realiza operaciones
+        TokenAsignaciones.pushPilaVP(exp1);
+        TokenAsignaciones.pushPilaOP(multiplica);
+        TokenAsignaciones.pushPilaVP(dim2Token);
+        creaCuadruploExp(func);
+        TokenAsignaciones.pushPilaOP(suma);
+        TokenAsignaciones.pushPilaVP(dirBase);
+        creaCuadruploExp(func);
+        TokenAsignaciones.pushPilaOP(suma);
+        TokenAsignaciones.pushPilaVP(exp2);
+        creaCuadruploExp(func);
   }
 
   static final public void MasV(int td, Token func) throws ParseException {Token var;
@@ -443,7 +584,7 @@ TokenAsignaciones.InsertarSimbolo(var, td, func);
                 reiniciaTodo();
                 {if (true) throw new ParseException(res);}
             }
-      Dim_Expresion(func);
+      Dim(func, var, td);
       Params_Func(func);
       break;
       }
@@ -908,11 +1049,9 @@ res = TokenAsignaciones.checkVariable(var, func);
             {if (true) throw new ParseException(res);}
             imp = true;
         }
-
-        TokenAsignaciones.pushPilaVP(var);
         //System.out.println(TokenAsignaciones.returnPilaVP());
 
-    Dim_Expresion(func);
+    Dim_Expresion(func, var);
 {if ("" != null) return var;}
     throw new Error("Missing return statement in function");
   }

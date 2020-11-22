@@ -585,6 +585,8 @@ public class TokenAsignaciones {
         return tablaVarsGlobal;
     }
 
+
+
     ////////////////////////////////////////////////////////////////////////////////////////////////        TABLAS
 
     public static void arraySegundaPasada(Token func, Token var)
@@ -1039,6 +1041,116 @@ public class TokenAsignaciones {
                     //Intenta obtener el token a verificar(checkTok) de la tabla de los tokens
                     aux = tabla.tablaV.get(checkTok.image);
                     return aux.dir;
+                }
+                catch(Exception f)
+                {
+                    //Si no lo puede obtener, manda el error
+                    return -1;
+                }
+            }
+            catch(Exception g)
+            {
+                return -1;
+            }
+        }
+    }
+
+    // Esta función obtiene la dirección de una variable dentro de una función
+    public static int getDim2(Token checkTok, Token nombreFuncion, int index)
+    {
+        CustomHash tabla;
+        Tipo_Dir aux;
+        ArrayList<DimType> aux2;
+        DimType aux3;
+
+        try
+        {
+            aux = tablaVarsGlobal.get(checkTok.image);
+            if (aux.isArray)
+            {
+                aux2 = aux.dim;
+                aux3 = aux2.get(index);
+                return (aux3.lsup-aux3.linf)+1;
+
+            }
+            else{
+                return -1;
+            }
+        }
+        catch (Exception e)
+        {
+            try
+            {
+                tabla = tablaFunc.get(nombreFuncion.image);
+                try
+                {
+                    //Intenta obtener el token a verificar(checkTok) de la tabla de los tokens
+                    aux = tabla.tablaV.get(checkTok.image);
+                    if (aux.isArray)
+                    {
+                        aux2 = aux.dim;
+                        aux3 = aux2.get(index);
+                        return (aux3.lsup-aux3.linf)+1;
+
+                    }
+                    else{
+                        return -1;
+                    }
+                }
+                catch(Exception f)
+                {
+                    //Si no lo puede obtener, manda el error
+                    return -1;
+                }
+            }
+            catch(Exception g)
+            {
+                return -1;
+            }
+        }
+    }
+
+    // Esta función obtiene la dirección de una variable dentro de una función
+    public static int getLimSup(Token checkTok, Token nombreFuncion, int index)
+    {
+        CustomHash tabla;
+        Tipo_Dir aux;
+        ArrayList<DimType> aux2;
+        DimType aux3;
+
+        try
+        {
+            aux = tablaVarsGlobal.get(checkTok.image);
+            if (aux.isArray)
+            {
+                aux2 = aux.dim;
+                aux3 = aux2.get(index);
+                return aux3.lsup;
+
+            }
+            else{
+                return -1;
+            }
+        }
+        catch (Exception e)
+        {
+            try
+            {
+                tabla = tablaFunc.get(nombreFuncion.image);
+                try
+                {
+                    //Intenta obtener el token a verificar(checkTok) de la tabla de los tokens
+                    aux = tabla.tablaV.get(checkTok.image);
+                    if (aux.isArray)
+                    {
+                        aux2 = aux.dim;
+                        aux3 = aux2.get(index);
+                        return aux3.lsup;
+
+                    }
+                    else{
+                        return -1;
+                    }
                 }
                 catch(Exception f)
                 {
