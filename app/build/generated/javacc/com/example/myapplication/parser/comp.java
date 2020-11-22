@@ -787,9 +787,13 @@ creaCuadruploEscritura(op, func);
     }
   }
 
-  static final public void creaCuadruploEscritura(Token op, Token func) throws ParseException {Token arg1;
+  static final public void creaCuadruploEscritura(Token op, Token func) throws ParseException {Token arg1  = new Token();
      int aux;
-arg1 = TokenAsignaciones.popPilaVP();
+     Token tAux;
+tAux = TokenAsignaciones.popPilaVP();
+
+         arg1.image = tAux.image;
+         arg1.kind = tAux.kind;
 
          if ( arg1.kind == 4 | arg1.kind == 5 | arg1.kind == 6 | arg1.kind == 47 | arg1.kind == 38 | arg1.kind == 39 | arg1.kind == 41)
          {
@@ -1101,9 +1105,13 @@ if(!TokenAsignaciones.getTypeFunc(func))
         }
   }
 
-  static final public void creaCuadruploRetorno(Token op, Token func) throws ParseException {Token arg1;
+  static final public void creaCuadruploRetorno(Token op, Token func) throws ParseException {Token arg1  = new Token();
      int aux;
-arg1 = TokenAsignaciones.popPilaVP();
+     Token tAux;
+tAux = TokenAsignaciones.popPilaVP();
+
+         arg1.image = tAux.image;
+         arg1.kind = tAux.kind;
 
          if ( arg1.kind == 4 | arg1.kind == 5 | arg1.kind == 6 | arg1.kind == 47 | arg1.kind == 38 | arg1.kind == 39 | arg1.kind == 41)
          {

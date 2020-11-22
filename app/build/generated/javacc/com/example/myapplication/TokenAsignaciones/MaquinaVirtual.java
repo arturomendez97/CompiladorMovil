@@ -315,6 +315,9 @@ public class MaquinaVirtual {
                         //Cambiar de posición
                         dirResultado = Integer.parseInt(aux.resultado.image);
                         ip = dirResultado;
+                        contParamsInt = 0;
+                        contParamsFloat = 0;
+                        contParamsChar = 0;
                         break;
 
                     case "ENDFUNC" :

@@ -876,12 +876,17 @@ void Escritura3(Token op, Token func) :
 
 void creaCuadruploEscritura(Token op, Token func) :
 {
-     Token arg1;
+     Token arg1  = new Token();
      int aux;
+     Token tAux;
+
 }
 {
     {
-         arg1 = TokenAsignaciones.popPilaVP();
+         tAux = TokenAsignaciones.popPilaVP();
+
+         arg1.image = tAux.image;
+         arg1.kind = tAux.kind;
 
          if ( arg1.kind == 4 | arg1.kind == 5 | arg1.kind == 6 | arg1.kind == 47 | arg1.kind == 38 | arg1.kind == 39 | arg1.kind == 41)
          {
@@ -1189,12 +1194,17 @@ void validaReturn(Token func) :
 
 void creaCuadruploRetorno(Token op, Token func) :
 {
-     Token arg1;
+     Token arg1  = new Token();
      int aux;
+     Token tAux;
+
 }
 {
     {
-         arg1 = TokenAsignaciones.popPilaVP();
+         tAux = TokenAsignaciones.popPilaVP();
+
+         arg1.image = tAux.image;
+         arg1.kind = tAux.kind;
 
          if ( arg1.kind == 4 | arg1.kind == 5 | arg1.kind == 6 | arg1.kind == 47 | arg1.kind == 38 | arg1.kind == 39 | arg1.kind == 41)
          {
