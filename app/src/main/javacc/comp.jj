@@ -1468,8 +1468,56 @@ Token Llamada( Token func ) :
             }
 
     }
-    //creaCuadruploRecibirValor(funcLlamada, func)
+    parcheGuadalupano(func)
     {return funcLlamada;}
+}
+
+void parcheGuadalupano(Token func) :
+{
+     Token arg1  = new Token();
+     Token tAux;
+     int aux;
+
+     Token temporal  = new Token();
+}
+{
+    {
+     try {
+            tAux = TokenAsignaciones.popPilaVP();
+         }
+     catch (Exception e)
+     {
+         reiniciaTodo();
+         throw new ParseException("Se está intentando llamar a una funcion void en una asignacion");
+     }
+
+
+         arg1.image = tAux.image;
+         arg1.kind = tAux.kind;
+
+         //El if es para cuando es un temporal o una constante
+         if ( arg1.kind == 4 | arg1.kind == 5 | arg1.kind == 6 | arg1.kind == 47 | arg1.kind == 38 | arg1.kind == 39 | arg1.kind == 41)
+         {
+             aux = arg1.kind;
+         }
+         else
+         {
+             aux = TokenAsignaciones.getType(arg1, func);
+         }
+
+
+         arg1.image = tokenToDir(arg1, func);
+         arg1.kind = aux;
+         temporal.kind = arg1.kind;
+         TokenAsignaciones.aumentaVarFuncTemporal(temporal.kind, func);
+
+
+         temporal.image = String.valueOf(TokenAsignaciones.getContTemporal(temporal.kind));
+         TokenAsignaciones.pushPilaVP(temporal);
+         Quadruple quad = new Quadruple("=", arg1, null, temporal);
+         TokenAsignaciones.meterCuadruplo(quad);
+         TokenAsignaciones.subeContCuadruplos();
+    }
 }
 
 void creaCuadruploGoSub(Token funcLlamada) :

@@ -1358,8 +1358,51 @@ res = TokenAsignaciones.checkFuncion(funcLlamada);
                         {if (true) throw new ParseException("La funcion " + funcLlamada + " es void. No se puede utilizar en una asignacion o expresion porque no regresa nada.");}
                     }
             }
+    parcheGuadalupano(func);
 {if ("" != null) return funcLlamada;}
     throw new Error("Missing return statement in function");
+  }
+
+  static final public void parcheGuadalupano(Token func) throws ParseException {Token arg1  = new Token();
+     Token tAux;
+     int aux;
+
+     Token temporal  = new Token();
+try {
+            tAux = TokenAsignaciones.popPilaVP();
+         }
+     catch (Exception e)
+     {
+         reiniciaTodo();
+         {if (true) throw new ParseException("Se est\u00c3\u00a1 intentando llamar a una funcion void en una asignacion");}
+     }
+
+
+         arg1.image = tAux.image;
+         arg1.kind = tAux.kind;
+
+         //El if es para cuando es un temporal o una constante
+         if ( arg1.kind == 4 | arg1.kind == 5 | arg1.kind == 6 | arg1.kind == 47 | arg1.kind == 38 | arg1.kind == 39 | arg1.kind == 41)
+         {
+             aux = arg1.kind;
+         }
+         else
+         {
+             aux = TokenAsignaciones.getType(arg1, func);
+         }
+
+
+         arg1.image = tokenToDir(arg1, func);
+         arg1.kind = aux;
+         temporal.kind = arg1.kind;
+         TokenAsignaciones.aumentaVarFuncTemporal(temporal.kind, func);
+
+
+         temporal.image = String.valueOf(TokenAsignaciones.getContTemporal(temporal.kind));
+         TokenAsignaciones.pushPilaVP(temporal);
+         Quadruple quad = new Quadruple("=", arg1, null, temporal);
+         TokenAsignaciones.meterCuadruplo(quad);
+         TokenAsignaciones.subeContCuadruplos();
   }
 
   static final public void creaCuadruploGoSub(Token funcLlamada) throws ParseException {Token aux = new Token();
