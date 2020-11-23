@@ -73,7 +73,7 @@ class CustomHash {
     // Cuadruplo inicial de la función
     int cuadruploInicial;
     // Arreglo que guarda la cantidad de variables de cada tipo que se van a necesitar dentro de la función
-    int[] varArray = new int[8];
+    int[] varArray = new int[9];
 
     // Arreglo que guarda la cantidad y tipo de parametros
     ArrayList<Integer> parametros = new ArrayList<Integer>();
@@ -82,9 +82,9 @@ class CustomHash {
     public static void main(String[] args) {
         CustomHash myObj = new CustomHash();
     }
-    //                                 int f  c  b ti tf  tc tb
+    //                                 int f  c  b ti tf  tc tb tp
     CustomHash(){
-        varArray = new int[]{0, 0, 0, 0, 0, 0, 0, 0};
+        varArray = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0};
     }
 }
 
@@ -143,6 +143,8 @@ public class TokenAsignaciones {
     private static int contCI = 11000;
     private static int contCF = 12000;
     private static int contCC = 13000;
+    private static int contTP = 14000;
+
 
 
     private static int contParametros = 0;
@@ -309,6 +311,14 @@ public class TokenAsignaciones {
         contCuadruplos = 0;
     }
 
+    public static int getContTemporalPointer()
+    {
+        int temp;
+        temp = contTP;
+        contTP++;
+        return temp;
+    }
+
     //Este se usa para crear variables temporales. (Se usa dentro de expresiones etc...)
     public static int getContTemporal(int tipo)
     {
@@ -378,6 +388,7 @@ public class TokenAsignaciones {
             default: return -1;
         }
     }
+
 
     public static void aumentaContVar(Token func, int td)
     {
@@ -461,6 +472,7 @@ public class TokenAsignaciones {
         contTF = 8000;
         contTC = 9000;
         contTB = 10000;
+        contTP = 14000;
     }
 
     public static void resetContsConstantes()
@@ -784,6 +796,13 @@ public class TokenAsignaciones {
             {
             }
         }
+    }
+
+    public static void aumentaVarFuncTempotalPointer(Token func)
+    {
+        CustomHash tabla;
+        tabla = tablaFunc.get(func.image);
+        tabla.varArray[8] += 1;
     }
 
     public static void aumentaVarFuncTemporal( int td, Token func)

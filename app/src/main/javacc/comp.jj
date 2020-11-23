@@ -511,7 +511,84 @@ void arraAccess2Exps(Token func, Token var) :
         creaCuadruploExp(func);
         TokenAsignaciones.pushPilaOP(suma);
         TokenAsignaciones.pushPilaVP(exp2);
-        creaCuadruploExp(func);
+        creaCuadruploExpPointer(func);
+     }
+}
+
+void creaCuadruploExpPointer(Token func) :
+{
+     Token op;
+     Token arg1  = new Token();
+     Token arg2  = new Token();
+     Token tAux;
+     Token tAux2;
+     int aux;
+     int aux2;
+     Token temporal;
+}
+{
+    {
+    op = TokenAsignaciones.popPilaOP();
+    tAux = TokenAsignaciones.popPilaVP();
+    tAux2 = TokenAsignaciones.popPilaVP();
+
+    arg1.image = tAux.image;
+    arg1.kind = tAux.kind;
+
+    arg2.image = tAux2.image;
+    arg2.kind = tAux2.kind;
+    temporal = op.newToken(op.kind);
+    System.out.println("image: " + arg1 + " type: " + arg1.kind);
+    System.out.println("image: " + arg2 + " type: " + arg2.kind);
+
+    //Entra qui si el argumento es un temporal, porque su tipo
+    if ( arg1.kind == 4 | arg1.kind == 5 | arg1.kind == 6 | arg1.kind == 47 | arg1.kind == 38 | arg1.kind == 39 | arg1.kind == 41)
+    {
+        aux = arg1.kind;
+    }
+    else{
+        aux = TokenAsignaciones.getType(arg1, func);
+        }
+
+
+    if (  arg2.kind == 4 | arg2.kind == 5 | arg2.kind == 6 | arg2.kind == 47 | arg2.kind == 38 | arg2.kind == 39 | arg2.kind == 41 )
+        {
+            aux2 = arg2.kind;
+        }
+        else{
+            aux2 = TokenAsignaciones.getType(arg2, func);
+            }
+
+    temporal.kind = TokenAsignaciones.getCuboType(aux, aux2, op.image);
+
+        TokenAsignaciones.aumentaVarFuncTempotalPointer(func);
+
+    //System.out.println("temporal.kind: " + temporal.kind);
+
+    if(temporal.kind == 0)
+    {
+        reiniciaTodo();
+        throw new ParseException("Los argumentos: " + arg1.image + " y " + arg2.image + " no son compatibles.");
+    }
+        System.out.println("aaaaaa: " + arg1.image);
+        System.out.println("aaaaaa: " + arg2.image);
+
+    ////////////////////////////////////////////////// Aquí cambia los tokens por sus direcciones antes de meterlos.
+
+    arg1.image = tokenToDir(arg1, func);
+    arg1.kind = aux;
+    arg2.image = tokenToDir(arg2, func);
+    arg2.kind = aux;
+
+
+    temporal.image = String.valueOf(TokenAsignaciones.getContTemporalPointer());
+    System.out.println("TEMPORAL POINTER IMAGE: " + temporal.image);
+    TokenAsignaciones.pushPilaVP(temporal);
+    Quadruple quad = new Quadruple(op.image, arg1, arg2, temporal);
+    TokenAsignaciones.meterCuadruplo(quad);
+        TokenAsignaciones.subeContCuadruplos();
+
+    //quad.print();
      }
 }
 
@@ -1139,6 +1216,7 @@ Token Variable(Token func) :
     Token var;
     String res;
     boolean imp = false;
+    Token parentesis = new Token();
 }
 {
     var = <ID>
@@ -1153,9 +1231,15 @@ Token Variable(Token func) :
         }
         //System.out.println(TokenAsignaciones.returnPilaVP());
     }
+    {
+         parentesis.image = "(";
+         parentesis.kind = 20;
+         TokenAsignaciones.pushPilaOP(parentesis);
+    }
     Dim_Expresion(func, var)
     {
-    return var;
+        TokenAsignaciones.popPilaOP();
+        return var;
     }
 }
 

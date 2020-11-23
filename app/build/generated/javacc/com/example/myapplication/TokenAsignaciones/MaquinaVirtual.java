@@ -59,9 +59,11 @@ class MemoriaLocal {
     char[] arrayCharsTemporales;
     boolean[] arrayBoolsTemporales;
 
+    int[] arrayPointersTemporales;
+
 
     // el tamaño de los arreglos depende de lo que le mandemos
-    MemoriaLocal(int numInts, int numFloats, int numChars, int numBools, int numIntsTemporales, int numFloatsTemporales, int numCharsTemporales, int numBoolsTemporales){
+    MemoriaLocal(int numInts, int numFloats, int numChars, int numBools, int numIntsTemporales, int numFloatsTemporales, int numCharsTemporales, int numBoolsTemporales, int numpointersTemporales){
         arrayInts = new int[numInts];
         arrayFloats = new float[numFloats];
         arrayChars = new char[numChars];
@@ -71,6 +73,8 @@ class MemoriaLocal {
         arrayFloatsTemporales = new float[numFloatsTemporales];
         arrayCharsTemporales = new char[numCharsTemporales];
         arrayBoolsTemporales = new boolean[numBoolsTemporales];
+
+        arrayPointersTemporales = new int[numpointersTemporales];
     }
 
     // También se puede crear una vacia.
@@ -84,6 +88,8 @@ class MemoriaLocal {
         arrayFloatsTemporales = new float[0];
         arrayCharsTemporales = new char[0];
         arrayBoolsTemporales = new boolean[0];
+
+        arrayPointersTemporales = new int[0];
     }
 }
 
@@ -198,7 +204,7 @@ public class MaquinaVirtual {
         CustomHash tabla;
         tabla = tablaFunc.get("main");
         //System.out.println(tablaFunc);
-        MemoriaLocal memLocal = new MemoriaLocal(tabla.varArray[0], tabla.varArray[1], tabla.varArray[2], tabla.varArray[3], tabla.varArray[4], tabla.varArray[5], tabla.varArray[6], tabla.varArray[7]);
+        MemoriaLocal memLocal = new MemoriaLocal(tabla.varArray[0], tabla.varArray[1], tabla.varArray[2], tabla.varArray[3], tabla.varArray[4], tabla.varArray[5], tabla.varArray[6], tabla.varArray[7], tabla.varArray[8]);
 
         // Variables auxiliares
         Quadruple aux;
@@ -231,6 +237,8 @@ public class MaquinaVirtual {
 
         int contParamsInt = 0, contParamsFloat = 0, contParamsChar = 0;
 
+        int auxDirArray = 0;
+
         //RECORRE CUADRUPLOS
 
         while (ip < cuadruplos.size())
@@ -248,6 +256,8 @@ public class MaquinaVirtual {
                         auxI1 = 0; auxF1 = 0; auxC1 = 'a';
                         arg1Int = false; arg1Float = false; arg1Char = false;
 
+                        // ARRAYS
+                        if (dirArg1 >= 14000 && dirArg1 < 15000) { dirArg1 = memLocal.arrayPointersTemporales[dirArg1-14000]; }
                         //CONSTANTES
                         if (dirArg1 >= 11000)
                         {
@@ -291,6 +301,7 @@ public class MaquinaVirtual {
                         if (dirArg1 >= 8000 && dirArg1 < 9000) { auxF1 = memLocal.arrayFloatsTemporales[dirArg1-8000]; arg1Float = true; }
                         if (dirArg1 >= 9000 && dirArg1 < 10000) { auxC1 = memLocal.arrayCharsTemporales[dirArg1-9000]; arg1Char = true; }
 
+
                         //////////////////////////////////////////////////////////////////////////// RESULTADO
                         Tipo_Dir dir;
                         dir = tablaVarsGlobal.get(auxString);
@@ -298,6 +309,7 @@ public class MaquinaVirtual {
                         System.out.println("AYUDAAAAAAAAAAAAAAAAAAAAAA: " + auxI1 + " " + dirResultado);
 
                         //ARG1 GLOBALES
+
                         if (dirResultado >= 1000 && dirResultado < 2000) { memGlobal.arrayInts[dirResultado-1000] = auxI1; }
                         if (dirResultado >= 2000 && dirResultado < 3000) {
                             if (arg1Int) { memGlobal.arrayFloats[dirResultado-2000] = auxI1; }
@@ -330,7 +342,7 @@ public class MaquinaVirtual {
                         auxString = aux.resultado.image;
                         CustomHash tablaAux;
                         tablaAux = tablaFunc.get(auxString);
-                        memLocal2 = new MemoriaLocal(tablaAux.varArray[0], tablaAux.varArray[1], tablaAux.varArray[2], tablaAux.varArray[3], tablaAux.varArray[4], tablaAux.varArray[5], tablaAux.varArray[6], tablaAux.varArray[7]);
+                        memLocal2 = new MemoriaLocal(tablaAux.varArray[0], tablaAux.varArray[1], tablaAux.varArray[2], tablaAux.varArray[3], tablaAux.varArray[4], tablaAux.varArray[5], tablaAux.varArray[6], tablaAux.varArray[7], tablaAux.varArray[8]);
                         ip++;
                         break;
                     case "PARAM" :
@@ -338,6 +350,8 @@ public class MaquinaVirtual {
                         auxI1 = 0; auxF1 = 0; auxC1 = 'a';
                         arg1Int = false; arg1Float = false; arg1Char = false;
 
+                        // ARRAYS
+                        if (dirArg1 >= 14000 && dirArg1 < 15000) { dirArg1 = memLocal.arrayPointersTemporales[dirArg1-14000]; }
                         //CONSTANTES
                         if (dirArg1 >= 11000)
                         {
@@ -406,6 +420,8 @@ public class MaquinaVirtual {
                         break;
                     case "write":
                         dirResultado = Integer.parseInt(aux.resultado.image);
+                        //ARRAYS
+                        if (dirResultado >= 14000 && dirResultado < 15000) { dirResultado =  memLocal.arrayPointersTemporales[dirResultado-14000]; }
                         // GLOBALES
                         if (dirResultado >= 1000 && dirResultado < 2000) { intValue = memGlobal.arrayInts[dirResultado-1000]; text += Integer.toString(intValue); }
                         else if (dirResultado >= 2000 && dirResultado < 3000) { floatValue = memGlobal.arrayFloats[dirResultado-2000]; text += Float.toString(floatValue); }
@@ -422,7 +438,7 @@ public class MaquinaVirtual {
                         // CONSTANTES
                         else if (dirResultado >= 11000 && dirResultado < 12000) { auxString = tablaConst.get(dirResultado); text += auxString; }
                         else if (dirResultado >= 12000 && dirResultado < 13000) { auxString = tablaConst.get(dirResultado); text += auxString; }
-                        else if (dirResultado >= 13000) { auxString = tablaConst.get(dirResultado); constChar = auxString.charAt(1); text += constChar; }
+                        else if (dirResultado >= 13000 && dirResultado < 14000) { auxString = tablaConst.get(dirResultado); constChar = auxString.charAt(1); text += constChar; }
                         text += "\r\n";
                         ip++;
                         break;
@@ -439,6 +455,8 @@ public class MaquinaVirtual {
                         arg1Int = false; arg1Float = false; arg2Int = false; arg2Float = false;
 
                         ///////////////////////////////////////////////////////////////////////////////////////////// ARG 1
+                        // ARRAYS
+                        if (dirArg1 >= 14000 && dirArg1 < 15000) { dirArg1 = memLocal.arrayPointersTemporales[dirArg1-14000]; }
                         //GLOBALES
                         if (dirArg1 >= 1000 && dirArg1 < 2000) { auxI1 = memGlobal.arrayInts[dirArg1-1000]; arg1Int = true;}
                         else if (dirArg1 >= 2000 && dirArg1 < 3000) { auxF1 = memGlobal.arrayFloats[dirArg1-2000]; arg1Float = true;}
@@ -453,6 +471,8 @@ public class MaquinaVirtual {
                         else if (dirArg1 >= 12000 && dirArg1 < 13000) { auxF1 = Float.parseFloat(tablaConst.get(dirArg1)); arg1Float = true;}
 
                         ///////////////////////////////////////////////////////////////////////////////////////////// ARG 2
+                        // ARRAYS
+                        if (dirArg2 >= 14000 && dirArg2 < 15000) { dirArg2 = memLocal.arrayPointersTemporales[dirArg2-14000]; }
                         //GLOBALES
                         if (dirArg2 >= 1000 && dirArg2 < 2000) { auxI2 = memGlobal.arrayInts[dirArg2-1000]; arg2Int = true;}
                         else if (dirArg2 >= 2000 && dirArg2 < 3000) { auxF2 = memGlobal.arrayFloats[dirArg2-2000]; arg2Float = true;}
@@ -467,10 +487,14 @@ public class MaquinaVirtual {
                         else if (dirArg2 >= 12000 && dirArg2 < 13000) { auxF2 = Float.parseFloat(tablaConst.get(dirArg2)); arg2Float = true;}
 
                         ///////////////////////////////////////////////////////////////////////////////////////////// RESULTADO
-                        if (arg1Int && arg2Int) { memLocal.arrayIntsTemporales[dirResultado-7000] = auxI2+auxI1; System.out.println( "RESPUESTA + : " + memLocal.arrayIntsTemporales[dirResultado-7000]);}
-                        else if (arg1Int && arg2Float) { memLocal.arrayFloatsTemporales[dirResultado-8000] = auxF2+auxI1; System.out.println( "RESPUESTA + : " + memLocal.arrayFloatsTemporales[dirResultado-8000]);}
-                        else if (arg1Float && arg2Int) { memLocal.arrayFloatsTemporales[dirResultado-8000] = auxI2+auxF1; System.out.println( "RESPUESTA + : " + memLocal.arrayFloatsTemporales[dirResultado-8000]);}
-                        else if (arg1Float && arg2Float) { memLocal.arrayFloatsTemporales[dirResultado-8000] = auxF2+auxF1; System.out.println( "RESPUESTA + : " + memLocal.arrayFloatsTemporales[dirResultado-8000]);}
+                        //ARRAYS
+                        if (dirResultado >= 14000 && dirResultado < 15000) { memLocal.arrayPointersTemporales[dirResultado-14000] = auxI2+auxI1; System.out.println( "RESPUESTA + : " + memLocal.arrayPointersTemporales[dirResultado-14000]); }
+                        else{
+                            if (arg1Int && arg2Int) { memLocal.arrayIntsTemporales[dirResultado-7000] = auxI2+auxI1; System.out.println( "RESPUESTA + : " + memLocal.arrayIntsTemporales[dirResultado-7000]);}
+                            else if (arg1Int && arg2Float) { memLocal.arrayFloatsTemporales[dirResultado-8000] = auxF2+auxI1; System.out.println( "RESPUESTA + : " + memLocal.arrayFloatsTemporales[dirResultado-8000]);}
+                            else if (arg1Float && arg2Int) { memLocal.arrayFloatsTemporales[dirResultado-8000] = auxI2+auxF1; System.out.println( "RESPUESTA + : " + memLocal.arrayFloatsTemporales[dirResultado-8000]);}
+                            else if (arg1Float && arg2Float) { memLocal.arrayFloatsTemporales[dirResultado-8000] = auxF2+auxF1; System.out.println( "RESPUESTA + : " + memLocal.arrayFloatsTemporales[dirResultado-8000]);}
+                        }
                         ip++;
                         break;
 
@@ -487,6 +511,8 @@ public class MaquinaVirtual {
                         arg1Int = false; arg1Float = false; arg2Int = false; arg2Float = false;
 
                         ///////////////////////////////////////////////////////////////////////////////////////////// ARG 1
+                        // ARRAYS
+                        if (dirArg1 >= 14000 && dirArg1 < 15000) { dirArg1 = memLocal.arrayPointersTemporales[dirArg1-14000]; }
                         //GLOBALES
                         if (dirArg1 >= 1000 && dirArg1 < 2000) { auxI1 = memGlobal.arrayInts[dirArg1-1000]; arg1Int = true;}
                         else if (dirArg1 >= 2000 && dirArg1 < 3000) { auxF1 = memGlobal.arrayFloats[dirArg1-2000]; arg1Float = true;}
@@ -501,6 +527,8 @@ public class MaquinaVirtual {
                         else if (dirArg1 >= 12000 && dirArg1 < 13000) { auxF1 = Float.parseFloat(tablaConst.get(dirArg1)); arg1Float = true;}
 
                         ///////////////////////////////////////////////////////////////////////////////////////////// ARG 2
+                        // ARRAYS
+                        if (dirArg2 >= 14000 && dirArg2 < 15000) { dirArg2 = memLocal.arrayPointersTemporales[dirArg2-14000]; }
                         //GLOBALES
                         if (dirArg2 >= 1000 && dirArg2 < 2000) { auxI2 = memGlobal.arrayInts[dirArg2-1000]; arg2Int = true;}
                         else if (dirArg2 >= 2000 && dirArg2 < 3000) { auxF2 = memGlobal.arrayFloats[dirArg2-2000]; arg2Float = true;}
@@ -535,6 +563,8 @@ public class MaquinaVirtual {
                         arg1Int = false; arg1Float = false; arg2Int = false; arg2Float = false;
 
                         ///////////////////////////////////////////////////////////////////////////////////////////// ARG 1
+                        // ARRAYS
+                        if (dirArg1 >= 14000 && dirArg1 < 15000) { dirArg1 = memLocal.arrayPointersTemporales[dirArg1-14000]; }
                         //GLOBALES
                         if (dirArg1 >= 1000 && dirArg1 < 2000) { auxI1 = memGlobal.arrayInts[dirArg1-1000]; arg1Int = true;}
                         else if (dirArg1 >= 2000 && dirArg1 < 3000) { auxF1 = memGlobal.arrayFloats[dirArg1-2000]; arg1Float = true;}
@@ -549,6 +579,8 @@ public class MaquinaVirtual {
                         else if (dirArg1 >= 12000 && dirArg1 < 13000) { auxF1 = Float.parseFloat(tablaConst.get(dirArg1)); arg1Float = true;}
 
                         ///////////////////////////////////////////////////////////////////////////////////////////// ARG 2
+                        // ARRAYS
+                        if (dirArg2 >= 14000 && dirArg2 < 15000) { dirArg2 = memLocal.arrayPointersTemporales[dirArg2-14000]; }
                         //GLOBALES
                         if (dirArg2 >= 1000 && dirArg2 < 2000) { auxI2 = memGlobal.arrayInts[dirArg2-1000]; arg2Int = true;}
                         else if (dirArg2 >= 2000 && dirArg2 < 3000) { auxF2 = memGlobal.arrayFloats[dirArg2-2000]; arg2Float = true;}
@@ -583,6 +615,8 @@ public class MaquinaVirtual {
                         arg1Int = false; arg1Float = false; arg2Int = false; arg2Float = false;
 
                         ///////////////////////////////////////////////////////////////////////////////////////////// ARG 1
+                        // ARRAYS
+                        if (dirArg1 >= 14000 && dirArg1 < 15000) { dirArg1 = memLocal.arrayPointersTemporales[dirArg1-14000]; }
                         //GLOBALES
                         if (dirArg1 >= 1000 && dirArg1 < 2000) { auxI1 = memGlobal.arrayInts[dirArg1-1000]; arg1Int = true;}
                         else if (dirArg1 >= 2000 && dirArg1 < 3000) { auxF1 = memGlobal.arrayFloats[dirArg1-2000]; arg1Float = true;}
@@ -597,6 +631,8 @@ public class MaquinaVirtual {
                         else if (dirArg1 >= 12000 && dirArg1 < 13000) { auxF1 = Float.parseFloat(tablaConst.get(dirArg1)); arg1Float = true;}
 
                         ///////////////////////////////////////////////////////////////////////////////////////////// ARG 2
+                        // ARRAYS
+                        if (dirArg2 >= 14000 && dirArg2 < 15000) { dirArg2 = memLocal.arrayPointersTemporales[dirArg2-14000]; }
                         //GLOBALES
                         if (dirArg2 >= 1000 && dirArg2 < 2000) { auxI2 = memGlobal.arrayInts[dirArg2-1000]; arg2Int = true;}
                         else if (dirArg2 >= 2000 && dirArg2 < 3000) { auxF2 = memGlobal.arrayFloats[dirArg2-2000]; arg2Float = true;}
@@ -632,6 +668,8 @@ public class MaquinaVirtual {
                         arg1Int = false; arg1Float = false; arg2Int = false; arg2Float = false;
 
                         ///////////////////////////////////////////////////////////////////////////////////////////// ARG 1
+                        // ARRAYS
+                        if (dirArg1 >= 14000 && dirArg1 < 15000) { dirArg1 = memLocal.arrayPointersTemporales[dirArg1-14000]; }
                         //GLOBALES
                         if (dirArg1 >= 1000 && dirArg1 < 2000) { auxI1 = memGlobal.arrayInts[dirArg1-1000]; arg1Int = true;}
                         else if (dirArg1 >= 2000 && dirArg1 < 3000) { auxF1 = memGlobal.arrayFloats[dirArg1-2000]; arg1Float = true;}
@@ -646,6 +684,8 @@ public class MaquinaVirtual {
                         else if (dirArg1 >= 12000 && dirArg1 < 13000) { auxF1 = Float.parseFloat(tablaConst.get(dirArg1)); arg1Float = true;}
 
                         ///////////////////////////////////////////////////////////////////////////////////////////// ARG 2
+                        // ARRAYS
+                        if (dirArg2 >= 14000 && dirArg2 < 15000) { dirArg2 = memLocal.arrayPointersTemporales[dirArg2-14000]; }
                         //GLOBALES
                         if (dirArg2 >= 1000 && dirArg2 < 2000) { auxI2 = memGlobal.arrayInts[dirArg2-1000]; arg2Int = true;}
                         else if (dirArg2 >= 2000 && dirArg2 < 3000) { auxF2 = memGlobal.arrayFloats[dirArg2-2000]; arg2Float = true;}
@@ -689,6 +729,8 @@ public class MaquinaVirtual {
                         arg1Int = false; arg1Float = false; arg2Int = false; arg2Float = false;
 
                         ///////////////////////////////////////////////////////////////////////////////////////////// ARG 1
+                        // ARRAYS
+                        if (dirArg1 >= 14000 && dirArg1 < 15000) { dirArg1 = memLocal.arrayPointersTemporales[dirArg1-14000]; }
                         //GLOBALES
                         if (dirArg1 >= 1000 && dirArg1 < 2000) { auxI1 = memGlobal.arrayInts[dirArg1-1000]; arg1Int = true;}
                         else if (dirArg1 >= 2000 && dirArg1 < 3000) { auxF1 = memGlobal.arrayFloats[dirArg1-2000]; arg1Float = true;}
@@ -703,6 +745,8 @@ public class MaquinaVirtual {
                         else if (dirArg1 >= 12000 && dirArg1 < 13000) { auxF1 = Float.parseFloat(tablaConst.get(dirArg1)); arg1Float = true;}
 
                         ///////////////////////////////////////////////////////////////////////////////////////////// ARG 2
+                        // ARRAYS
+                        if (dirArg2 >= 14000 && dirArg2 < 15000) { dirArg2 = memLocal.arrayPointersTemporales[dirArg2-14000]; }
                         //GLOBALES
                         if (dirArg2 >= 1000 && dirArg2 < 2000) { auxI2 = memGlobal.arrayInts[dirArg2-1000]; arg2Int = true;}
                         else if (dirArg2 >= 2000 && dirArg2 < 3000) { auxF2 = memGlobal.arrayFloats[dirArg2-2000]; arg2Float = true;}
@@ -746,6 +790,8 @@ public class MaquinaVirtual {
                         arg1Int = false; arg1Float = false; arg2Int = false; arg2Float = false;
 
                         ///////////////////////////////////////////////////////////////////////////////////////////// ARG 1
+                        // ARRAYS
+                        if (dirArg1 >= 14000 && dirArg1 < 15000) { dirArg1 = memLocal.arrayPointersTemporales[dirArg1-14000]; }
                         //GLOBALES
                         if (dirArg1 >= 1000 && dirArg1 < 2000) { auxI1 = memGlobal.arrayInts[dirArg1-1000]; arg1Int = true;}
                         else if (dirArg1 >= 2000 && dirArg1 < 3000) { auxF1 = memGlobal.arrayFloats[dirArg1-2000]; arg1Float = true;}
@@ -760,6 +806,8 @@ public class MaquinaVirtual {
                         else if (dirArg1 >= 12000 && dirArg1 < 13000) { auxF1 = Float.parseFloat(tablaConst.get(dirArg1)); arg1Float = true;}
 
                         ///////////////////////////////////////////////////////////////////////////////////////////// ARG 2
+                        // ARRAYS
+                        if (dirArg2 >= 14000 && dirArg2 < 15000) { dirArg2 = memLocal.arrayPointersTemporales[dirArg2-14000]; }
                         //GLOBALES
                         if (dirArg2 >= 1000 && dirArg2 < 2000) { auxI2 = memGlobal.arrayInts[dirArg2-1000]; arg2Int = true;}
                         else if (dirArg2 >= 2000 && dirArg2 < 3000) { auxF2 = memGlobal.arrayFloats[dirArg2-2000]; arg2Float = true;}
@@ -803,6 +851,8 @@ public class MaquinaVirtual {
                         arg1Int = false; arg1Float = false; arg2Int = false; arg2Float = false;
 
                         ///////////////////////////////////////////////////////////////////////////////////////////// ARG 1
+                        // ARRAYS
+                        if (dirArg1 >= 14000 && dirArg1 < 15000) { dirArg1 = memLocal.arrayPointersTemporales[dirArg1-14000]; }
                         //GLOBALES
                         if (dirArg1 >= 1000 && dirArg1 < 2000) { auxI1 = memGlobal.arrayInts[dirArg1-1000]; arg1Int = true;}
                         else if (dirArg1 >= 2000 && dirArg1 < 3000) { auxF1 = memGlobal.arrayFloats[dirArg1-2000]; arg1Float = true;}
@@ -817,6 +867,8 @@ public class MaquinaVirtual {
                         else if (dirArg1 >= 12000 && dirArg1 < 13000) { auxF1 = Float.parseFloat(tablaConst.get(dirArg1)); arg1Float = true;}
 
                         ///////////////////////////////////////////////////////////////////////////////////////////// ARG 2
+                        // ARRAYS
+                        if (dirArg2 >= 14000 && dirArg2 < 15000) { dirArg2 = memLocal.arrayPointersTemporales[dirArg2-14000]; }
                         //GLOBALES
                         if (dirArg2 >= 1000 && dirArg2 < 2000) { auxI2 = memGlobal.arrayInts[dirArg2-1000]; arg2Int = true;}
                         else if (dirArg2 >= 2000 && dirArg2 < 3000) { auxF2 = memGlobal.arrayFloats[dirArg2-2000]; arg2Float = true;}
@@ -860,6 +912,8 @@ public class MaquinaVirtual {
                         arg1Int = false; arg1Float = false; arg2Int = false; arg2Float = false;
 
                         ///////////////////////////////////////////////////////////////////////////////////////////// ARG 1
+                        // ARRAYS
+                        if (dirArg1 >= 14000 && dirArg1 < 15000) { dirArg1 = memLocal.arrayPointersTemporales[dirArg1-14000]; }
                         //GLOBALES
                         if (dirArg1 >= 1000 && dirArg1 < 2000) { auxI1 = memGlobal.arrayInts[dirArg1-1000]; arg1Int = true;}
                         else if (dirArg1 >= 2000 && dirArg1 < 3000) { auxF1 = memGlobal.arrayFloats[dirArg1-2000]; arg1Float = true;}
@@ -874,6 +928,8 @@ public class MaquinaVirtual {
                         else if (dirArg1 >= 12000 && dirArg1 < 13000) { auxF1 = Float.parseFloat(tablaConst.get(dirArg1)); arg1Float = true;}
 
                         ///////////////////////////////////////////////////////////////////////////////////////////// ARG 2
+                        // ARRAYS
+                        if (dirArg2 >= 14000 && dirArg2 < 15000) { dirArg2 = memLocal.arrayPointersTemporales[dirArg2-14000]; }
                         //GLOBALES
                         if (dirArg2 >= 1000 && dirArg2 < 2000) { auxI2 = memGlobal.arrayInts[dirArg2-1000]; arg2Int = true;}
                         else if (dirArg2 >= 2000 && dirArg2 < 3000) { auxF2 = memGlobal.arrayFloats[dirArg2-2000]; arg2Float = true;}
@@ -917,6 +973,8 @@ public class MaquinaVirtual {
                         arg1Int = false; arg1Float = false; arg2Int = false; arg2Float = false;
 
                         ///////////////////////////////////////////////////////////////////////////////////////////// ARG 1
+                        // ARRAYS
+                        if (dirArg1 >= 14000 && dirArg1 < 15000) { dirArg1 = memLocal.arrayPointersTemporales[dirArg1-14000]; }
                         //GLOBALES
                         if (dirArg1 >= 1000 && dirArg1 < 2000) { auxI1 = memGlobal.arrayInts[dirArg1-1000]; arg1Int = true;}
                         else if (dirArg1 >= 2000 && dirArg1 < 3000) { auxF1 = memGlobal.arrayFloats[dirArg1-2000]; arg1Float = true;}
@@ -931,6 +989,8 @@ public class MaquinaVirtual {
                         else if (dirArg1 >= 12000 && dirArg1 < 13000) { auxF1 = Float.parseFloat(tablaConst.get(dirArg1)); arg1Float = true;}
 
                         ///////////////////////////////////////////////////////////////////////////////////////////// ARG 2
+                        // ARRAYS
+                        if (dirArg2 >= 14000 && dirArg2 < 15000) { dirArg2 = memLocal.arrayPointersTemporales[dirArg2-14000]; }
                         //GLOBALES
                         if (dirArg2 >= 1000 && dirArg2 < 2000) { auxI2 = memGlobal.arrayInts[dirArg2-1000]; arg2Int = true;}
                         else if (dirArg2 >= 2000 && dirArg2 < 3000) { auxF2 = memGlobal.arrayFloats[dirArg2-2000]; arg2Float = true;}
@@ -1013,8 +1073,11 @@ public class MaquinaVirtual {
                         auxI1 = 0; auxF1 = 0; auxC1 = 'a';
                         arg1Int = false; arg1Float = false; arg1Char = false;
 
+                        // ARRAYS
+                        if (dirArg1 >= 14000 && dirArg1 < 15000) { dirArg1 = memLocal.arrayPointersTemporales[dirArg1-14000]; }
+
                         //CONSTANTES
-                        if (dirArg1 >= 11000)
+                        if (dirArg1 >= 11000 && dirArg1 < 14000)
                         {
                             switch (aux.resultado.kind)
                             {
@@ -1056,7 +1119,12 @@ public class MaquinaVirtual {
                         if (dirArg1 >= 8000 && dirArg1 < 9000) { auxF1 = memLocal.arrayFloatsTemporales[dirArg1-8000]; arg1Float = true; }
                         if (dirArg1 >= 9000 && dirArg1 < 10000) { auxC1 = memLocal.arrayCharsTemporales[dirArg1-9000]; arg1Char = true; }
 
+
                         //////////////////////////////////////////////////////////////////////////// RESULTADO
+
+                        //ARRAYS
+                        if (dirResultado >= 14000 && dirResultado < 15000) { dirResultado =  memLocal.arrayPointersTemporales[dirResultado-14000]; }
+
                         //ARG1 GLOBALES
                         if (dirResultado >= 1000 && dirResultado < 2000) { memGlobal.arrayInts[dirResultado-1000] = auxI1; }
                         if (dirResultado >= 2000 && dirResultado < 3000) {
@@ -1077,6 +1145,7 @@ public class MaquinaVirtual {
                             if (arg1Int) { memGlobal.arrayFloats[dirResultado-8000] = auxI1; }
                             else if(arg1Float) { memGlobal.arrayFloats[dirResultado-8000] = auxF1; } }
                         if (dirResultado >= 9000 && dirResultado < 10000) { memLocal.arrayCharsTemporales[dirResultado-6000] = auxC1; }
+
 
                         ip++;
                         break;
