@@ -808,14 +808,18 @@ void Parametros( Token func, Token funcLlamada) :
 
 void creaCuadruploParametro(Token func, Token funcLlamada) :
 {
-     Token arg1;
+     Token arg1 = new Token();
      Token par = new Token();
      int aux;
      int contParams;
+     Token tAux;
 }
 {
     {
-         arg1 = TokenAsignaciones.popPilaVP();
+         tAux = TokenAsignaciones.popPilaVP();
+
+         arg1.image = tAux.image;
+         arg1.kind = tAux.kind;
          contParams = TokenAsignaciones.getContParams();
          par.image = "par" + Integer.toString(contParams);
 
@@ -1301,10 +1305,31 @@ void creaCuadruploRetorno(Token op, Token func) :
          arg1.image = tokenToDir(arg1, func);
          arg1.kind = aux;
 
-         if (TokenAsignaciones.getfunctipo(func) != aux)
+         if (TokenAsignaciones.getfunctipo(func) == 4)
          {
-             reiniciaTodo();
-             throw new ParseException("Lo que se regresa en la función " + func + " debe de ser del mismo tipo que la función");
+            if(aux != 4 && aux != 38)
+            {
+                reiniciaTodo();
+                throw new ParseException("Lo que se regresa en la funcion " + func + " debe de ser del mismo tipo que la funcion");
+            }
+         }
+
+         if (TokenAsignaciones.getfunctipo(func) == 5)
+         {
+             if(aux != 5 && aux!= 39)
+             {
+                 reiniciaTodo();
+                throw new ParseException("Lo que se regresa en la funcion " + func + " debe de ser del mismo tipo que la funcion");
+             }
+         }
+
+         if (TokenAsignaciones.getfunctipo(func) == 6)
+         {
+             if(aux != 6 && aux!= 41)
+             {
+                 reiniciaTodo();
+                throw new ParseException("Lo que se regresa en la funcion " + func + " debe de ser del mismo tipo que la funcion");
+             }
          }
 
 

@@ -258,7 +258,7 @@ TokenAsignaciones.pushPilaVP(var);
         if( dim2 == -1)
         {
             reiniciaTodo();
-            {if (true) throw new ParseException("La variable " + var + " se est\u00c3\u00a1 invocando con m\u00c3\u00a1s o menos dimensiones de las declaradas.");}
+            {if (true) throw new ParseException("La variable " + var + " se esta invocando con mas o menos dimensiones de las declaradas.");}
         }
 
         // Convertir valores a tokens
@@ -320,7 +320,7 @@ TokenAsignaciones.pushPilaVP(var);
         if( dim2 == -1)
         {
             reiniciaTodo();
-            {if (true) throw new ParseException("La variable " + var + " se est\u00c3\u00a1 invocando con m\u00c3\u00a1s o menos dimensiones de las declaradas.");}
+            {if (true) throw new ParseException("La variable " + var + " se esta invocando con mas o menos dimensiones de las declaradas.");}
         }
 
         // Convertir valores a tokens
@@ -706,11 +706,15 @@ TokenAsignaciones.popPilaOP();
     }
   }
 
-  static final public void creaCuadruploParametro(Token func, Token funcLlamada) throws ParseException {Token arg1;
+  static final public void creaCuadruploParametro(Token func, Token funcLlamada) throws ParseException {Token arg1 = new Token();
      Token par = new Token();
      int aux;
      int contParams;
-arg1 = TokenAsignaciones.popPilaVP();
+     Token tAux;
+tAux = TokenAsignaciones.popPilaVP();
+
+         arg1.image = tAux.image;
+         arg1.kind = tAux.kind;
          contParams = TokenAsignaciones.getContParams();
          par.image = "par" + Integer.toString(contParams);
 
@@ -1201,10 +1205,31 @@ tAux = TokenAsignaciones.popPilaVP();
          arg1.image = tokenToDir(arg1, func);
          arg1.kind = aux;
 
-         if (TokenAsignaciones.getfunctipo(func) != aux)
+         if (TokenAsignaciones.getfunctipo(func) == 4)
          {
-             reiniciaTodo();
-             {if (true) throw new ParseException("Lo que se regresa en la funci\u00c3\u00b3n " + func + " debe de ser del mismo tipo que la funci\u00c3\u00b3n");}
+            if(aux != 4 && aux != 38)
+            {
+                reiniciaTodo();
+                {if (true) throw new ParseException("Lo que se regresa en la funcion " + func + " debe de ser del mismo tipo que la funcion");}
+            }
+         }
+
+         if (TokenAsignaciones.getfunctipo(func) == 5)
+         {
+             if(aux != 5 && aux!= 39)
+             {
+                 reiniciaTodo();
+                {if (true) throw new ParseException("Lo que se regresa en la funcion " + func + " debe de ser del mismo tipo que la funcion");}
+             }
+         }
+
+         if (TokenAsignaciones.getfunctipo(func) == 6)
+         {
+             if(aux != 6 && aux!= 41)
+             {
+                 reiniciaTodo();
+                {if (true) throw new ParseException("Lo que se regresa en la funcion " + func + " debe de ser del mismo tipo que la funcion");}
+             }
          }
 
 

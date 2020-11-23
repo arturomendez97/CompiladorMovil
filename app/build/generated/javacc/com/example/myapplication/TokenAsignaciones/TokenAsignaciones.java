@@ -999,19 +999,37 @@ public class TokenAsignaciones {
     {
         CustomHash tabla;
         tabla = tablaFunc.get(func.image);
+        int typePar;
 
         try
         {
-            if (tabla.parametros.get(contParametros) == td)
+            typePar = tabla.parametros.get(contParametros);
+
+            if (typePar == 4)
             {
-                contParametros++;
-                return true;
+                if(td != 4 && td != 38)
+                {
+                    return false;
+                }
             }
-            else
+
+            if (typePar == 5)
             {
-                contParametros++;
-                return false;
+                if(td != 5 && td!= 39)
+                {
+                    return false;
+                }
             }
+
+            if (typePar== 6)
+            {
+                if(td != 6 && td!= 41)
+                {
+                    return false;
+                }
+            }
+            contParametros++;
+            return true;
         }
         catch(Exception e)
         {

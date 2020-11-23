@@ -261,7 +261,7 @@ public class MaquinaVirtual {
                         //CONSTANTES
                         if (dirArg1 >= 11000)
                         {
-                            switch (aux.resultado.kind)
+                            switch (aux.arg1.kind)
                             {
                                 case 4:  auxI1 = Integer.parseInt(tablaConst.get(dirArg1)); arg1Int = true;
                                     break;
@@ -401,7 +401,7 @@ public class MaquinaVirtual {
                         //CONSTANTES
                         if (dirArg1 >= 11000)
                         {
-                            switch (aux.resultado.kind)
+                            switch (aux.arg1.kind)
                             {
                                 case 4:  auxI1 = Integer.parseInt(tablaConst.get(dirArg1)); arg1Int = true;
                                     break;
