@@ -444,7 +444,7 @@ public class MaquinaVirtual {
                         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Resultado
                         //ARG1 LOCALES
                         if (arg1Int == true) { memLocal2.arrayInts[contParamsInt] = auxI1; contParamsInt++;}
-                        if (arg1Float == true) { memLocal2.arrayInts[contParamsFloat] = auxI1; contParamsFloat++;}
+                        if (arg1Float == true) { memLocal2.arrayFloats[contParamsFloat] = auxF1; contParamsFloat++;}
                         if (arg1Char == true) { memLocal2.arrayChars[contParamsChar] = auxC1; contParamsChar++;}
 
                         ip++;
