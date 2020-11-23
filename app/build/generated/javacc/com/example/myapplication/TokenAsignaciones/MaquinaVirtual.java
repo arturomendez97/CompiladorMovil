@@ -15,6 +15,7 @@ package com.example.myapplication.TokenAsignaciones;
 import android.os.Environment;
 
 // Import de la clase token
+import com.example.myapplication.parser.ParseException;
 import com.example.myapplication.parser.Token;
 
 // Imports para manejo de archivos
@@ -185,8 +186,7 @@ public class MaquinaVirtual {
 
 
     //Esta es la función principal, y donde se ejecuta tdodo el programa. Recibe muchos argumentos de tokenasignaciones. Todas las tablas y cuadruplos.
-    public static void Comienza(Hashtable<String, Tipo_Dir> vGlobal, int[] arrGlobal, Hashtable<String, CustomHash> funcs, Hashtable<Integer, String> constantes, ArrayList<Quadruple> cuads)
-    {
+    public static void Comienza(Hashtable<String, Tipo_Dir> vGlobal, int[] arrGlobal, Hashtable<String, CustomHash> funcs, Hashtable<Integer, String> constantes, ArrayList<Quadruple> cuads) throws ParseException {
         //Se obtienen las variables necesarias.
         ip = 0;
         text = "";
@@ -331,7 +331,53 @@ public class MaquinaVirtual {
                         contParamsFloat = 0;
                         contParamsChar = 0;
                         break;
+                    case "Ver" :
+                        dirArg1 = Integer.parseInt(aux.arg1.image);
+                        dirArg2 = Integer.parseInt(aux.resultado.image);
 
+                        auxI1 = 0; auxI2 = 0; auxF1 = 0; auxF2 = 0;
+                        arg1Int = false; arg1Float = false; arg2Int = false; arg2Float = false;
+
+                        ///////////////////////////////////////////////////////////////////////////////////////////// ARG 1
+                        // ARRAYS
+                        if (dirArg1 >= 14000 && dirArg1 < 15000) { dirArg1 = memLocal.arrayPointersTemporales[dirArg1-14000]; }
+                        //GLOBALES
+                        if (dirArg1 >= 1000 && dirArg1 < 2000) { auxI1 = memGlobal.arrayInts[dirArg1-1000]; arg1Int = true;}
+                        else if (dirArg1 >= 2000 && dirArg1 < 3000) { TokenAsignaciones.createParseException("No se puede indexar un arreglo con floats"); }
+                        //LOCALES
+                        else if (dirArg1 >= 4000 && dirArg1 < 5000) { auxI1 = memLocal.arrayInts[dirArg1-4000]; arg1Int = true;}
+                        else if (dirArg1 >= 5000 && dirArg1 < 6000) { TokenAsignaciones.createParseException("No se puede indexar un arreglo con floats"); }
+                        //TEMPORALES
+                        else if (dirArg1 >= 7000 && dirArg1 < 8000) { auxI1 = memLocal.arrayIntsTemporales[dirArg1-7000]; arg1Int = true;}
+                        else if (dirArg1 >= 8000 && dirArg1 < 9000) { TokenAsignaciones.createParseException("No se puede indexar un arreglo con floats"); }
+                        //CONSTANTES
+                        else if (dirArg1 >= 11000 && dirArg1 < 12000) { auxI1 = Integer.parseInt(tablaConst.get(dirArg1)); arg1Int = true;}
+                        else if (dirArg1 >= 12000 && dirArg1 < 13000) { TokenAsignaciones.createParseException("No se puede indexar un arreglo con floats"); }
+
+                        ///////////////////////////////////////////////////////////////////////////////////////////// ARG 2
+                        // ARRAYS
+                        if (dirArg2 >= 14000 && dirArg2 < 15000) { dirArg2 = memLocal.arrayPointersTemporales[dirArg2-14000]; }
+                        //GLOBALES
+                        if (dirArg2 >= 1000 && dirArg2 < 2000) { auxI2 = memGlobal.arrayInts[dirArg2-1000]; arg2Int = true;}
+                        else if (dirArg2 >= 2000 && dirArg2 < 3000) { TokenAsignaciones.createParseException("No se puede indexar un arreglo con floats"); }
+                        //LOCALES
+                        else if (dirArg2 >= 4000 && dirArg2 < 5000) { auxI2 = memLocal.arrayInts[dirArg2-4000]; arg2Int = true;}
+                        else if (dirArg2 >= 5000 && dirArg2 < 6000) { TokenAsignaciones.createParseException("No se puede indexar un arreglo con floats"); }
+                        //TEMPORALES
+                        else if (dirArg2 >= 7000 && dirArg2 < 8000) { auxI2 = memLocal.arrayIntsTemporales[dirArg2-7000]; arg2Int = true;}
+                        else if (dirArg2 >= 8000 && dirArg2 < 9000) { TokenAsignaciones.createParseException("No se puede indexar un arreglo con floats"); }
+                        //CONSTANTES
+                        else if (dirArg2 >= 11000 && dirArg2 < 12000) { auxI2 = Integer.parseInt(tablaConst.get(dirArg2)); arg2Int = true;}
+                        else if (dirArg2 >= 12000 && dirArg2 < 13000) { TokenAsignaciones.createParseException("No se puede indexar un arreglo con floats"); }
+
+
+                        if (auxI1 >= auxI2)
+                        {
+                            System.out.println("EL VER: " + auxI1 + " " + auxI2);
+                            TokenAsignaciones.createParseException("Se está intentando acceder a una casilla inexistente de un arreglo.");
+                        }
+                        ip++;
+                        break;
                     case "ENDFUNC" :
                         //Rregresar a la memoria anterior
                         memLocal = pilaMemorias.pop();

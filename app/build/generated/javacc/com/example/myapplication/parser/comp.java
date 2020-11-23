@@ -258,7 +258,7 @@ TokenAsignaciones.pushPilaVP(var);
         if( dim2 == -1)
         {
             reiniciaTodo();
-            {if (true) throw new ParseException("La variable " + var + " no es un arreglo, y se est\u00c3\u00a1 invocando como uno.");}
+            {if (true) throw new ParseException("La variable " + var + " se est\u00c3\u00a1 invocando con m\u00c3\u00a1s o menos dimensiones de las declaradas.");}
         }
 
         // Convertir valores a tokens
@@ -285,7 +285,7 @@ TokenAsignaciones.pushPilaVP(var);
         TokenAsignaciones.pushPilaVP(dirBase);
         TokenAsignaciones.pushPilaOP(suma);
         TokenAsignaciones.pushPilaVP(exp1);
-        creaCuadruploExp(func);
+        creaCuadruploExpPointer(func);
   }
 
   static final public void arraAccess2Exps(Token func, Token var) throws ParseException {Token exp2;
@@ -320,7 +320,7 @@ TokenAsignaciones.pushPilaVP(var);
         if( dim2 == -1)
         {
             reiniciaTodo();
-            {if (true) throw new ParseException("La variable " + var + " no es un arreglo, y se est\u00c3\u00a1 invocando como uno.");}
+            {if (true) throw new ParseException("La variable " + var + " se est\u00c3\u00a1 invocando con m\u00c3\u00a1s o menos dimensiones de las declaradas.");}
         }
 
         // Convertir valores a tokens

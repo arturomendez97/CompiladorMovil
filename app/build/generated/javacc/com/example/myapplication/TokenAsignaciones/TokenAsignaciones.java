@@ -14,6 +14,8 @@ import android.os.Environment;
 import com.example.myapplication.parser.Token;
 import com.example.myapplication.TokenAsignaciones.cuboSemantico;
 import com.example.myapplication.TokenAsignaciones.Quadruple;
+import com.example.myapplication.parser.ParseException;
+
 
 
 import java.io.FileNotFoundException;
@@ -180,9 +182,13 @@ public class TokenAsignaciones {
     ////////////////////////////////////////////////////////////////////////////////////////////////        Comienza Maquina Virtual
 
     // Aquí termina la fase de compilación, y le pasamos toodo lo relevante a la maquina virtual para seguir con la ejecución.
-    public static void comienzaMaquinaVirtual()
-    {
+    public static void comienzaMaquinaVirtual() throws ParseException {
         MaquinaVirtual.Comienza(tablaVarsGlobal, varArrayGlobal, tablaFunc, tablaConst, cuadruplos);
+    }
+
+    public static void createParseException(String text) throws ParseException {
+        reiniciaTodo();
+        throw new ParseException(text);
     }
 
     /*public static void guardarTodo()
