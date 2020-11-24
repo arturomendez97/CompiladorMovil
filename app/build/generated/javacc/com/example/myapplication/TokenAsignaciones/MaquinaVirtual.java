@@ -316,7 +316,7 @@ public class MaquinaVirtual {
                             else if(arg1Float) { memGlobal.arrayFloats[dirResultado-2000] = auxF1; } }
                         if (dirResultado >= 3000 && dirResultado < 4000) { memGlobal.arrayChars[dirResultado-3000] = auxC1; }
 
-                        ip++;
+                        ip = contCuadruplo.pop()+1;
                         break;
                     case "GOSUB" :
                         //Guardar memoria actual en el stack
