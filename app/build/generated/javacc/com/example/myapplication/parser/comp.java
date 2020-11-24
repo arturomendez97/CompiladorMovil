@@ -1357,8 +1357,21 @@ TokenAsignaciones.pushPilaSaltos(TokenAsignaciones.getContCuadruplos());
   }
 
   static final public void creaCuadruploSuma(Token var, Token func) throws ParseException {Token aux = new Token();
-aux.image = "1";
-        Quadruple quad = new Quadruple("+", var, aux, var );
+    Token aux2 = new Token();
+if(var.kind == 40)
+        {
+            aux.image = var.image;
+            aux.kind = var.kind;
+            var.image = tokenToDir(var, func);
+            var.kind = TokenAsignaciones.getType(aux, func);
+        }
+
+
+        aux2.image = "1";
+        aux2.kind = 38;
+
+        aux2.image = TokenAsignaciones.InsertarConstante(aux2.image, TokenAsignaciones.getContConst(aux2.kind));
+        Quadruple quad = new Quadruple("+", var, aux2, var );
         TokenAsignaciones.meterCuadruplo(quad);
         TokenAsignaciones.subeContCuadruplos();
   }

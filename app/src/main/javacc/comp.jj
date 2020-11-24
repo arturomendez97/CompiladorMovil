@@ -1467,11 +1467,24 @@ void No_condicional(Token func) :
 void creaCuadruploSuma(Token var, Token func) :
 {
     Token aux = new Token();
+    Token aux2 = new Token();
 }
 {
     {
-        aux.image = "1";
-        Quadruple quad = new Quadruple("+", var, aux, var );
+        if(var.kind == 40)
+        {
+            aux.image = var.image;
+            aux.kind = var.kind;
+            var.image = tokenToDir(var, func);
+            var.kind = TokenAsignaciones.getType(aux, func);
+        }
+
+
+        aux2.image = "1";
+        aux2.kind = 38;
+
+        aux2.image = TokenAsignaciones.InsertarConstante(aux2.image, TokenAsignaciones.getContConst(aux2.kind));
+        Quadruple quad = new Quadruple("+", var, aux2, var );
         TokenAsignaciones.meterCuadruplo(quad);
         TokenAsignaciones.subeContCuadruplos();
     }

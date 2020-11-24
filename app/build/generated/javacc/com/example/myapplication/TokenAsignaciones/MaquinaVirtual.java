@@ -533,13 +533,28 @@ public class MaquinaVirtual {
                         else if (dirArg2 >= 12000 && dirArg2 < 13000) { auxF2 = Float.parseFloat(tablaConst.get(dirArg2)); arg2Float = true;}
 
                         ///////////////////////////////////////////////////////////////////////////////////////////// RESULTADO
-                        //ARRAYS
-                        if (dirResultado >= 14000 && dirResultado < 15000) { memLocal.arrayPointersTemporales[dirResultado-14000] = auxI2+auxI1; System.out.println( "RESPUESTA + : " + memLocal.arrayPointersTemporales[dirResultado-14000]); }
+                        //Entra aquí en el caso del for
+                        if(dirResultado >= 1000 && dirResultado < 6000)
+                        {
+                            /// CASO ESPECIAL PARA LA SUMA DENTRO DEL FOR
+                            //GLOBALES
+                            if (dirResultado >= 1000 && dirResultado < 2000) { memGlobal.arrayInts[dirResultado-1000] = auxI2+auxI1; System.out.println( "RESPUESTA + : " + memGlobal.arrayInts[dirResultado-1000]);}
+                            else if (dirResultado >= 2000 && dirResultado < 3000) { memGlobal.arrayFloats[dirResultado-2000] = auxI2+auxF1; System.out.println( "RESPUESTA + : " + memGlobal.arrayFloats[dirResultado-2000]);}
+                            //LOCALES
+                            else if (dirResultado >= 4000 && dirResultado < 5000) { memLocal.arrayInts[dirResultado-4000] = auxI2+auxI1; System.out.println( "RESPUESTA + : " + memLocal.arrayInts[dirResultado-4000]);}
+                            else if (dirResultado >= 5000 && dirResultado < 6000) { memLocal.arrayFloats[dirResultado-5000] = auxI2+auxF1; System.out.println( "RESPUESTA + : " + memLocal.arrayFloats[dirResultado-5000]);}
+                            ////
+                        }
+                        //Entra acá en todo lo demás
                         else{
-                            if (arg1Int && arg2Int) { memLocal.arrayIntsTemporales[dirResultado-7000] = auxI2+auxI1; System.out.println( "RESPUESTA + : " + memLocal.arrayIntsTemporales[dirResultado-7000]);}
-                            else if (arg1Int && arg2Float) { memLocal.arrayFloatsTemporales[dirResultado-8000] = auxF2+auxI1; System.out.println( "RESPUESTA + : " + memLocal.arrayFloatsTemporales[dirResultado-8000]);}
-                            else if (arg1Float && arg2Int) { memLocal.arrayFloatsTemporales[dirResultado-8000] = auxI2+auxF1; System.out.println( "RESPUESTA + : " + memLocal.arrayFloatsTemporales[dirResultado-8000]);}
-                            else if (arg1Float && arg2Float) { memLocal.arrayFloatsTemporales[dirResultado-8000] = auxF2+auxF1; System.out.println( "RESPUESTA + : " + memLocal.arrayFloatsTemporales[dirResultado-8000]);}
+                            //ARRAYS
+                            if (dirResultado >= 14000 && dirResultado < 15000) { memLocal.arrayPointersTemporales[dirResultado-14000] = auxI2+auxI1; System.out.println( "RESPUESTA + : " + memLocal.arrayPointersTemporales[dirResultado-14000]); }
+                            else{
+                                if (arg1Int && arg2Int) { memLocal.arrayIntsTemporales[dirResultado-7000] = auxI2+auxI1; System.out.println( "RESPUESTA + : " + memLocal.arrayIntsTemporales[dirResultado-7000]);}
+                                else if (arg1Int && arg2Float) { memLocal.arrayFloatsTemporales[dirResultado-8000] = auxF2+auxI1; System.out.println( "RESPUESTA + : " + memLocal.arrayFloatsTemporales[dirResultado-8000]);}
+                                else if (arg1Float && arg2Int) { memLocal.arrayFloatsTemporales[dirResultado-8000] = auxI2+auxF1; System.out.println( "RESPUESTA + : " + memLocal.arrayFloatsTemporales[dirResultado-8000]);}
+                                else if (arg1Float && arg2Float) { memLocal.arrayFloatsTemporales[dirResultado-8000] = auxF2+auxF1; System.out.println( "RESPUESTA + : " + memLocal.arrayFloatsTemporales[dirResultado-8000]);}
+                            }
                         }
                         ip++;
                         break;
