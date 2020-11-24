@@ -245,6 +245,8 @@ TokenAsignaciones.pushPilaVP(var);
      Token limSup1 = new Token();
      Token limSup2 = new Token();
      Token limInf = new Token();
+
+     Token aux = new Token();
 // HAcer pop de las dos expresiones más recientes
         exp1 = TokenAsignaciones.popPilaVP();
         //Conseguir valores del arreglo
@@ -276,6 +278,16 @@ TokenAsignaciones.pushPilaVP(var);
         limInf.kind = 38;
         limInf.image = TokenAsignaciones.InsertarConstante(limInf.image, TokenAsignaciones.getContConst(limInf.kind));
 
+        //entra aqui cuando es una variable sola EJ: j. Hay que cambiar su image por la dirección y su type por el correcto.
+        if(exp1.kind == 40)
+        {
+            aux.image = exp1.image;
+            aux.kind = exp1.kind;
+            exp1.image = tokenToDir(exp1, func);
+            exp1.kind = TokenAsignaciones.getType(aux, func);
+        }
+        System.out.println("EXP 1 kind: " + exp1.kind);
+
         Quadruple quad = new Quadruple("Ver", exp1, limInf, limSup1 );
         TokenAsignaciones.meterCuadruplo(quad);
         TokenAsignaciones.subeContCuadruplos();
@@ -303,6 +315,9 @@ TokenAsignaciones.pushPilaVP(var);
      Token limSup1 = new Token();
      Token limSup2 = new Token();
      Token limInf = new Token();
+
+     Token aux = new Token();
+     Token aux2 = new Token();
 // HAcer pop de las dos expresiones más recientes
         exp2 = TokenAsignaciones.popPilaVP();
         exp1 = TokenAsignaciones.popPilaVP();
@@ -346,6 +361,24 @@ TokenAsignaciones.pushPilaVP(var);
         limInf.kind = 38;
         limInf.image = TokenAsignaciones.InsertarConstante(limInf.image, TokenAsignaciones.getContConst(limInf.kind));
 
+        //entra aqui cuando es una variable sola EJ: j. Hay que cambiar su image por la dirección y su type por el correcto.
+        if(exp1.kind == 40)
+        {
+            aux.image = exp1.image;
+            aux.kind = exp1.kind;
+            exp1.image = tokenToDir(exp1, func);
+            exp1.kind = TokenAsignaciones.getType(aux, func);
+        }
+
+        //entra aqui cuando es una variable sola EJ: j. Hay que cambiar su image por la dirección y su type por el correcto.
+        if(exp2.kind == 40)
+        {
+            aux2.image = exp2.image;
+            aux2.kind = exp2.kind;
+            exp2.image = tokenToDir(exp2, func);
+            exp2.kind = TokenAsignaciones.getType(aux2, func);
+        }
+
         Quadruple quad = new Quadruple("Ver", exp1, limInf, limSup1 );
         TokenAsignaciones.meterCuadruplo(quad);
         TokenAsignaciones.subeContCuadruplos();
@@ -386,8 +419,6 @@ op = TokenAsignaciones.popPilaOP();
     arg2.image = tAux2.image;
     arg2.kind = tAux2.kind;
     temporal = op.newToken(op.kind);
-    System.out.println("image: " + arg1 + " type: " + arg1.kind);
-    System.out.println("image: " + arg2 + " type: " + arg2.kind);
 
     //Entra qui si el argumento es un temporal, porque su tipo
     if ( arg1.kind == 4 | arg1.kind == 5 | arg1.kind == 6 | arg1.kind == 47 | arg1.kind == 38 | arg1.kind == 39 | arg1.kind == 41)
@@ -1544,8 +1575,6 @@ op = TokenAsignaciones.popPilaOP();
     arg2.image = tAux2.image;
     arg2.kind = tAux2.kind;
     temporal = op.newToken(op.kind);
-    System.out.println("image: " + arg1 + " type: " + arg1.kind);
-    System.out.println("image: " + arg2 + " type: " + arg2.kind);
 
     //Entra qui si el argumento es un temporal, porque su tipo
     if ( arg1.kind == 4 | arg1.kind == 5 | arg1.kind == 6 | arg1.kind == 47 | arg1.kind == 38 | arg1.kind == 39 | arg1.kind == 41)
