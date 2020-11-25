@@ -6,6 +6,10 @@
 // Jorge Adrían Ramos Barrena - A01176234
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // TOKENASIGNACIONES (archivo auxiliar)
+// ¿Que hace? - Ayuda al compjj con toda su funcionalidad. Aquí se declaran todas las varaibles como las tablas y se encuentran todas las funciones auxiliares.
+// ¿Que parametros recibe? - Tokens
+// ¿Que genera como salida? - Lo mismo que el comp.jj
+// Modulos más importantes que hacen uso de este archivo. - MaquinaVirtual y Comp.jj
 
 // Varios imports
 package com.example.myapplication.TokenAsignaciones;
@@ -30,7 +34,9 @@ import java.io.IOException;
 import java.io.FileWriter;
 import java.util.LinkedList;
 
-
+//Esta clase nos permite guardar la información de cada nodo del arreglo. En vez de una lista
+// encadenada decidimos usar un arraylist que se encuentra en Tipo:Dir. Aquí se guarda el límite
+// inferior, el superior, y la m del nodo.
 class DimType {
     int linf;
     int lsup;
@@ -47,7 +53,9 @@ class DimType {
 }
 
 // Clase Tipo_Dir
-// Esta clase nos permite almacenar tanto el tipo como la dirección de una variable
+// Esta clase nos permite almacenar tanto el tipo como la dirección de una variable.
+// También si la variable es un arreglo, y un arraylist de DimType, una estructura que
+// guarda todo lo relacionado con los arreglos.
 class Tipo_Dir{
     int tipo;
     int dir;

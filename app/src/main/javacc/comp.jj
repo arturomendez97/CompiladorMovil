@@ -6,6 +6,10 @@
 // Jorge Adrían Ramos Barrena - A01176234
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // COMP (compilación)
+// ¿Que hace? - Revisa la parte de léxico y sintaxis y semántica. Genera los cuadruplos y todoo lo necesario para el funcionamiento de la maquina virtual.
+// ¿Que parametros recibe? - El código escrito por el usuario.
+// ¿Que genera como salida? - Cuadruplos, tabla de variables global, tabla de funciones, tabla de constantes.
+// Modulos más importantes que hacen uso de este archivo. - MaquinaVirtual y MainActivity.
 
 // Opciones del parser
 options {

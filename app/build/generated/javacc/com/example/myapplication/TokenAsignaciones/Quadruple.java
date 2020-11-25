@@ -6,6 +6,10 @@
 // Jorge Adrían Ramos Barrena - A01176234
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // CLASE CUADRUPLO
+// ¿Que hace? - Contiene la estructura de los cuadruplos.
+// ¿Que parametros recibe? - El operador, el primer argumento, el segundo argumento, y el resultado del cuadruplo.
+// ¿Que genera como salida? - Un cuadruplo.
+// Modulos más importantes que hacen uso de este archivo. - TokenAsignaciones, Comp.jj, y MaquinaVirtual.
 
 package com.example.myapplication.TokenAsignaciones;
 import java.lang.String;

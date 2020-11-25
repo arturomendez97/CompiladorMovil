@@ -5,7 +5,12 @@
 // Jorge Arturo Méndez Vargas - A01176369
 // Jorge Adrían Ramos Barrena - A01176234
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-// MAQUINA VIRTUAL (Archivo eauxiliar)
+// CUBO SEMANTICO (Archivo eauxiliar)
+// ¿Que hace? - Valida operaciones entre dos argumentos y saca el tipo del temporal resultante.
+// ¿Que parametros recibe? - dos argumentos y un operador.
+// ¿Que genera como salida? - El tipo del temporal resultante y si la expresión es válida.
+// Modulos más importantes que hacen uso de este archivo. - TokenAsignaciones y Comp.jj
+
 
 package com.example.myapplication.TokenAsignaciones;
 import java.lang.String;

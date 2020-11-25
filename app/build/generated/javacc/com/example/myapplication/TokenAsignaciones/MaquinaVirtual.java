@@ -6,7 +6,10 @@
 // Jorge Adrían Ramos Barrena - A01176234
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // MAQUINA VIRTUAL  (Ejecución)
-
+// ¿Que hace? - Realiza todoo lo relacionado con la parte de ejecución, incluyendo la creación de memoria y ejecución de los cuadruplos.
+// ¿Que parametros recibe? - Todas las tablas, cuadruplos e información necesaria para la ejecución.
+// ¿Que genera como salida? - Los resultados reales del código.
+// Modulos más importantes que hacen uso de este archivo. - TokenAsignaciones y MainActivity.
 
 // Se importa como paquete lo que está dentro del folder Tokenasignaciones
 package com.example.myapplication.TokenAsignaciones;
