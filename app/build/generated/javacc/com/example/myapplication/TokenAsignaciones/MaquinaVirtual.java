@@ -316,6 +316,8 @@ public class MaquinaVirtual {
                             else if(arg1Float) { memGlobal.arrayFloats[dirResultado-2000] = auxF1; } }
                         if (dirResultado >= 3000 && dirResultado < 4000) { memGlobal.arrayChars[dirResultado-3000] = auxC1; }
 
+                        //Rregresar a la memoria anterior
+                        memLocal = pilaMemorias.pop();
                         ip = contCuadruplo.pop()+1;
                         break;
                     case "GOSUB" :
